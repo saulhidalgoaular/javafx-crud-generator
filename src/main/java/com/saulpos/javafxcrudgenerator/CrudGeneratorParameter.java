@@ -15,6 +15,9 @@
  */
 package com.saulpos.javafxcrudgenerator;
 
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -23,9 +26,28 @@ public class CrudGeneratorParameter {
 
     private String title = "";
 
-    private Pane layout = new VBox();
+    private Pane fieldsLayout = new VBox();
+
+    private Pane buttonLayout = new HBox();
+
+    private Pane mainLayout = new VBox();
 
     private boolean enableSearch = true;
+
+    private NodeConstructor labelConstructor = new NodeConstructor() {
+
+        @Override
+        public Node generateNode(Object... name) {
+            return new Label(name[0] + ":");
+        }
+    };
+
+    private NodeConstructor buttonConstructor = new NodeConstructor() {
+        @Override
+        public Node generateNode(Object... name) {
+            return new Button(name[0] + "");
+        }
+    };
 
     public String getTitle() {
         return title;
@@ -35,12 +57,12 @@ public class CrudGeneratorParameter {
         this.title = title;
     }
 
-    public Pane getLayout() {
-        return layout;
+    public Pane getFieldsLayout() {
+        return fieldsLayout;
     }
 
-    public void setLayout(Pane layout) {
-        this.layout = layout;
+    public void setFieldsLayout(Pane fieldsLayout) {
+        this.fieldsLayout = fieldsLayout;
     }
 
     public boolean isEnableSearch() {
@@ -49,5 +71,37 @@ public class CrudGeneratorParameter {
 
     public void setEnableSearch(boolean enableSearch) {
         this.enableSearch = enableSearch;
+    }
+
+    public NodeConstructor getLabelConstructor() {
+        return labelConstructor;
+    }
+
+    public void setLabelConstructor(NodeConstructor labelConstructor) {
+        this.labelConstructor = labelConstructor;
+    }
+
+    public Pane getMainLayout() {
+        return mainLayout;
+    }
+
+    public void setMainLayout(Pane mainLayout) {
+        this.mainLayout = mainLayout;
+    }
+
+    public Pane getButtonLayout() {
+        return buttonLayout;
+    }
+
+    public void setButtonLayout(Pane buttonLayout) {
+        this.buttonLayout = buttonLayout;
+    }
+
+    public NodeConstructor getButtonConstructor() {
+        return buttonConstructor;
+    }
+
+    public void setButtonConstructor(NodeConstructor buttonConstructor) {
+        this.buttonConstructor = buttonConstructor;
     }
 }

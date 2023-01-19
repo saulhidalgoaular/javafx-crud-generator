@@ -9,8 +9,8 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class CrudGeneratorTest extends Application {
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
         launch(args);
     }
 
@@ -20,7 +20,6 @@ public class CrudGeneratorTest extends Application {
         CrudGenerator crudGenerator = new CrudGenerator(crudGeneratorParameter);
 
         stage.setTitle("Hello World!");
-
 
         StackPane root = new StackPane();
         root.getChildren().add(crudGenerator.generate(Product.class));

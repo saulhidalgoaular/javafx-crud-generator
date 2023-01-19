@@ -16,12 +16,11 @@
 package com.saulpos.javafxcrudgenerator;
 
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Control;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 
 import java.lang.reflect.Field;
 
@@ -36,17 +35,29 @@ public class CrudGenerator {
     public Node generate(final Class clazz){
         final Field[] allFields = clazz.getDeclaredFields();
 
-        final Pane mainPane = parameter.getLayout();
+        final Pane fieldsPane = parameter.getFieldsLayout();
         for (Field field : allFields){
             final HBox row = new HBox();
 
-            final Label label = new Label(field.getName() + ":");
+            final Node label = parameter.getLabelConstructor().generateNode(field.getName());
             final Control control = getControlField(field);
 
             row.getChildren().addAll(label, control);
 
-            mainPane.getChildren().add(row);
+            fieldsPane.getChildren().add(row);
         }
+
+        final Pane buttonsPane = parameter.getButtonLayout();
+        final Node addNewButton =  parameter.getButtonConstructor().generateNode("Add New");
+        final Node editButton =  parameter.getButtonConstructor().generateNode("Edit");
+        final Node deleteButton =  parameter.getButtonConstructor().generateNode("Delete");
+        final Node refreshButton =  parameter.getButtonConstructor().generateNode("Refresh");
+
+        buttonsPane.getChildren().addAll(addNewButton, editButton, deleteButton, refreshButton);
+
+        final Pane mainPane = parameter.getMainLayout();
+
+        mainPane.getChildren().addAll(fieldsPane, buttonsPane);
 
         return mainPane;
     }
