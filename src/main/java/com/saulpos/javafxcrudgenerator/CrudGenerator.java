@@ -16,8 +16,8 @@
 package com.saulpos.javafxcrudgenerator;
 
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Control;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -35,6 +35,7 @@ public class CrudGenerator {
     public Node generate(final Class clazz){
         final Field[] allFields = clazz.getDeclaredFields();
 
+        // Fields area.
         final Pane fieldsPane = parameter.getFieldsLayout();
         for (Field field : allFields){
             final HBox row = new HBox();
@@ -47,22 +48,36 @@ public class CrudGenerator {
             fieldsPane.getChildren().add(row);
         }
 
+        // Buttons area
         final Pane buttonsPane = parameter.getButtonLayout();
-        final Node addNewButton =  parameter.getButtonConstructor().generateNode("Add New");
-        final Node editButton =  parameter.getButtonConstructor().generateNode("Edit");
-        final Node deleteButton =  parameter.getButtonConstructor().generateNode("Delete");
-        final Node refreshButton =  parameter.getButtonConstructor().generateNode("Refresh");
+        final Node addNewButton =  parameter.getAddNextButtonConstructor().generateNode("Add New"); // TODO: Language customizable
+        final Node editButton =  parameter.getEditButtonConstructor().generateNode("Edit");
+        final Node deleteButton =  parameter.getDeleteButtonConstructor().generateNode("Delete");
+        final Node refreshButton =  parameter.getRefreshButtonConstructor().generateNode("Refresh");
 
         buttonsPane.getChildren().addAll(addNewButton, editButton, deleteButton, refreshButton);
 
+        final Pane searchArea = new HBox();
+        final Label searchLabel = new Label("Search: ");
+        final TextField searchBox = new TextField();
+
+        final Label searchResult = new Label("Total");
+
+        searchArea.getChildren().addAll(searchLabel, searchBox, searchResult);
+
         final Pane mainPane = parameter.getMainLayout();
 
-        mainPane.getChildren().addAll(fieldsPane, buttonsPane);
+        mainPane.getChildren().addAll(fieldsPane, buttonsPane, searchArea);
+
+
 
         return mainPane;
     }
 
     private Control getControlField(Field field){
+        // TODO: Depending on the kind of field, we would need different controls.
         return new TextField();
     }
+
+
 }

@@ -42,12 +42,17 @@ public class CrudGeneratorParameter {
         }
     };
 
-    private NodeConstructor buttonConstructor = new NodeConstructor() {
+    private NodeConstructor genericButtonConstructor = new NodeConstructor() {
         @Override
         public Node generateNode(Object... name) {
             return new Button(name[0] + "");
         }
     };
+
+    private NodeConstructor addNextButtonConstructor = genericButtonConstructor;
+    private NodeConstructor editButtonConstructor = genericButtonConstructor;
+    private NodeConstructor deleteButtonConstructor = genericButtonConstructor;
+    private NodeConstructor refreshButtonConstructor = genericButtonConstructor;
 
     public String getTitle() {
         return title;
@@ -97,11 +102,43 @@ public class CrudGeneratorParameter {
         this.buttonLayout = buttonLayout;
     }
 
-    public NodeConstructor getButtonConstructor() {
-        return buttonConstructor;
+    public NodeConstructor getAddNextButtonConstructor() {
+        return addNextButtonConstructor;
     }
 
-    public void setButtonConstructor(NodeConstructor buttonConstructor) {
-        this.buttonConstructor = buttonConstructor;
+    public void setAddNextButtonConstructor(NodeConstructor addNextButtonConstructor) {
+        this.addNextButtonConstructor = addNextButtonConstructor;
+    }
+
+    public NodeConstructor getGenericButtonConstructor() {
+        return genericButtonConstructor;
+    }
+
+    public void setGenericButtonConstructor(NodeConstructor genericButtonConstructor) {
+        this.genericButtonConstructor = genericButtonConstructor;
+    }
+
+    public NodeConstructor getEditButtonConstructor() {
+        return editButtonConstructor;
+    }
+
+    public void setEditButtonConstructor(NodeConstructor editButtonConstructor) {
+        this.editButtonConstructor = editButtonConstructor;
+    }
+
+    public NodeConstructor getDeleteButtonConstructor() {
+        return deleteButtonConstructor;
+    }
+
+    public void setDeleteButtonConstructor(NodeConstructor deleteButtonConstructor) {
+        this.deleteButtonConstructor = deleteButtonConstructor;
+    }
+
+    public NodeConstructor getRefreshButtonConstructor() {
+        return refreshButtonConstructor;
+    }
+
+    public void setRefreshButtonConstructor(NodeConstructor refreshButtonConstructor) {
+        this.refreshButtonConstructor = refreshButtonConstructor;
     }
 }
