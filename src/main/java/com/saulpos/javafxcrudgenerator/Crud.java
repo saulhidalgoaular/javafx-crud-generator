@@ -16,9 +16,10 @@
 package com.saulpos.javafxcrudgenerator;
 
 import com.saulpos.javafxcrudgenerator.model.CrudModel;
+import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import com.saulpos.javafxcrudgenerator.view.CrudView;
 
-public class Crud<S> {
+public class Crud<S extends AbstractBean> {
 
     private CrudModel<S> model;
 

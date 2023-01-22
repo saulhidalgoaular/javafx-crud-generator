@@ -4,9 +4,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 public class Product {
 
@@ -24,7 +22,7 @@ public class Product {
 
     private SimpleObjectProperty<Calendar> initializationDate;
 
-    @LongString(5)
+    @LongString(rows=5)
     private SimpleStringProperty wideDescription;
 
     @Ignore

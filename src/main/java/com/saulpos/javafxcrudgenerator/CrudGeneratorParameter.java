@@ -15,6 +15,7 @@
  */
 package com.saulpos.javafxcrudgenerator;
 
+import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -24,7 +25,7 @@ import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 
-public class CrudGeneratorParameter {
+public class CrudGeneratorParameter <S extends AbstractBean> {
 
     private String title = "";
 
