@@ -16,10 +16,11 @@
 
 package com.saulpos.javafxcrudgenerator.model;
 
+import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class CrudModel<S> {
+public class CrudModel<S extends AbstractBean> {
 
     private final ObservableList<S> items = FXCollections.observableArrayList();
 

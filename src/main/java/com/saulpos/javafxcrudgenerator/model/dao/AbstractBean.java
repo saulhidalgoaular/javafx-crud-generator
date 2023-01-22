@@ -22,22 +22,13 @@ import java.io.Serializable;
 /**
  * Created by Saul on 11/16/2016.
  */
-public class AbstractBean implements Serializable {
-    private static final long serialVersionUID = 1L;
+public interface AbstractBean {
 
-    public Integer save() throws PropertyVetoException {
-        return DatabaseConnection.getInstance().createEntry(this);
-    }
+    Integer save();
 
-    public void update() throws PropertyVetoException {
-        DatabaseConnection.getInstance().update(this);
-    }
+    void update();
 
-    public void saveOrUpdate() throws PropertyVetoException {
-        DatabaseConnection.getInstance().saveOrUpdate(this);
-    }
+    void saveOrUpdate();
 
-    public void delete() throws PropertyVetoException {
-        DatabaseConnection.getInstance().delete(this);
-    }
+    void delete();
 }

@@ -31,10 +31,11 @@ package com.saulpos.javafxcrudgenerator;
  */
 
 import com.saulpos.javafxcrudgenerator.model.CrudModel;
+import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import com.saulpos.javafxcrudgenerator.view.CrudView;
 import com.saulpos.javafxcrudgenerator.view.CrudViewGenerator;
 
-public class CrudGenerator {
+public class CrudGenerator<S extends AbstractBean> {
 
     private CrudGeneratorParameter parameter;
 
