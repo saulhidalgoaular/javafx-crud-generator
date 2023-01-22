@@ -31,6 +31,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Parameter;
+import java.lang.reflect.ParameterizedType;
 import java.util.*;
 
 public class CrudViewGenerator {
@@ -62,8 +64,8 @@ public class CrudViewGenerator {
         final HBox mainSplit = new HBox();
         final VBox leftSide = new VBox();
         final VBox rightSide = new VBox();
-
-        leftSide.getChildren().addAll(searchGridPane, tableView);
+        final Label searchResult = new Label("Total");
+        leftSide.getChildren().addAll(searchGridPane, tableView, searchResult);
         rightSide.getChildren().addAll(fieldsPane, buttonsPane);
         mainSplit.getChildren().addAll(leftSide, rightSide);
         mainPane.getChildren().add(mainSplit);
@@ -92,11 +94,11 @@ public class CrudViewGenerator {
 
         final Label searchLabel = new Label("Search: ");
         final TextField searchBox = new TextField();
-        final Label searchResult = new Label("Total");
+        //final Label searchResult = new Label("Total");
 
         searchGridPane.add(searchLabel, 0, 0);
         searchGridPane.add(searchBox, 1, 0);
-        searchGridPane.add(searchResult, 2, 0);
+        //searchGridPane.add(searchResult, 2, 0);
         return searchGridPane;
     }
 
@@ -163,8 +165,7 @@ public class CrudViewGenerator {
             return new CheckBox();
         }
 
-        else if (SimpleObjectProperty.class.equals(field.getType())) {
-
+        else if (SimpleObjectProperty.class.equals(field.getType()) && Calendar.class.equals((((ParameterizedType)field.getGenericType()).getActualTypeArguments())[0])) {
             return new DatePicker();
         }
 
