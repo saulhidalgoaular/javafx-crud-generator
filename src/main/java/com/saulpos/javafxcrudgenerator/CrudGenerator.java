@@ -15,12 +15,12 @@
  */
 package com.saulpos.javafxcrudgenerator;
 
+import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.Control;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
 import java.lang.reflect.Field;
 
@@ -37,40 +37,81 @@ public class CrudGenerator {
 
         // Fields area.
         final Pane fieldsPane = parameter.getFieldsLayout();
-        for (Field field : allFields){
-            final HBox row = new HBox();
 
-            final Node label = parameter.getLabelConstructor().generateNode(field.getName());
+        final GridPane fieldsGridPane = new GridPane();
+        fieldsGridPane.setPadding(new Insets(10, 10, 10, 30));
+        fieldsGridPane.setHgap(10);
+        fieldsGridPane.setVgap(10);
+
+        int rowCounter = 0;
+        for (Field field : allFields){
+            final Node label = parameter.getLabelConstructor().generateNode(getTitle(field.getName()));
             final Control control = getControlField(field);
 
-            row.getChildren().addAll(label, control);
+            fieldsGridPane.add(label, 0, rowCounter);
+            fieldsGridPane.add(control, 1, rowCounter);
 
-            fieldsPane.getChildren().add(row);
+            rowCounter++;
         }
-
+        fieldsPane.getChildren().add(fieldsGridPane);
         // Buttons area
         final Pane buttonsPane = parameter.getButtonLayout();
+        final GridPane btnsGridPane = new GridPane();
+        btnsGridPane.setPadding(new Insets(10, 10, 10, 30));
+        btnsGridPane.setHgap(10);
+        btnsGridPane.setVgap(10);
+
         final Node addNewButton =  parameter.getAddNextButtonConstructor().generateNode("Add New"); // TODO: Language customizable
         final Node editButton =  parameter.getEditButtonConstructor().generateNode("Edit");
         final Node deleteButton =  parameter.getDeleteButtonConstructor().generateNode("Delete");
         final Node refreshButton =  parameter.getRefreshButtonConstructor().generateNode("Refresh");
 
-        buttonsPane.getChildren().addAll(addNewButton, editButton, deleteButton, refreshButton);
+        btnsGridPane.add(addNewButton, 0, 0);
+        btnsGridPane.add(editButton, 1, 0);
+        btnsGridPane.add(deleteButton, 2, 0);
+        btnsGridPane.add(refreshButton, 3, 0);
 
-        final Pane searchArea = new HBox();
+        buttonsPane.getChildren().addAll(btnsGridPane);
+        //buttonsPane.getChildren().addAll(addNewButton, editButton, deleteButton, refreshButton);
+
+        // Search area
+        final GridPane searchGrigPane = new GridPane();
+        searchGrigPane.setPadding(new Insets(10, 10, 10, 30));
+        searchGrigPane.setHgap(10);
+        searchGrigPane.setVgap(10);
+
+        //final Pane searchArea = new HBox();
         final Label searchLabel = new Label("Search: ");
         final TextField searchBox = new TextField();
-
         final Label searchResult = new Label("Total");
 
-        searchArea.getChildren().addAll(searchLabel, searchBox, searchResult);
+        searchGrigPane.add(searchLabel, 0, 0);
+        searchGrigPane.add(searchBox, 1, 0);
+        searchGrigPane.add(searchResult, 2, 0);
+
+        //searchGrigPane.getChildren().addAll(searchLabel, searchBox, searchResult);
+        // Table area
+        TableView tableView = new TableView();
+        for (Field field : allFields){
+            TableColumn<Object, String> column = new TableColumn<>(getTitle(field.getName())); // TODO: IT NEEDS SOME IMPROVEMENTS
+            column.setCellValueFactory(new PropertyValueFactory<>(field.getName()));
+            tableView.getColumns().add(column);
+        }
+
+        tableView.setPadding(new Insets(10, 10, 10, 10));
+
 
         final Pane mainPane = parameter.getMainLayout();
 
-        mainPane.getChildren().addAll(fieldsPane, buttonsPane, searchArea);
+        final HBox mainSplit = new HBox();
+        final VBox leftSide = new VBox();
+        final VBox rightSide = new VBox();
 
-
-
+        //mainPane.getChildren().addAll(fieldsPane, buttonsPane, searchGrigPane, tableView);
+        leftSide.getChildren().addAll(fieldsPane, buttonsPane, searchGrigPane);
+        rightSide.getChildren().add(tableView);
+        mainSplit.getChildren().addAll(leftSide, rightSide);
+        mainPane.getChildren().add(mainSplit);
         return mainPane;
     }
 
@@ -79,5 +120,25 @@ public class CrudGenerator {
         return new TextField();
     }
 
+    private static String getTitle(final String name){
+        StringBuilder title = new StringBuilder();
+        StringBuilder currentWord = new StringBuilder();
+        for (char c : name.toCharArray()){
+            if (currentWord.isEmpty()){
+                currentWord.append(Character.toUpperCase(c));
+            }else if (Character.isUpperCase(c)){
+                title.append(currentWord);
+                title.append(" ");
+                currentWord.setLength(0);
+                currentWord.append(Character.toUpperCase(c));
+            }else{
+                currentWord.append(c);
+            }
+        }
+        if (!currentWord.isEmpty()){
+            title.append(currentWord);
+        }
 
+        return title.toString().trim();
+    }
 }

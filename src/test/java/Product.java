@@ -4,7 +4,11 @@ public class Product {
 
     private String description;
 
-    private Double price;
+    private Price price;
+
+    private String measuringUnit;
+
+    private Currency currency;
 
     public Product() {
     }
@@ -25,11 +29,27 @@ public class Product {
         this.description = description;
     }
 
-    public Double getPrice() {
+    public Price getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(Price price) {
         this.price = price;
+    }
+
+    public String getMeasuringUnit() {
+        return measuringUnit;
+    }
+
+    public void setMeasuringUnit(String measuringUnit) {
+        this.measuringUnit = measuringUnit;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 }

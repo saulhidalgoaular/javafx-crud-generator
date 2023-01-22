@@ -23,7 +23,7 @@ public class CrudGeneratorTest extends Application {
 
         StackPane root = new StackPane();
         root.getChildren().add(crudGenerator.generate(Product.class));
-        stage.setScene(new Scene(root, 300, 250));
+        stage.setScene(new Scene(root, 800, 640));
         stage.show();
     }
 }
