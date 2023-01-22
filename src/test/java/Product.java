@@ -24,6 +24,8 @@ public class Product {
 
     private SimpleObjectProperty<Calendar> initializationDate;
 
+    private String test;
+
     @LongString(5)
     private SimpleStringProperty wideDescription;
 
