@@ -107,7 +107,7 @@ public class CrudGenerator {
         final Node refreshButton =  parameter.getRefreshButtonConstructor().generateNode("Refresh");
 
         final Node[] nodes = new Node[]{addNewButton, editButton, deleteButton, refreshButton};
-        final List<Node> allButtons = Arrays.asList(nodes);
+        final ArrayList<Node> allButtons = new ArrayList<>(Arrays.asList(nodes));
         for (NodeConstructor customButtonConstructor :
                 parameter.getExtraButtonsConstructor()) {
             allButtons.add(customButtonConstructor.generateNode(null));
