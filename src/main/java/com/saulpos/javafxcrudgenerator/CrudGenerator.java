@@ -23,6 +23,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class CrudGenerator {
 
@@ -103,10 +106,16 @@ public class CrudGenerator {
         final Node deleteButton =  parameter.getDeleteButtonConstructor().generateNode("Delete");
         final Node refreshButton =  parameter.getRefreshButtonConstructor().generateNode("Refresh");
 
-        btnsGridPane.add(addNewButton, 0, 0);
-        btnsGridPane.add(editButton, 1, 0);
-        btnsGridPane.add(deleteButton, 2, 0);
-        btnsGridPane.add(refreshButton, 3, 0);
+        final Node[] nodes = new Node[]{addNewButton, editButton, deleteButton, refreshButton};
+        final List<Node> allButtons = Arrays.asList(nodes);
+        for (NodeConstructor customButtonConstructor :
+                parameter.getExtraButtonsConstructor()) {
+            allButtons.add(customButtonConstructor.generateNode(null));
+        }
+
+        for (int i = 0; i < allButtons.size(); i++) {
+            btnsGridPane.add(allButtons.get(parameter.getButtonsOrder().isEmpty() ? i :parameter.getButtonsOrder().get(i)), i, 0);
+        }
 
         buttonsPane.getChildren().addAll(btnsGridPane);
         return buttonsPane;

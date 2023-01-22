@@ -22,6 +22,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
+import java.util.ArrayList;
+
 public class CrudGeneratorParameter {
 
     private String title = "";
@@ -53,6 +55,10 @@ public class CrudGeneratorParameter {
     private NodeConstructor editButtonConstructor = genericButtonConstructor;
     private NodeConstructor deleteButtonConstructor = genericButtonConstructor;
     private NodeConstructor refreshButtonConstructor = genericButtonConstructor;
+
+    private ArrayList<Integer> buttonsOrder = new ArrayList<>();
+
+    private ArrayList<NodeConstructor> extraButtonsConstructor = new ArrayList<>();
 
     public String getTitle() {
         return title;
@@ -140,5 +146,21 @@ public class CrudGeneratorParameter {
 
     public void setRefreshButtonConstructor(NodeConstructor refreshButtonConstructor) {
         this.refreshButtonConstructor = refreshButtonConstructor;
+    }
+
+    public ArrayList<NodeConstructor> getExtraButtonsConstructor() {
+        return extraButtonsConstructor;
+    }
+
+    public void setExtraButtonsConstructor(ArrayList<NodeConstructor> extraButtonsConstructor) {
+        this.extraButtonsConstructor = extraButtonsConstructor;
+    }
+
+    public ArrayList<Integer> getButtonsOrder() {
+        return buttonsOrder;
+    }
+
+    public void setButtonsOrder(ArrayList<Integer> buttonsOrder) {
+        this.buttonsOrder = buttonsOrder;
     }
 }
