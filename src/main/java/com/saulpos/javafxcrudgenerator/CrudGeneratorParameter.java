@@ -36,6 +36,8 @@ public class CrudGeneratorParameter {
 
     private boolean enableSearch = true;
 
+    private Class clazz; // TODO: Improve the logic of it.
+
     private NodeConstructor labelConstructor = new NodeConstructor() {
 
         @Override
@@ -162,5 +164,13 @@ public class CrudGeneratorParameter {
 
     public void setButtonsOrder(ArrayList<Integer> buttonsOrder) {
         this.buttonsOrder = buttonsOrder;
+    }
+
+    public Class getClazz() {
+        return clazz;
+    }
+
+    public void setClazz(Class clazz) {
+        this.clazz = clazz;
     }
 }

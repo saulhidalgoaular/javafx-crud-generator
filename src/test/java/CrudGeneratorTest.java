@@ -1,3 +1,4 @@
+import com.saulpos.javafxcrudgenerator.Crud;
 import com.saulpos.javafxcrudgenerator.CrudGenerator;
 import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
 import com.saulpos.javafxcrudgenerator.NodeConstructor;
@@ -34,13 +35,16 @@ public class CrudGeneratorTest extends Application {
             }
         };
 
+        crudGeneratorParameter.setClazz(Product.class);
+
         crudGeneratorParameter.getExtraButtonsConstructor().add(customButtonConstructor);
         CrudGenerator crudGenerator = new CrudGenerator(crudGeneratorParameter);
 
         stage.setTitle("Hello World!");
 
         StackPane root = new StackPane();
-        root.getChildren().add(crudGenerator.generate(Product.class));
+        Crud crud = crudGenerator.generate();
+        root.getChildren().add(crud.getView().getMainView());
         stage.setScene(new Scene(root, 800, 640));
         stage.show();
     }
