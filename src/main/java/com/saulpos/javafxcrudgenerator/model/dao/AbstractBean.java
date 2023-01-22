@@ -13,38 +13,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.saulpos.javafxcrudgenerator;
 
-import com.saulpos.javafxcrudgenerator.model.CrudModel;
-import com.saulpos.javafxcrudgenerator.view.CrudView;
+package com.saulpos.javafxcrudgenerator.model.dao;
 
-public class Crud<S> {
+import java.beans.PropertyVetoException;
+import java.io.Serializable;
 
-    private CrudModel<S> model;
+/**
+ * Created by Saul on 11/16/2016.
+ */
+public class AbstractBean implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-    private CrudView view;
-
-    public Crud() {
+    public Integer save() throws PropertyVetoException {
+        return DatabaseConnection.getInstance().createEntry(this);
     }
 
-    public Crud(CrudModel<S> model, CrudView view) {
-        this.model = model;
-        this.view = view;
+    public void update() throws PropertyVetoException {
+        DatabaseConnection.getInstance().update(this);
     }
 
-    public CrudModel<S> getModel() {
-        return model;
+    public void saveOrUpdate() throws PropertyVetoException {
+        DatabaseConnection.getInstance().saveOrUpdate(this);
     }
 
-    public void setModel(CrudModel<S> model) {
-        this.model = model;
-    }
-
-    public CrudView getView() {
-        return view;
-    }
-
-    public void setView(CrudView view) {
-        this.view = view;
+    public void delete() throws PropertyVetoException {
+        DatabaseConnection.getInstance().delete(this);
     }
 }
