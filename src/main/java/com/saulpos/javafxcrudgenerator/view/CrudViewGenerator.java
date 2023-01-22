@@ -18,6 +18,9 @@ package com.saulpos.javafxcrudgenerator.view;
 import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
 import com.saulpos.javafxcrudgenerator.NodeConstructor;
 import com.saulpos.javafxcrudgenerator.annotations.Ignore;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -28,8 +31,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 public class CrudViewGenerator {
 
@@ -61,8 +63,8 @@ public class CrudViewGenerator {
         final VBox leftSide = new VBox();
         final VBox rightSide = new VBox();
 
-        leftSide.getChildren().addAll(fieldsPane, buttonsPane);
-        rightSide.getChildren().addAll(searchGridPane, tableView);
+        leftSide.getChildren().addAll(searchGridPane, tableView);
+        rightSide.getChildren().addAll(fieldsPane, buttonsPane);
         mainSplit.getChildren().addAll(leftSide, rightSide);
         mainPane.getChildren().add(mainSplit);
         return mainPane;
@@ -151,7 +153,24 @@ public class CrudViewGenerator {
 
     private Control getControlField(Field field){
         // TODO: Depending on the kind of field, we would need different controls.
-        return new TextField();
+        System.out.println(field.getType().toString().toLowerCase());
+
+        if (SimpleStringProperty.class.equals(field.getType())) {
+            return new TextField();
+        }
+
+        else if (SimpleBooleanProperty.class.equals(field.getType())) {
+            return new CheckBox();
+        }
+
+        else if (SimpleObjectProperty.class.equals(field.getType())) {
+
+            return new DatePicker();
+        }
+
+        else {
+            return new TextField();
+        }
     }
 
     private static String getTitle(final String name){

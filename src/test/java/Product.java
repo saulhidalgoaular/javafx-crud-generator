@@ -1,36 +1,67 @@
 import com.saulpos.javafxcrudgenerator.annotations.Ignore;
+import com.saulpos.javafxcrudgenerator.annotations.LongString;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class Product {
 
-    private String name;
+    private SimpleStringProperty name;
 
-    private String description;
+    private SimpleStringProperty description;
 
     private Price price;
 
-    private String measuringUnit;
+    private SimpleStringProperty measuringUnit;
 
     private Currency currency;
 
+    private SimpleBooleanProperty isAvailable;
+
+    private SimpleObjectProperty<Calendar> initializationDate;
+
+    @LongString(5)
+    private SimpleStringProperty wideDescription;
+
     @Ignore
-    private String extraLongDescription;
+    private SimpleStringProperty extraLongDescription;
 
     public Product() {
     }
 
-    public String getName() {
+    public SimpleObjectProperty<Calendar> getInitializationDate() {
+        return initializationDate;
+    }
+
+    public void setInitializationDate(SimpleObjectProperty<Calendar> initializationDate) {
+        this.initializationDate = initializationDate;
+    }
+
+    public SimpleBooleanProperty isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(SimpleBooleanProperty available) {
+        isAvailable = available;
+    }
+
+    public SimpleStringProperty getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(SimpleStringProperty name) {
         this.name = name;
     }
 
-    public String getDescription() {
+    public SimpleStringProperty getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(SimpleStringProperty description) {
         this.description = description;
     }
 
@@ -42,11 +73,11 @@ public class Product {
         this.price = price;
     }
 
-    public String getMeasuringUnit() {
+    public SimpleStringProperty getMeasuringUnit() {
         return measuringUnit;
     }
 
-    public void setMeasuringUnit(String measuringUnit) {
+    public void setMeasuringUnit(SimpleStringProperty measuringUnit) {
         this.measuringUnit = measuringUnit;
     }
 
@@ -58,11 +89,11 @@ public class Product {
         this.currency = currency;
     }
 
-    public String getExtraLongDescription() {
+    public SimpleStringProperty getExtraLongDescription() {
         return extraLongDescription;
     }
 
-    public void setExtraLongDescription(String extraLongDescription) {
+    public void setExtraLongDescription(SimpleStringProperty extraLongDescription) {
         this.extraLongDescription = extraLongDescription;
     }
 }
