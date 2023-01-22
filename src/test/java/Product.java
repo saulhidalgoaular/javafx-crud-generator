@@ -1,3 +1,5 @@
+import com.saulpos.javafxcrudgenerator.annotations.Ignore;
+
 public class Product {
 
     private String name;
@@ -9,6 +11,9 @@ public class Product {
     private String measuringUnit;
 
     private Currency currency;
+
+    @Ignore
+    private String extraLongDescription;
 
     public Product() {
     }
@@ -51,5 +56,13 @@ public class Product {
 
     public void setCurrency(Currency currency) {
         this.currency = currency;
+    }
+
+    public String getExtraLongDescription() {
+        return extraLongDescription;
+    }
+
+    public void setExtraLongDescription(String extraLongDescription) {
+        this.extraLongDescription = extraLongDescription;
     }
 }

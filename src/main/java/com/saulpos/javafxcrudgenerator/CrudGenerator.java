@@ -15,12 +15,12 @@
  */
 package com.saulpos.javafxcrudgenerator;
 
+import com.saulpos.javafxcrudgenerator.annotations.Ignore;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 
 import java.lang.reflect.Field;
 
@@ -36,25 +36,62 @@ public class CrudGenerator {
         final Field[] allFields = clazz.getDeclaredFields();
 
         // Fields area.
-        final Pane fieldsPane = parameter.getFieldsLayout();
-
-        final GridPane fieldsGridPane = new GridPane();
-        fieldsGridPane.setPadding(new Insets(10, 10, 10, 30));
-        fieldsGridPane.setHgap(10);
-        fieldsGridPane.setVgap(10);
-
-        int rowCounter = 0;
-        for (Field field : allFields){
-            final Node label = parameter.getLabelConstructor().generateNode(getTitle(field.getName()));
-            final Control control = getControlField(field);
-
-            fieldsGridPane.add(label, 0, rowCounter);
-            fieldsGridPane.add(control, 1, rowCounter);
-
-            rowCounter++;
-        }
-        fieldsPane.getChildren().add(fieldsGridPane);
+        final Pane fieldsPane = createFieldsPane(allFields);
         // Buttons area
+        final Pane buttonsPane = createButtonsPane();
+        // Search area
+        final GridPane searchGrigPane = createSearchPane();
+        // Table area
+        TableView tableView = createTableViewPane(allFields);
+
+        return createMainPane(fieldsPane, buttonsPane, searchGrigPane, tableView);
+    }
+
+    private Pane createMainPane(Pane fieldsPane, Pane buttonsPane, GridPane searchGridPane, TableView tableView) {
+        final Pane mainPane = parameter.getMainLayout();
+
+        final HBox mainSplit = new HBox();
+        final VBox leftSide = new VBox();
+        final VBox rightSide = new VBox();
+
+        leftSide.getChildren().addAll(fieldsPane, buttonsPane);
+        rightSide.getChildren().addAll(searchGridPane, tableView);
+        mainSplit.getChildren().addAll(leftSide, rightSide);
+        mainPane.getChildren().add(mainSplit);
+        return mainPane;
+    }
+
+    private static TableView createTableViewPane(Field[] allFields) {
+        TableView tableView = new TableView();
+        for (Field field : allFields){
+            if (!field.isAnnotationPresent(Ignore.class)){
+                TableColumn<Object, String> column = new TableColumn<>(getTitle(field.getName())); // TODO: IT NEEDS SOME IMPROVEMENTS
+                column.setCellValueFactory(new PropertyValueFactory<>(field.getName()));
+                tableView.getColumns().add(column);
+            }
+        }
+
+        tableView.setPadding(new Insets(10, 10, 10, 10));
+        return tableView;
+    }
+
+    private static GridPane createSearchPane() {
+        final GridPane searchGridPane = new GridPane();
+        searchGridPane.setPadding(new Insets(10, 10, 10, 30));
+        searchGridPane.setHgap(10);
+        searchGridPane.setVgap(10);
+
+        final Label searchLabel = new Label("Search: ");
+        final TextField searchBox = new TextField();
+        final Label searchResult = new Label("Total");
+
+        searchGridPane.add(searchLabel, 0, 0);
+        searchGridPane.add(searchBox, 1, 0);
+        searchGridPane.add(searchResult, 2, 0);
+        return searchGridPane;
+    }
+
+    private Pane createButtonsPane() {
         final Pane buttonsPane = parameter.getButtonLayout();
         final GridPane btnsGridPane = new GridPane();
         btnsGridPane.setPadding(new Insets(10, 10, 10, 30));
@@ -72,47 +109,31 @@ public class CrudGenerator {
         btnsGridPane.add(refreshButton, 3, 0);
 
         buttonsPane.getChildren().addAll(btnsGridPane);
-        //buttonsPane.getChildren().addAll(addNewButton, editButton, deleteButton, refreshButton);
+        return buttonsPane;
+    }
 
-        // Search area
-        final GridPane searchGrigPane = new GridPane();
-        searchGrigPane.setPadding(new Insets(10, 10, 10, 30));
-        searchGrigPane.setHgap(10);
-        searchGrigPane.setVgap(10);
+    private Pane createFieldsPane(Field[] allFields) {
+        final Pane fieldsPane = parameter.getFieldsLayout();
 
-        //final Pane searchArea = new HBox();
-        final Label searchLabel = new Label("Search: ");
-        final TextField searchBox = new TextField();
-        final Label searchResult = new Label("Total");
+        final GridPane fieldsGridPane = new GridPane();
+        fieldsGridPane.setPadding(new Insets(10, 10, 10, 30));
+        fieldsGridPane.setHgap(10);
+        fieldsGridPane.setVgap(10);
 
-        searchGrigPane.add(searchLabel, 0, 0);
-        searchGrigPane.add(searchBox, 1, 0);
-        searchGrigPane.add(searchResult, 2, 0);
-
-        //searchGrigPane.getChildren().addAll(searchLabel, searchBox, searchResult);
-        // Table area
-        TableView tableView = new TableView();
+        int rowCounter = 0;
         for (Field field : allFields){
-            TableColumn<Object, String> column = new TableColumn<>(getTitle(field.getName())); // TODO: IT NEEDS SOME IMPROVEMENTS
-            column.setCellValueFactory(new PropertyValueFactory<>(field.getName()));
-            tableView.getColumns().add(column);
+            if (!field.isAnnotationPresent(Ignore.class)) {
+                final Node label = parameter.getLabelConstructor().generateNode(getTitle(field.getName()));
+                final Control control = getControlField(field);
+
+                fieldsGridPane.add(label, 0, rowCounter);
+                fieldsGridPane.add(control, 1, rowCounter);
+
+                rowCounter++;
+            }
         }
-
-        tableView.setPadding(new Insets(10, 10, 10, 10));
-
-
-        final Pane mainPane = parameter.getMainLayout();
-
-        final HBox mainSplit = new HBox();
-        final VBox leftSide = new VBox();
-        final VBox rightSide = new VBox();
-
-        //mainPane.getChildren().addAll(fieldsPane, buttonsPane, searchGrigPane, tableView);
-        leftSide.getChildren().addAll(fieldsPane, buttonsPane, searchGrigPane);
-        rightSide.getChildren().add(tableView);
-        mainSplit.getChildren().addAll(leftSide, rightSide);
-        mainPane.getChildren().add(mainSplit);
-        return mainPane;
+        fieldsPane.getChildren().add(fieldsGridPane);
+        return fieldsPane;
     }
 
     private Control getControlField(Field field){
