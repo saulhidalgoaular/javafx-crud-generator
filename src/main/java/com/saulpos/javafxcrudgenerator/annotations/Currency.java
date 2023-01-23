@@ -15,7 +15,14 @@
  */
 package com.saulpos.javafxcrudgenerator.annotations;
 
-public @interface LongString {
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-    int rows() default 2;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+
+@Retention(RUNTIME)
+@Target(FIELD)
+public @interface Currency {
 }

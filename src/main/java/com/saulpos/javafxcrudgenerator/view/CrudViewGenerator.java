@@ -33,6 +33,7 @@ import javafx.scene.layout.VBox;
 import java.lang.reflect.Field;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 
 public class CrudViewGenerator {
@@ -116,13 +117,13 @@ public class CrudViewGenerator {
 
         final Node[] nodes = new Node[]{addNewButton, editButton, deleteButton, refreshButton};
         final ArrayList<Node> allButtons = new ArrayList<>(Arrays.asList(nodes));
-        for (NodeConstructor customButtonConstructor :
+        for (Object customButtonConstructor :
                 parameter.getExtraButtonsConstructor()) {
-            allButtons.add(customButtonConstructor.generateNode(null));
+            allButtons.add(((NodeConstructor)customButtonConstructor).generateNode(null));
         }
 
         for (int i = 0; i < allButtons.size(); i++) {
-            btnsGridPane.add(allButtons.get(parameter.getButtonsOrder().isEmpty() ? i :parameter.getButtonsOrder().get(i)), i, 0);
+            btnsGridPane.add(allButtons.get(parameter.getButtonsOrder().isEmpty() ? i :(int)parameter.getButtonsOrder().get(i)), i, 0);
         }
 
         buttonsPane.getChildren().addAll(btnsGridPane);
@@ -155,7 +156,6 @@ public class CrudViewGenerator {
 
     private Control getControlField(Field field){
         // TODO: Depending on the kind of field, we would need different controls.
-        System.out.println(field.getType().toString().toLowerCase());
 
         if (SimpleStringProperty.class.equals(field.getType())) {
             return new TextField();
@@ -165,13 +165,23 @@ public class CrudViewGenerator {
             return new CheckBox();
         }
 
-        else if (SimpleObjectProperty.class.equals(field.getType()) && Calendar.class.equals((((ParameterizedType)field.getGenericType()).getActualTypeArguments())[0])) {
+        else if (SimpleObjectProperty.class.equals(field.getType()) && Calendar.class.equals(getActualTypeArgument(field))) {
             return new DatePicker();
         }
 
         else {
             return new TextField();
         }
+    }
+
+    private static Type getActualTypeArgument(Field field) {
+        if (field.getGenericType() instanceof ParameterizedType){
+            Type[] actualTypeArguments = ((ParameterizedType) field.getGenericType()).getActualTypeArguments();
+            if (actualTypeArguments.length > 0){
+                return actualTypeArguments[0];
+            }
+        }
+        return null;
     }
 
     private static String getTitle(final String name){
