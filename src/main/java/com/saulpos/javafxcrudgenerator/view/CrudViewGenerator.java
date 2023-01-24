@@ -40,9 +40,15 @@ import java.util.*;
 
 public class CrudViewGenerator {
 
-    private TextField searchBox;
     private CrudGeneratorParameter parameter;
-    private TableView tableView;
+
+    private Node addNewButton;
+    private Node editButton;
+    private Node deleteButton;
+    private Node refreshButton;
+    private Label searchResult;
+
+    private TextField searchBox;
 
     private HashMap<String, Node> parameterNodes = new HashMap<>();
 
@@ -60,9 +66,22 @@ public class CrudViewGenerator {
         // Search area
         final GridPane searchGridPane = createSearchPane();
         // Table area
-        TableView tableView = createTableViewPane(allFields);
+        final TableView tableView = createTableViewPane(allFields);
 
-        return new CrudView(createMainPane(fieldsPane, buttonsPane, searchGridPane, tableView));
+        Pane mainPane = createMainPane(fieldsPane, buttonsPane, searchGridPane, tableView);
+
+        CrudView view = new CrudView();
+        view.setMainView(mainPane);
+        view.setTableView(tableView);
+        view.setAddNewButton(addNewButton);
+        view.setEditButton(editButton);
+        view.setDeleteButton(deleteButton);
+        view.setRefreshButton(refreshButton);
+        view.setParameterNodes(parameterNodes);
+        view.setSearchBox(searchBox);
+        view.setTotalLabel(searchResult);
+
+        return view;
     }
 
     private Pane createMainPane(Pane fieldsPane, Pane buttonsPane, GridPane searchGridPane, TableView tableView) {
@@ -71,7 +90,7 @@ public class CrudViewGenerator {
         final HBox mainSplit = new HBox();
         final VBox leftSide = new VBox();
         final VBox rightSide = new VBox();
-        final Label searchResult = new Label("Total");
+        searchResult = new Label("Total");
         leftSide.getChildren().addAll(searchGridPane, tableView, searchResult);
         rightSide.getChildren().addAll(fieldsPane, buttonsPane);
         mainSplit.getChildren().addAll(leftSide, rightSide);
@@ -80,7 +99,7 @@ public class CrudViewGenerator {
     }
 
     private TableView createTableViewPane(Field[] allFields) {
-        tableView = new TableView();
+        TableView tableView = new TableView();
         for (Field field : allFields){
             if (!field.isAnnotationPresent(Ignore.class)){
                 TableColumn<Object, String> column = new TableColumn<>(getTitle(field.getName())); // TODO: IT NEEDS SOME IMPROVEMENTS
@@ -114,10 +133,10 @@ public class CrudViewGenerator {
         btnsGridPane.setHgap(10);
         btnsGridPane.setVgap(10);
 
-        final Node addNewButton =  parameter.getAddNextButtonConstructor().generateNode("Add New"); // TODO: Language customizable
-        final Node editButton =  parameter.getEditButtonConstructor().generateNode("Edit");
-        final Node deleteButton =  parameter.getDeleteButtonConstructor().generateNode("Delete");
-        final Node refreshButton =  parameter.getRefreshButtonConstructor().generateNode("Refresh");
+        addNewButton =  parameter.getAddNextButtonConstructor().generateNode("Add New"); // TODO: Language customizable
+        editButton =  parameter.getEditButtonConstructor().generateNode("Edit");
+        deleteButton =  parameter.getDeleteButtonConstructor().generateNode("Delete");
+        refreshButton =  parameter.getRefreshButtonConstructor().generateNode("Refresh");
 
         final Node[] nodes = new Node[]{addNewButton, editButton, deleteButton, refreshButton};
         final ArrayList<Node> allButtons = new ArrayList<>(Arrays.asList(nodes));
@@ -216,5 +235,21 @@ public class CrudViewGenerator {
         }
 
         return title.toString().trim();
+    }
+
+    public Node getAddNewButton() {
+        return addNewButton;
+    }
+
+    public Node getEditButton() {
+        return editButton;
+    }
+
+    public Node getDeleteButton() {
+        return deleteButton;
+    }
+
+    public Node getRefreshButton() {
+        return refreshButton;
     }
 }

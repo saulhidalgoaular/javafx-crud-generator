@@ -17,6 +17,9 @@
 package com.saulpos.javafxcrudgenerator.view;
 
 import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 
 import java.util.HashMap;
 
@@ -24,12 +27,15 @@ public class CrudView {
 
     private Node mainView;
 
+    private HashMap<String, Node> parameterNodes;
 
-    private HashMap<String, Node> parameterNodes = new HashMap<>();
-
-    public CrudView(Node mainView) {
-        this.mainView = mainView;
-    }
+    private TextField searchBox;
+    private TableView tableView;
+    private Label totalLabel;
+    private Node addNewButton;
+    private Node editButton;
+    private Node deleteButton;
+    private Node refreshButton;
 
     public Node getMainView() {
         return mainView;
@@ -37,5 +43,69 @@ public class CrudView {
 
     public void setMainView(Node mainView) {
         this.mainView = mainView;
+    }
+
+    public HashMap<String, Node> getParameterNodes() {
+        return parameterNodes;
+    }
+
+    public void setParameterNodes(HashMap<String, Node> parameterNodes) {
+        this.parameterNodes = parameterNodes;
+    }
+
+    public TextField getSearchBox() {
+        return searchBox;
+    }
+
+    public void setSearchBox(TextField searchBox) {
+        this.searchBox = searchBox;
+    }
+
+    public TableView getTableView() {
+        return tableView;
+    }
+
+    public void setTableView(TableView tableView) {
+        this.tableView = tableView;
+    }
+
+    public Label getTotalLabel() {
+        return totalLabel;
+    }
+
+    public void setTotalLabel(Label totalLabel) {
+        this.totalLabel = totalLabel;
+    }
+
+    public Node getAddNewButton() {
+        return addNewButton;
+    }
+
+    public void setAddNewButton(Node addNewButton) {
+        this.addNewButton = addNewButton;
+    }
+
+    public Node getEditButton() {
+        return editButton;
+    }
+
+    public void setEditButton(Node editButton) {
+        this.editButton = editButton;
+    }
+
+    public Node getDeleteButton() {
+        return deleteButton;
+    }
+
+    public void setDeleteButton(Node deleteButton) {
+        this.deleteButton = deleteButton;
+    }
+
+    public Node getRefreshButton() {
+        return refreshButton;
+    }
+
+    public void setRefreshButton(Node refreshButton) {
+        this.refreshButton = refreshButton;
     }
 }

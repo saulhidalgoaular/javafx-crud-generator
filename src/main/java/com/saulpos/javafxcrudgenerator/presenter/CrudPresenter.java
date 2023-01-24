@@ -18,6 +18,12 @@ package com.saulpos.javafxcrudgenerator.presenter;
 import com.saulpos.javafxcrudgenerator.model.CrudModel;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import com.saulpos.javafxcrudgenerator.view.CrudView;
+import javafx.beans.binding.Binding;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.Node;
+import javafx.scene.control.TextField;
 
 public class CrudPresenter<S extends AbstractBean> {
 
@@ -31,9 +37,24 @@ public class CrudPresenter<S extends AbstractBean> {
     public CrudPresenter(CrudModel<S> model, CrudView view) {
         this.model = model;
         this.view = view;
+
+        addBindings(); // Optional
     }
 
     public void addBindings(){
+        for (String field : model.getProperties().keySet()){
+            final Node node = view.getParameterNodes().get(field);
+            Property property = model.getProperties().get(field);
+
+            if (node instanceof TextField && property instanceof SimpleStringProperty){
+                Bindings.bindBidirectional(((TextField) node).textProperty(), property);
+            }
+
+            // TODO add more kind of combinations.
+        }
+
+        Bindings.bindContentBidirectional(view.getTableView().getItems(), model.getItems());
+        view.getTableView().selectionModelProperty().bindBidirectional(model.selectedItemProperty());
 
     }
 

@@ -20,7 +20,10 @@ import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
 import com.saulpos.javafxcrudgenerator.annotations.Ignore;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -31,7 +34,7 @@ public class CrudModel<S extends AbstractBean> {
 
     private final ObservableList<S> items = FXCollections.observableArrayList();
 
-    private S selectedItem;
+    private SimpleObjectProperty<S> selectedItem = new SimpleObjectProperty<>();
 
     private SimpleStringProperty searchText = new SimpleStringProperty();
 
@@ -42,14 +45,26 @@ public class CrudModel<S extends AbstractBean> {
     public CrudModel(CrudGeneratorParameter parameter) {
         this.parameter = parameter;
 
+        refreshAction();
         createProperties();
+    }
+
+    public void refreshAction(){
+        items.setAll(parameter.getDataProvider().getAllItems());
     }
 
     public void createProperties(){
         properties.clear();
         for (Field field : parameter.getClazz().getDeclaredFields()) {
             if (!field.isAnnotationPresent(Ignore.class)){
-                properties.put(field.getName(), new SimpleStringProperty()); // TODO: Improve this
+                SimpleStringProperty stringProperty = new SimpleStringProperty();
+                stringProperty.addListener(new ChangeListener<String>() {
+                    @Override
+                    public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                        System.out.println(t1); // just testing the binding // TODO Remove later.
+                    }
+                });
+                properties.put(field.getName(), stringProperty); // TODO: Improve this
             }
         }
     }
@@ -62,12 +77,16 @@ public class CrudModel<S extends AbstractBean> {
         return items;
     }
 
-    public S getSelectedItem() {
+    public AbstractBean getSelectedItem() {
+        return selectedItem.get();
+    }
+
+    public SimpleObjectProperty<S> selectedItemProperty() {
         return selectedItem;
     }
 
     public void setSelectedItem(S selectedItem) {
-        this.selectedItem = selectedItem;
+        this.selectedItem.set(selectedItem);
     }
 
     public String getSearchText() {

@@ -1,3 +1,5 @@
+package com.saulpos.javafxcrudgenerator.sample;
+
 import java.util.Date;
 
 public class Price {

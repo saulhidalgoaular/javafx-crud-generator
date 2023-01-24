@@ -1,8 +1,13 @@
+package com.saulpos.javafxcrudgenerator.sample;
+
+import com.saulpos.javafxcrudgenerator.model.dao.AbstractDataProvider;
 import com.saulpos.javafxcrudgenerator.presenter.CrudPresenter;
 import com.saulpos.javafxcrudgenerator.CrudGenerator;
 import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
 import com.saulpos.javafxcrudgenerator.NodeConstructor;
 import javafx.application.Application;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -11,7 +16,10 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-public class CrudGeneratorTest extends Application {
+import java.util.ArrayList;
+import java.util.List;
+
+public class CrudGeneratorSample extends Application {
 
     public static void main(String[] args) {
         launch(args);
@@ -35,6 +43,21 @@ public class CrudGeneratorTest extends Application {
         };
 
         crudGeneratorParameter.setClazz(Product.class);
+        crudGeneratorParameter.setDataProvider(new AbstractDataProvider() {
+            @Override
+            public List getAllItems() {
+                final ArrayList<Product> products = new ArrayList<>();
+                Product p1 = new Product();
+                p1.setName(new SimpleStringProperty("Apple"));
+                p1.setAvailable(new SimpleBooleanProperty(true));
+                products.add(p1);
+                Product p2 = new Product();
+                p2.setName(new SimpleStringProperty("Banana"));
+                p2.setAvailable(new SimpleBooleanProperty(false));
+                products.add(p2);
+                return products;
+            }
+        });
 
         crudGeneratorParameter.getExtraButtonsConstructor().add(customButtonConstructor);
         CrudGenerator crudGenerator = new CrudGenerator(crudGeneratorParameter);

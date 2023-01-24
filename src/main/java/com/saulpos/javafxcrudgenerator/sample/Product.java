@@ -1,12 +1,15 @@
+package com.saulpos.javafxcrudgenerator.sample;
+
 import com.saulpos.javafxcrudgenerator.annotations.Ignore;
 import com.saulpos.javafxcrudgenerator.annotations.LongString;
+import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Calendar;
 
-public class Product {
+public class Product implements AbstractBean {
 
     private SimpleStringProperty name;
 
@@ -93,5 +96,27 @@ public class Product {
 
     public void setExtraLongDescription(SimpleStringProperty extraLongDescription) {
         this.extraLongDescription = extraLongDescription;
+    }
+
+    @Override
+    public Integer save() {
+        System.out.println("Product saved into database");
+        return null;
+    }
+
+    @Override
+    public void update() {
+        System.out.println("Product updated into database");
+
+    }
+
+    @Override
+    public void saveOrUpdate() {
+        System.out.println("Product saved/updated into database");
+    }
+
+    @Override
+    public void delete() {
+        System.out.println("Product deleted into database");
     }
 }

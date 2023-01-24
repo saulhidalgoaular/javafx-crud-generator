@@ -16,6 +16,7 @@
 package com.saulpos.javafxcrudgenerator;
 
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
+import com.saulpos.javafxcrudgenerator.model.dao.AbstractDataProvider;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -62,6 +63,8 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
     private ArrayList<Integer> buttonsOrder = new ArrayList<>();
 
     private ArrayList<NodeConstructor> extraButtonsConstructor = new ArrayList<>();
+
+    private AbstractDataProvider<S> dataProvider;
 
     public String getTitle() {
         return title;
@@ -173,5 +176,13 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
 
     public void setClazz(Class clazz) {
         this.clazz = clazz;
+    }
+
+    public AbstractDataProvider<S> getDataProvider() {
+        return dataProvider;
+    }
+
+    public void setDataProvider(AbstractDataProvider<S> dataProvider) {
+        this.dataProvider = dataProvider;
     }
 }
