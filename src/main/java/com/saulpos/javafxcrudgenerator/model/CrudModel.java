@@ -31,10 +31,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -64,7 +62,7 @@ public class CrudModel<S extends AbstractBean> {
             public void changed(ObservableValue<? extends S> observableValue, S oldValue, S newValue) {
                 for (String field : properties.keySet()){
                     try {
-                        properties.get(field).setValue(parameter.getClazz().getDeclaredMethod("get" + Character.toUpperCase(field.charAt(0)) + field.substring(1) ).invoke(newValue));
+                        properties.get(field).setValue(newValue != null ? parameter.getClazz().getDeclaredMethod("get" + Character.toUpperCase(field.charAt(0)) + field.substring(1) ).invoke(newValue) : null);
                     } catch (IllegalAccessException e) {
                         throw new RuntimeException(e);
                     } catch (InvocationTargetException e) {
@@ -86,7 +84,21 @@ public class CrudModel<S extends AbstractBean> {
     }
 
     public void editItemAction(){
-        // TODO: Assign the values from properties of the selected item.
+        final HashMap<String, Method> methods = new HashMap<>();
+        Arrays.stream(parameter.getClazz().getDeclaredMethods()).forEach(method -> methods.put(method.getName(), method));
+
+        for (String field : properties.keySet()){
+            try {
+                methods.get("set" + Character.toUpperCase(field.charAt(0)) + field.substring(1))
+                    .invoke(
+                    selectedItem.get(),
+                    properties.get(field).getValue());
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public void deleteItemAction(){

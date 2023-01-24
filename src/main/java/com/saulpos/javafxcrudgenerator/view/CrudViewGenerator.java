@@ -87,6 +87,7 @@ public class CrudViewGenerator {
 
     private void addBindings() {
         deleteButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
+        editButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
     }
 
     private Pane createMainPane(Pane fieldsPane, Pane buttonsPane, GridPane searchGridPane, TableView tableView) {
