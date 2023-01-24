@@ -13,24 +13,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.saulpos.javafxcrudgenerator;
+package com.saulpos.javafxcrudgenerator.presenter;
 
 import com.saulpos.javafxcrudgenerator.model.CrudModel;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import com.saulpos.javafxcrudgenerator.view.CrudView;
 
-public class Crud<S extends AbstractBean> {
+public class CrudPresenter<S extends AbstractBean> {
 
     private CrudModel<S> model;
 
     private CrudView view;
 
-    public Crud() {
+    public CrudPresenter() {
     }
 
-    public Crud(CrudModel<S> model, CrudView view) {
+    public CrudPresenter(CrudModel<S> model, CrudView view) {
         this.model = model;
         this.view = view;
+    }
+
+    public void addBindings(){
+
     }
 
     public CrudModel<S> getModel() {

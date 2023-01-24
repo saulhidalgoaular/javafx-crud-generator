@@ -18,9 +18,14 @@ package com.saulpos.javafxcrudgenerator.view;
 
 import javafx.scene.Node;
 
+import java.util.HashMap;
+
 public class CrudView {
 
     private Node mainView;
+
+
+    private HashMap<String, Node> parameterNodes = new HashMap<>();
 
     public CrudView(Node mainView) {
         this.mainView = mainView;

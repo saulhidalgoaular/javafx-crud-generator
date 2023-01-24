@@ -18,6 +18,8 @@ package com.saulpos.javafxcrudgenerator.view;
 import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
 import com.saulpos.javafxcrudgenerator.NodeConstructor;
 import com.saulpos.javafxcrudgenerator.annotations.Ignore;
+import com.saulpos.javafxcrudgenerator.annotations.LongString;
+import com.saulpos.javafxcrudgenerator.annotations.Password;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -38,7 +40,11 @@ import java.util.*;
 
 public class CrudViewGenerator {
 
+    private TextField searchBox;
     private CrudGeneratorParameter parameter;
+    private TableView tableView;
+
+    private HashMap<String, Node> parameterNodes = new HashMap<>();
 
     public CrudViewGenerator(CrudGeneratorParameter parameter) {
         this.parameter = parameter;
@@ -73,8 +79,8 @@ public class CrudViewGenerator {
         return mainPane;
     }
 
-    private static TableView createTableViewPane(Field[] allFields) {
-        TableView tableView = new TableView();
+    private TableView createTableViewPane(Field[] allFields) {
+        tableView = new TableView();
         for (Field field : allFields){
             if (!field.isAnnotationPresent(Ignore.class)){
                 TableColumn<Object, String> column = new TableColumn<>(getTitle(field.getName())); // TODO: IT NEEDS SOME IMPROVEMENTS
@@ -87,19 +93,17 @@ public class CrudViewGenerator {
         return tableView;
     }
 
-    private static GridPane createSearchPane() {
+    private GridPane createSearchPane() {
         final GridPane searchGridPane = new GridPane();
-        searchGridPane.setPadding(new Insets(10, 10, 10, 30));
+        searchGridPane.setPadding(new Insets(10, 10, 10, 10));
         searchGridPane.setHgap(10);
         searchGridPane.setVgap(10);
 
         final Label searchLabel = new Label("Search: ");
-        final TextField searchBox = new TextField();
-        //final Label searchResult = new Label("Total");
+        searchBox = new TextField();
 
         searchGridPane.add(searchLabel, 0, 0);
         searchGridPane.add(searchBox, 1, 0);
-        //searchGridPane.add(searchResult, 2, 0);
         return searchGridPane;
     }
 
@@ -144,6 +148,8 @@ public class CrudViewGenerator {
                 final Node label = parameter.getLabelConstructor().generateNode(getTitle(field.getName()));
                 final Control control = getControlField(field);
 
+                parameterNodes.put(field.getName(), control);
+
                 fieldsGridPane.add(label, 0, rowCounter);
                 fieldsGridPane.add(control, 1, rowCounter);
 
@@ -158,6 +164,12 @@ public class CrudViewGenerator {
         // TODO: Depending on the kind of field, we would need different controls.
 
         if (SimpleStringProperty.class.equals(field.getType())) {
+            if (field.isAnnotationPresent(Password.class)) {
+                return new PasswordField();
+            }
+            if (field.isAnnotationPresent(LongString.class)) {
+                return new TextArea();
+            }
             return new TextField();
         }
 

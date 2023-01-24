@@ -1,4 +1,4 @@
-import com.saulpos.javafxcrudgenerator.Crud;
+import com.saulpos.javafxcrudgenerator.presenter.CrudPresenter;
 import com.saulpos.javafxcrudgenerator.CrudGenerator;
 import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
 import com.saulpos.javafxcrudgenerator.NodeConstructor;
@@ -8,7 +8,6 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -43,7 +42,7 @@ public class CrudGeneratorTest extends Application {
         stage.setTitle("Hello World!");
 
         StackPane root = new StackPane();
-        Crud crud = crudGenerator.generate();
+        CrudPresenter crud = crudGenerator.generate();
         root.getChildren().add(crud.getView().getMainView());
         stage.setScene(new Scene(root, 960, 640));
         stage.show();
