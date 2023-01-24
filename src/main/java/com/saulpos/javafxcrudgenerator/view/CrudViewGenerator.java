@@ -17,14 +17,8 @@ package com.saulpos.javafxcrudgenerator.view;
 
 import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
 import com.saulpos.javafxcrudgenerator.NodeConstructor;
-import com.saulpos.javafxcrudgenerator.annotations.Ignore;
-import com.saulpos.javafxcrudgenerator.annotations.LongString;
-import com.saulpos.javafxcrudgenerator.annotations.Password;
-import com.saulpos.javafxcrudgenerator.annotations.RichCalendar;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
+import com.saulpos.javafxcrudgenerator.annotations.*;
+import javafx.beans.property.*;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -35,6 +29,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import com.saulpos.javafxcrudgenerator.view.ViewUtils;
 import jfxtras.scene.control.CalendarPicker;
+import jfxtras.scene.control.ListView;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -216,18 +211,29 @@ public class CrudViewGenerator {
             return new CheckBox();
         }
 
-        else if (SimpleObjectProperty.class.equals(field.getType()) && Calendar.class.equals(ViewUtils.getActualTypeArgument(field))) {
-            if (field.isAnnotationPresent(RichCalendar.class)) {
-                return new CalendarPicker();
+        else if (SimpleObjectProperty.class.equals(field.getType())) {
+            if (Calendar.class.equals(ViewUtils.getActualTypeArgument(field))) {
+                if (field.isAnnotationPresent(RichCalendar.class)) {
+                    return new CalendarPicker();
+                } else {
+                    return new DatePicker();
+                }
+            }else{
+                final List allItems = parameter.getDataProvider().getAllItems((Class)ViewUtils.getActualTypeArgument(field));
+                if (!allItems.isEmpty()){
+                    final ChoiceBox choiceBox = new ChoiceBox();
+
+                    choiceBox.getItems().addAll(allItems);
+
+                    return choiceBox;
+                }
             }
-            else
-                return new DatePicker();
 
+        }else if (SimpleDoubleProperty.class.equals(field.getType())){
+            return new TextField(); // TODO: Change to a Double control
         }
 
-        else {
-            return new TextField();
-        }
+        return new TextField();
     }
 
     public Node getAddNewButton() {
