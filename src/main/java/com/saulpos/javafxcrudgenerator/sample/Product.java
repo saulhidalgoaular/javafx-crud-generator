@@ -2,8 +2,10 @@ package com.saulpos.javafxcrudgenerator.sample;
 
 import com.saulpos.javafxcrudgenerator.annotations.Ignore;
 import com.saulpos.javafxcrudgenerator.annotations.LongString;
+import com.saulpos.javafxcrudgenerator.annotations.Currency;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -19,12 +21,14 @@ public class Product implements AbstractBean {
 
     private SimpleStringProperty measuringUnit = new SimpleStringProperty();
 
-    private SimpleObjectProperty<Currency> currency = new SimpleObjectProperty<>();
+    private SimpleObjectProperty<com.saulpos.javafxcrudgenerator.sample.Currency> currency = new SimpleObjectProperty<>();
 
     private SimpleBooleanProperty isAvailable = new SimpleBooleanProperty();
 
     private SimpleObjectProperty<Calendar> initializationDate = new SimpleObjectProperty<>();
 
+    @Currency
+    private SimpleDoubleProperty total = new SimpleDoubleProperty();
     @LongString(rows=5)
     private SimpleStringProperty wideDescription = new SimpleStringProperty();
 
@@ -82,15 +86,15 @@ public class Product implements AbstractBean {
         this.measuringUnit.set(measuringUnit);
     }
 
-    public Currency getCurrency() {
+    public com.saulpos.javafxcrudgenerator.sample.Currency getCurrency() {
         return currency.get();
     }
 
-    public SimpleObjectProperty<Currency> currencyProperty() {
+    public SimpleObjectProperty<com.saulpos.javafxcrudgenerator.sample.Currency> currencyProperty() {
         return currency;
     }
 
-    public void setCurrency(Currency currency) {
+    public void setCurrency(com.saulpos.javafxcrudgenerator.sample.Currency currency) {
         this.currency.set(currency);
     }
 
@@ -140,6 +144,18 @@ public class Product implements AbstractBean {
 
     public void setExtraLongDescription(String extraLongDescription) {
         this.extraLongDescription.set(extraLongDescription);
+    }
+
+    public SimpleDoubleProperty totalProperty() {
+        return total;
+    }
+
+    public double getTotal() {
+        return total.get();
+    }
+
+    public void setTotal(double total) {
+        this.total.set(total);
     }
 
     @Override

@@ -20,6 +20,7 @@ import com.saulpos.javafxcrudgenerator.NodeConstructor;
 import com.saulpos.javafxcrudgenerator.annotations.Ignore;
 import com.saulpos.javafxcrudgenerator.annotations.LongString;
 import com.saulpos.javafxcrudgenerator.annotations.Password;
+import com.saulpos.javafxcrudgenerator.annotations.RichCalendar;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -33,6 +34,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import com.saulpos.javafxcrudgenerator.view.ViewUtils;
+import jfxtras.scene.control.CalendarPicker;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -215,7 +217,12 @@ public class CrudViewGenerator {
         }
 
         else if (SimpleObjectProperty.class.equals(field.getType()) && Calendar.class.equals(ViewUtils.getActualTypeArgument(field))) {
-            return new DatePicker();
+            if (field.isAnnotationPresent(RichCalendar.class)) {
+                return new CalendarPicker();
+            }
+            else
+                return new DatePicker();
+
         }
 
         else {
