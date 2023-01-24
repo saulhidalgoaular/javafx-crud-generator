@@ -53,6 +53,19 @@ public class CrudModel<S extends AbstractBean> {
         items.setAll(parameter.getDataProvider().getAllItems());
     }
 
+    public void addItemAction(){
+        // TODO: Call default constructor and assign the values
+    }
+
+    public void editItemAction(){
+        // TODO: Assign the values from properties of the selected item.
+    }
+
+    public void deleteItemAction(){
+        selectedItem.get().delete();
+        items.remove(selectedItem.get());
+    }
+
     public void createProperties(){
         properties.clear();
         for (Field field : parameter.getClazz().getDeclaredFields()) {

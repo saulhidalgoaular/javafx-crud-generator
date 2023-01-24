@@ -48,12 +48,13 @@ public class CrudGeneratorSample extends Application {
             public List getAllItems() {
                 final ArrayList<Product> products = new ArrayList<>();
                 Product p1 = new Product();
-                p1.setName(new SimpleStringProperty("Apple"));
-                p1.setAvailable(new SimpleBooleanProperty(true));
+                p1.setName("Apple");
+                p1.setIsAvailable(true);
+                p1.setDescription("Description here");
                 products.add(p1);
                 Product p2 = new Product();
-                p2.setName(new SimpleStringProperty("Banana"));
-                p2.setAvailable(new SimpleBooleanProperty(false));
+                p2.setName("Banana");
+                p2.setIsAvailable(false);
                 products.add(p2);
                 return products;
             }

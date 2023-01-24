@@ -11,91 +11,135 @@ import java.util.Calendar;
 
 public class Product implements AbstractBean {
 
-    private SimpleStringProperty name;
+    private SimpleStringProperty name = new SimpleStringProperty();
 
-    private SimpleStringProperty description;
+    private SimpleStringProperty description = new SimpleStringProperty();
 
-    private Price price;
+    private SimpleObjectProperty<Price> price = new SimpleObjectProperty<>();
 
-    private SimpleStringProperty measuringUnit;
+    private SimpleStringProperty measuringUnit = new SimpleStringProperty();
 
-    private Currency currency;
+    private SimpleObjectProperty<Currency> currency = new SimpleObjectProperty<>();
 
-    private SimpleBooleanProperty isAvailable;
+    private SimpleBooleanProperty isAvailable = new SimpleBooleanProperty();
 
-    private SimpleObjectProperty<Calendar> initializationDate;
+    private SimpleObjectProperty<Calendar> initializationDate = new SimpleObjectProperty<>();
 
     @LongString(rows=5)
-    private SimpleStringProperty wideDescription;
+    private SimpleStringProperty wideDescription = new SimpleStringProperty();
 
     @Ignore
-    private SimpleStringProperty extraLongDescription;
+    private SimpleStringProperty extraLongDescription = new SimpleStringProperty();
 
     public Product() {
     }
 
-    public SimpleObjectProperty<Calendar> getInitializationDate() {
-        return initializationDate;
+    public String getName() {
+        return name.get();
     }
 
-    public void setInitializationDate(SimpleObjectProperty<Calendar> initializationDate) {
-        this.initializationDate = initializationDate;
-    }
-
-    public SimpleBooleanProperty isAvailable() {
-        return isAvailable;
-    }
-
-    public void setAvailable(SimpleBooleanProperty available) {
-        isAvailable = available;
-    }
-
-    public SimpleStringProperty getName() {
+    public SimpleStringProperty nameProperty() {
         return name;
     }
 
-    public void setName(SimpleStringProperty name) {
-        this.name = name;
+    public void setName(String name) {
+        this.name.set(name);
     }
 
-    public SimpleStringProperty getDescription() {
+    public String getDescription() {
+        return description.get();
+    }
+
+    public SimpleStringProperty descriptionProperty() {
         return description;
     }
 
-    public void setDescription(SimpleStringProperty description) {
-        this.description = description;
+    public void setDescription(String description) {
+        this.description.set(description);
     }
 
     public Price getPrice() {
+        return price.get();
+    }
+
+    public SimpleObjectProperty<Price> priceProperty() {
         return price;
     }
 
     public void setPrice(Price price) {
-        this.price = price;
+        this.price.set(price);
     }
 
-    public SimpleStringProperty getMeasuringUnit() {
+    public String getMeasuringUnit() {
+        return measuringUnit.get();
+    }
+
+    public SimpleStringProperty measuringUnitProperty() {
         return measuringUnit;
     }
 
-    public void setMeasuringUnit(SimpleStringProperty measuringUnit) {
-        this.measuringUnit = measuringUnit;
+    public void setMeasuringUnit(String measuringUnit) {
+        this.measuringUnit.set(measuringUnit);
     }
 
     public Currency getCurrency() {
+        return currency.get();
+    }
+
+    public SimpleObjectProperty<Currency> currencyProperty() {
         return currency;
     }
 
     public void setCurrency(Currency currency) {
-        this.currency = currency;
+        this.currency.set(currency);
     }
 
-    public SimpleStringProperty getExtraLongDescription() {
+    public boolean isIsAvailable() {
+        return isAvailable.get();
+    }
+
+    public SimpleBooleanProperty isAvailableProperty() {
+        return isAvailable;
+    }
+
+    public void setIsAvailable(boolean isAvailable) {
+        this.isAvailable.set(isAvailable);
+    }
+
+    public Calendar getInitializationDate() {
+        return initializationDate.get();
+    }
+
+    public SimpleObjectProperty<Calendar> initializationDateProperty() {
+        return initializationDate;
+    }
+
+    public void setInitializationDate(Calendar initializationDate) {
+        this.initializationDate.set(initializationDate);
+    }
+
+    public String getWideDescription() {
+        return wideDescription.get();
+    }
+
+    public SimpleStringProperty wideDescriptionProperty() {
+        return wideDescription;
+    }
+
+    public void setWideDescription(String wideDescription) {
+        this.wideDescription.set(wideDescription);
+    }
+
+    public String getExtraLongDescription() {
+        return extraLongDescription.get();
+    }
+
+    public SimpleStringProperty extraLongDescriptionProperty() {
         return extraLongDescription;
     }
 
-    public void setExtraLongDescription(SimpleStringProperty extraLongDescription) {
-        this.extraLongDescription = extraLongDescription;
+    public void setExtraLongDescription(String extraLongDescription) {
+        this.extraLongDescription.set(extraLongDescription);
     }
 
     @Override

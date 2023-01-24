@@ -22,7 +22,10 @@ import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
 public class CrudPresenter<S extends AbstractBean> {
@@ -39,6 +42,37 @@ public class CrudPresenter<S extends AbstractBean> {
         this.view = view;
 
         addBindings(); // Optional
+        addActions();
+    }
+
+    public void addActions(){
+        ((Button)view.getAddNewButton()).setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                model.addItemAction();
+            }
+        }); // TODO: Improve this. It is not Buttons all the time
+
+        ((Button)view.getEditButton()).setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                model.editItemAction();
+            }
+        });
+
+        ((Button)view.getDeleteButton()).setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                model.deleteItemAction();
+            }
+        });
+
+        ((Button)view.getRefreshButton()).setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                model.refreshAction();
+            }
+        });
     }
 
     public void addBindings(){
@@ -55,6 +89,7 @@ public class CrudPresenter<S extends AbstractBean> {
 
         Bindings.bindContentBidirectional(view.getTableView().getItems(), model.getItems());
         view.getTableView().selectionModelProperty().bindBidirectional(model.selectedItemProperty());
+
 
     }
 

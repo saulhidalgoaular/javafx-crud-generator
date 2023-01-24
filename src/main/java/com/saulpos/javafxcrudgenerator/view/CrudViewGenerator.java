@@ -20,6 +20,7 @@ import com.saulpos.javafxcrudgenerator.NodeConstructor;
 import com.saulpos.javafxcrudgenerator.annotations.Ignore;
 import com.saulpos.javafxcrudgenerator.annotations.LongString;
 import com.saulpos.javafxcrudgenerator.annotations.Password;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -32,10 +33,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Parameter;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.*;
 
 public class CrudViewGenerator {
@@ -103,13 +101,25 @@ public class CrudViewGenerator {
         for (Field field : allFields){
             if (!field.isAnnotationPresent(Ignore.class)){
                 TableColumn<Object, String> column = new TableColumn<>(getTitle(field.getName())); // TODO: IT NEEDS SOME IMPROVEMENTS
-                column.setCellValueFactory(new PropertyValueFactory<>(field.getName()));
+                column.setCellValueFactory(cell -> getProperty(cell, field.getName()));
                 tableView.getColumns().add(column);
             }
         }
 
         tableView.setPadding(new Insets(10, 10, 10, 10));
         return tableView;
+    }
+
+    private Property getProperty(final TableColumn.CellDataFeatures instance, final String name){
+        try {
+            return (Property) parameter.getClazz().getDeclaredMethod(name + "Property").invoke(instance.getValue());
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private GridPane createSearchPane() {
