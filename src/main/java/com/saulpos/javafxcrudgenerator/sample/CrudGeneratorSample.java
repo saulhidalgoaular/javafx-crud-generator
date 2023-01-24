@@ -44,23 +44,44 @@ public class CrudGeneratorSample extends Application {
         crudGeneratorParameter.setClazz(Product.class);
         crudGeneratorParameter.setDataProvider(new AbstractDataProvider() {
             @Override
-            public List getAllItems() {
-                final ArrayList<Product> products = new ArrayList<>();
-                Product p1 = new Product();
-                p1.setName("Apple");
-                p1.setIsAvailable(true);
-                p1.setDescription("Description here");
-                products.add(p1);
-                Product p2 = new Product();
-                p2.setName("Banana");
-                p2.setIsAvailable(false);
-                products.add(p2);
-                Product p3 = new Product();
-                p3.setName("Ananas");
-                p3.setIsAvailable(true);
-                p3.setInitializationDate(new GregorianCalendar(2023,0,24));
-                products.add(p3);
-                return products;
+            public List getAllItems(Class clazz) {
+                if (Product.class.equals(clazz)){
+                    final ArrayList<Product> products = new ArrayList<>();
+                    Product p1 = new Product();
+                    p1.setName("Apple");
+                    p1.setIsAvailable(true);
+                    p1.setDescription("Description here");
+                    products.add(p1);
+                    Product p2 = new Product();
+                    p2.setName("Banana");
+                    p2.setIsAvailable(false);
+                    products.add(p2);
+                    Product p3 = new Product();
+                    p3.setName("Ananas");
+                    p3.setIsAvailable(true);
+                    p3.setInitializationDate(new GregorianCalendar(2023,0,24));
+                    products.add(p3);
+                    return products;
+                }else if (Price.class.equals(clazz)){
+                    final ArrayList<Price> prices = new ArrayList<>();
+                    Price p1 = new Price();
+                    p1.setDiscount(.2);
+                    p1.setValue(35.);
+                    p1.setStartingDate(Calendar.getInstance().getTime());
+                    p1.setEndingDate(Calendar.getInstance().getTime());
+                    prices.add(p1);
+                    Price p2 = new Price();
+                    p2.setDiscount(.2);
+                    p2.setValue(40.);
+                    p2.setStartingDate(Calendar.getInstance().getTime());
+                    p2.setEndingDate(Calendar.getInstance().getTime());
+                    prices.add(p2);
+                    return prices;
+                }else if (clazz.isEnum()){
+                    return new ArrayList(EnumSet.allOf(clazz));
+                }
+
+                return new ArrayList();
             }
         });
 

@@ -21,6 +21,7 @@ import com.saulpos.javafxcrudgenerator.annotations.Ignore;
 import com.saulpos.javafxcrudgenerator.annotations.LongString;
 import com.saulpos.javafxcrudgenerator.annotations.Password;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
+import com.saulpos.javafxcrudgenerator.view.ViewUtils;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -44,7 +45,7 @@ public class CrudModel<S extends AbstractBean> {
 
     private SimpleStringProperty searchText = new SimpleStringProperty();
 
-    private HashMap<String, Property> properties = new HashMap<>();
+    private final HashMap<String, Property> properties;
 
     private CrudGeneratorParameter parameter;
 
@@ -53,7 +54,7 @@ public class CrudModel<S extends AbstractBean> {
 
         addListeners();
         refreshAction();
-        createProperties();
+        properties = ViewUtils.createModelProperties(parameter);
     }
 
     private void addListeners() {
@@ -76,7 +77,7 @@ public class CrudModel<S extends AbstractBean> {
     }
 
     public void refreshAction(){
-        items.setAll(parameter.getDataProvider().getAllItems());
+        items.setAll(parameter.getDataProvider().getAllItems(parameter.getClazz()));
     }
 
     public void addItemAction(){
@@ -104,44 +105,6 @@ public class CrudModel<S extends AbstractBean> {
     public void deleteItemAction(){
         selectedItem.get().delete();
         items.remove(selectedItem.get());
-    }
-
-    public void createProperties(){
-        properties.clear();
-        for (Field field : parameter.getClazz().getDeclaredFields()) {
-            if (!field.isAnnotationPresent(Ignore.class)){
-                Property property;
-
-                if (SimpleStringProperty.class.equals(field.getType())) {
-                    property = new SimpleStringProperty();
-                }
-
-                else if (SimpleBooleanProperty.class.equals(field.getType())) {
-                    property = new SimpleBooleanProperty();
-                }
-
-                else if (SimpleObjectProperty.class.equals(field.getType()) && Calendar.class.equals(getActualTypeArgument(field))) {
-                    property = new SimpleObjectProperty();
-                }
-
-                else {
-                    property = new SimpleStringProperty();
-                }
-
-                properties.put(field.getName(), property);
-            }
-        }
-    }
-
-
-    private static Type getActualTypeArgument(Field field) { // TODO: URGENT. This is repeated in the view generator
-        if (field.getGenericType() instanceof ParameterizedType){
-            Type[] actualTypeArguments = ((ParameterizedType) field.getGenericType()).getActualTypeArguments();
-            if (actualTypeArguments.length > 0){
-                return actualTypeArguments[0];
-            }
-        }
-        return null;
     }
 
     public HashMap<String, Property> getProperties() {

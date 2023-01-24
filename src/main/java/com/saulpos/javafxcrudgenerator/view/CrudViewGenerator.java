@@ -110,7 +110,7 @@ public class CrudViewGenerator {
         TableView tableView = new TableView();
         for (Field field : allFields){
             if (!field.isAnnotationPresent(Ignore.class)){
-                TableColumn<Object, String> column = new TableColumn<>(getTitle(field.getName())); // TODO: IT NEEDS SOME IMPROVEMENTS
+                TableColumn<Object, String> column = new TableColumn<>(ViewUtils.getTitle(field.getName())); // TODO: IT NEEDS SOME IMPROVEMENTS
                 column.setCellValueFactory(cell -> getProperty(cell, field.getName()));
                 tableView.getColumns().add(column);
             }
@@ -184,7 +184,7 @@ public class CrudViewGenerator {
         int rowCounter = 0;
         for (Field field : allFields){
             if (!field.isAnnotationPresent(Ignore.class)) {
-                final Node label = parameter.getLabelConstructor().generateNode(getTitle(field.getName()));
+                final Node label = parameter.getLabelConstructor().generateNode(ViewUtils.getTitle(field.getName()));
                 final Control control = getControlField(field);
 
                 parameterNodes.put(field.getName(), control);
@@ -228,30 +228,6 @@ public class CrudViewGenerator {
         else {
             return new TextField();
         }
-    }
-
-
-
-    private static String getTitle(final String name){
-        StringBuilder title = new StringBuilder();
-        StringBuilder currentWord = new StringBuilder();
-        for (char c : name.toCharArray()){
-            if (currentWord.isEmpty()){
-                currentWord.append(Character.toUpperCase(c));
-            }else if (Character.isUpperCase(c)){
-                title.append(currentWord);
-                title.append(" ");
-                currentWord.setLength(0);
-                currentWord.append(Character.toUpperCase(c));
-            }else{
-                currentWord.append(c);
-            }
-        }
-        if (!currentWord.isEmpty()){
-            title.append(currentWord);
-        }
-
-        return title.toString().trim();
     }
 
     public Node getAddNewButton() {
