@@ -45,7 +45,7 @@ public class CrudViewGenerator {
     private Node deleteButton;
     private Node refreshButton;
     private Label searchResult;
-
+    private TableView tableView;
     private TextField searchBox;
 
     private HashMap<String, Node> parameterNodes = new HashMap<>();
@@ -64,9 +64,11 @@ public class CrudViewGenerator {
         // Search area
         final GridPane searchGridPane = createSearchPane();
         // Table area
-        final TableView tableView = createTableViewPane(allFields);
+        tableView = createTableViewPane(allFields);
 
         Pane mainPane = createMainPane(fieldsPane, buttonsPane, searchGridPane, tableView);
+
+        addBindings();
 
         CrudView view = new CrudView();
         view.setMainView(mainPane);
@@ -80,6 +82,10 @@ public class CrudViewGenerator {
         view.setTotalLabel(searchResult);
 
         return view;
+    }
+
+    private void addBindings() {
+        deleteButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
     }
 
     private Pane createMainPane(Pane fieldsPane, Pane buttonsPane, GridPane searchGridPane, TableView tableView) {

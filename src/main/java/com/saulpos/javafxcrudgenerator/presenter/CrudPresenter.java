@@ -88,8 +88,7 @@ public class CrudPresenter<S extends AbstractBean> {
         }
 
         Bindings.bindContentBidirectional(view.getTableView().getItems(), model.getItems());
-        view.getTableView().selectionModelProperty().bindBidirectional(model.selectedItemProperty());
-
+        model.selectedItemProperty().bind(view.getTableView().getSelectionModel().selectedItemProperty());
 
     }
 

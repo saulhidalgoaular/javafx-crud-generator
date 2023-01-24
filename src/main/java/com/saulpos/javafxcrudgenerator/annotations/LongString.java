@@ -14,7 +14,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.saulpos.javafxcrudgenerator.annotations;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+
+@Retention(RUNTIME)
+@Target(FIELD)
 public @interface LongString {
 
     int rows() default 2;

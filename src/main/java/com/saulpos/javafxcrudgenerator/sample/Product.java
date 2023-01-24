@@ -94,7 +94,7 @@ public class Product implements AbstractBean {
         this.currency.set(currency);
     }
 
-    public boolean isIsAvailable() {
+    public boolean getIsAvailable() {
         return isAvailable.get();
     }
 
@@ -144,23 +144,23 @@ public class Product implements AbstractBean {
 
     @Override
     public Integer save() {
-        System.out.println("Product saved into database");
+        System.out.println("Product saved");
         return null;
     }
 
     @Override
     public void update() {
-        System.out.println("Product updated into database");
+        System.out.println("Product updated");
 
     }
 
     @Override
     public void saveOrUpdate() {
-        System.out.println("Product saved/updated into database");
+        System.out.println("Product saved/updated");
     }
 
     @Override
     public void delete() {
-        System.out.println("Product deleted into database");
+        System.out.println("Product deleted; " + getName());
     }
 }

@@ -18,16 +18,24 @@ package com.saulpos.javafxcrudgenerator.model;
 
 import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
 import com.saulpos.javafxcrudgenerator.annotations.Ignore;
+import com.saulpos.javafxcrudgenerator.annotations.LongString;
+import com.saulpos.javafxcrudgenerator.annotations.Password;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.*;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class CrudModel<S extends AbstractBean> {
@@ -45,8 +53,28 @@ public class CrudModel<S extends AbstractBean> {
     public CrudModel(CrudGeneratorParameter parameter) {
         this.parameter = parameter;
 
+        addListeners();
         refreshAction();
         createProperties();
+    }
+
+    private void addListeners() {
+        selectedItem.addListener(new ChangeListener<S>() {
+            @Override
+            public void changed(ObservableValue<? extends S> observableValue, S oldValue, S newValue) {
+                for (String field : properties.keySet()){
+                    try {
+                        properties.get(field).setValue(parameter.getClazz().getDeclaredMethod("get" + Character.toUpperCase(field.charAt(0)) + field.substring(1) ).invoke(newValue));
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    } catch (InvocationTargetException e) {
+                        throw new RuntimeException(e);
+                    } catch (NoSuchMethodException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
     }
 
     public void refreshAction(){
@@ -70,16 +98,38 @@ public class CrudModel<S extends AbstractBean> {
         properties.clear();
         for (Field field : parameter.getClazz().getDeclaredFields()) {
             if (!field.isAnnotationPresent(Ignore.class)){
-                SimpleStringProperty stringProperty = new SimpleStringProperty();
-                stringProperty.addListener(new ChangeListener<String>() {
-                    @Override
-                    public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                        System.out.println(t1); // just testing the binding // TODO Remove later.
-                    }
-                });
-                properties.put(field.getName(), stringProperty); // TODO: Improve this
+                Property property;
+
+                if (SimpleStringProperty.class.equals(field.getType())) {
+                    property = new SimpleStringProperty();
+                }
+
+                else if (SimpleBooleanProperty.class.equals(field.getType())) {
+                    property = new SimpleBooleanProperty();
+                }
+
+                else if (SimpleObjectProperty.class.equals(field.getType()) && Calendar.class.equals(getActualTypeArgument(field))) {
+                    property = new SimpleObjectProperty();
+                }
+
+                else {
+                    property = new SimpleStringProperty();
+                }
+
+                properties.put(field.getName(), property);
             }
         }
+    }
+
+
+    private static Type getActualTypeArgument(Field field) { // TODO: URGENT. This is repeated in the view generator
+        if (field.getGenericType() instanceof ParameterizedType){
+            Type[] actualTypeArguments = ((ParameterizedType) field.getGenericType()).getActualTypeArguments();
+            if (actualTypeArguments.length > 0){
+                return actualTypeArguments[0];
+            }
+        }
+        return null;
     }
 
     public HashMap<String, Property> getProperties() {
