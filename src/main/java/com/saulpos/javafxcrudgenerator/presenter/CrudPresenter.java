@@ -18,14 +18,19 @@ package com.saulpos.javafxcrudgenerator.presenter;
 import com.saulpos.javafxcrudgenerator.model.CrudModel;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import com.saulpos.javafxcrudgenerator.view.CrudView;
+import com.saulpos.javafxcrudgenerator.view.ViewUtils;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 
 public class CrudPresenter<S extends AbstractBean> {
@@ -84,6 +89,19 @@ public class CrudPresenter<S extends AbstractBean> {
                 Bindings.bindBidirectional(((TextField) node).textProperty(), property);
             }
 
+            else if (node instanceof CheckBox && property instanceof SimpleBooleanProperty) {
+                Bindings.bindBidirectional(((CheckBox) node).selectedProperty(), property);
+            }
+
+            else if (property instanceof SimpleObjectProperty)
+            {
+                if (node instanceof DatePicker) {}
+                // todo: add for all object types
+                //else if (node instanceof )
+            }
+
+
+            // getActualArgumentType
             // TODO add more kind of combinations.
         }
 

@@ -16,8 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class CrudGeneratorSample extends Application {
 
@@ -56,6 +55,11 @@ public class CrudGeneratorSample extends Application {
                 p2.setName("Banana");
                 p2.setIsAvailable(false);
                 products.add(p2);
+                Product p3 = new Product();
+                p3.setName("Ananas");
+                p3.setIsAvailable(true);
+                p3.setInitializationDate(new GregorianCalendar(2023,0,24));
+                products.add(p3);
                 return products;
             }
         });
@@ -68,7 +72,7 @@ public class CrudGeneratorSample extends Application {
         StackPane root = new StackPane();
         CrudPresenter crud = crudGenerator.generate();
         root.getChildren().add(crud.getView().getMainView());
-        stage.setScene(new Scene(root, 960, 640));
+        stage.setScene(new Scene(root, 1160, 640));
         stage.show();
     }
 }

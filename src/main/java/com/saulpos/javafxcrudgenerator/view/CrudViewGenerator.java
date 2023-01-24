@@ -32,6 +32,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import com.saulpos.javafxcrudgenerator.view.ViewUtils;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -212,7 +213,7 @@ public class CrudViewGenerator {
             return new CheckBox();
         }
 
-        else if (SimpleObjectProperty.class.equals(field.getType()) && Calendar.class.equals(getActualTypeArgument(field))) {
+        else if (SimpleObjectProperty.class.equals(field.getType()) && Calendar.class.equals(ViewUtils.getActualTypeArgument(field))) {
             return new DatePicker();
         }
 
@@ -221,15 +222,7 @@ public class CrudViewGenerator {
         }
     }
 
-    private static Type getActualTypeArgument(Field field) {
-        if (field.getGenericType() instanceof ParameterizedType){
-            Type[] actualTypeArguments = ((ParameterizedType) field.getGenericType()).getActualTypeArguments();
-            if (actualTypeArguments.length > 0){
-                return actualTypeArguments[0];
-            }
-        }
-        return null;
-    }
+
 
     private static String getTitle(final String name){
         StringBuilder title = new StringBuilder();
