@@ -30,6 +30,7 @@ import javafx.scene.layout.VBox;
 import com.saulpos.javafxcrudgenerator.view.ViewUtils;
 import jfxtras.scene.control.CalendarPicker;
 import jfxtras.scene.control.ListView;
+import org.controlsfx.control.PropertySheet;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -38,6 +39,7 @@ public class CrudViewGenerator {
 
     private CrudGeneratorParameter parameter;
 
+    private PropertySheet propertySheet;
     private Node addNewButton;
     private Node editButton;
     private Node deleteButton;
@@ -45,8 +47,6 @@ public class CrudViewGenerator {
     private Label searchResult;
     private TableView tableView;
     private TextField searchBox;
-
-    private HashMap<String, Node> parameterNodes = new HashMap<>();
 
     public CrudViewGenerator(CrudGeneratorParameter parameter) {
         this.parameter = parameter;
@@ -75,7 +75,7 @@ public class CrudViewGenerator {
         view.setEditButton(editButton);
         view.setDeleteButton(deleteButton);
         view.setRefreshButton(refreshButton);
-        view.setParameterNodes(parameterNodes);
+        view.setPropertySheet(propertySheet);
         view.setSearchBox(searchBox);
         view.setTotalLabel(searchResult);
 
@@ -171,69 +171,10 @@ public class CrudViewGenerator {
     private Pane createFieldsPane(Field[] allFields) {
         final Pane fieldsPane = parameter.getFieldsLayout();
 
-        final GridPane fieldsGridPane = new GridPane();
-        fieldsGridPane.setPadding(new Insets(10, 10, 10, 30));
-        fieldsGridPane.setHgap(10);
-        fieldsGridPane.setVgap(10);
+        propertySheet = new PropertySheet();
 
-        int rowCounter = 0;
-        for (Field field : allFields){
-            if (!field.isAnnotationPresent(Ignore.class)) {
-                final Node label = parameter.getLabelConstructor().generateNode(ViewUtils.getTitle(field.getName()));
-                final Control control = getControlField(field);
-
-                parameterNodes.put(field.getName(), control);
-
-                fieldsGridPane.add(label, 0, rowCounter);
-                fieldsGridPane.add(control, 1, rowCounter);
-
-                rowCounter++;
-            }
-        }
-        fieldsPane.getChildren().add(fieldsGridPane);
+        fieldsPane.getChildren().add(propertySheet);
         return fieldsPane;
-    }
-
-    private Control getControlField(Field field){
-        // TODO: Depending on the kind of field, we would need different controls.
-
-        if (SimpleStringProperty.class.equals(field.getType())) {
-            if (field.isAnnotationPresent(Password.class)) {
-                return new PasswordField();
-            }
-            if (field.isAnnotationPresent(LongString.class)) {
-                return new TextArea();
-            }
-            return new TextField();
-        }
-
-        else if (SimpleBooleanProperty.class.equals(field.getType())) {
-            return new CheckBox();
-        }
-
-        else if (SimpleObjectProperty.class.equals(field.getType())) {
-            if (Calendar.class.equals(ViewUtils.getActualTypeArgument(field))) {
-                if (field.isAnnotationPresent(RichCalendar.class)) {
-                    return new CalendarPicker();
-                } else {
-                    return new DatePicker();
-                }
-            }else{
-                final List allItems = parameter.getDataProvider().getAllItems((Class)ViewUtils.getActualTypeArgument(field));
-                if (!allItems.isEmpty()){
-                    final ChoiceBox choiceBox = new ChoiceBox();
-
-                    choiceBox.getItems().addAll(allItems);
-
-                    return choiceBox;
-                }
-            }
-
-        }else if (SimpleDoubleProperty.class.equals(field.getType())){
-            return new TextField(); // TODO: Change to a Double control
-        }
-
-        return new TextField();
     }
 
     public Node getAddNewButton() {

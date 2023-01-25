@@ -8,6 +8,8 @@ import com.saulpos.javafxcrudgenerator.NodeConstructor;
 import javafx.application.Application;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -15,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import org.controlsfx.control.PropertySheet;
 
 import java.util.*;
 
@@ -91,8 +94,13 @@ public class CrudGeneratorSample extends Application {
         stage.setTitle("Hello World!");
 
         StackPane root = new StackPane();
+        ObservableList list = FXCollections.observableArrayList();
+        list.addAll(crudGeneratorParameter.getDataProvider().getAllItems(Product.class));
+        PropertySheet propertySheet = new PropertySheet(list);
+
         CrudPresenter crud = crudGenerator.generate();
         root.getChildren().add(crud.getView().getMainView());
+
         stage.setScene(new Scene(root, 1160, 640));
         stage.show();
     }

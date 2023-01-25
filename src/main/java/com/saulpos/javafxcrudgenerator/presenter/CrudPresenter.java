@@ -25,6 +25,8 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -32,6 +34,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import org.controlsfx.property.BeanPropertyUtils;
 
 public class CrudPresenter<S extends AbstractBean> {
 
@@ -81,32 +84,15 @@ public class CrudPresenter<S extends AbstractBean> {
     }
 
     public void addBindings(){
-        for (String field : model.getProperties().keySet()){
-            final Node node = view.getParameterNodes().get(field);
-            Property property = model.getProperties().get(field);
-
-            if (node instanceof TextField && property instanceof SimpleStringProperty){
-                Bindings.bindBidirectional(((TextField) node).textProperty(), property);
-            }
-
-            else if (node instanceof CheckBox && property instanceof SimpleBooleanProperty) {
-                Bindings.bindBidirectional(((CheckBox) node).selectedProperty(), property);
-            }
-
-            else if (property instanceof SimpleObjectProperty)
-            {
-                if (node instanceof DatePicker) {}
-                // todo: add for all object types
-                //else if (node instanceof )
-            }
-
-
-            // getActualArgumentType
-            // TODO add more kind of combinations.
-        }
-
         Bindings.bindContentBidirectional(view.getTableView().getItems(), model.getItems());
         model.selectedItemProperty().bind(view.getTableView().getSelectionModel().selectedItemProperty());
+
+        model.selectedItemProperty().addListener(new ChangeListener<S>() {
+            @Override
+            public void changed(ObservableValue<? extends S> observableValue, S s, S t1) {
+                view.getPropertySheet().getItems().setAll(BeanPropertyUtils.getProperties(t1));
+            }
+        });
 
     }
 

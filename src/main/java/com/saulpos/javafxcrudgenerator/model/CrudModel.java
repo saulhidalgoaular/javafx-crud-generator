@@ -45,8 +45,6 @@ public class CrudModel<S extends AbstractBean> {
 
     private SimpleStringProperty searchText = new SimpleStringProperty();
 
-    private final HashMap<String, Property> properties;
-
     private CrudGeneratorParameter parameter;
 
     public CrudModel(CrudGeneratorParameter parameter) {
@@ -54,26 +52,10 @@ public class CrudModel<S extends AbstractBean> {
 
         addListeners();
         refreshAction();
-        properties = ViewUtils.createModelProperties(parameter);
     }
 
     private void addListeners() {
-        selectedItem.addListener(new ChangeListener<S>() {
-            @Override
-            public void changed(ObservableValue<? extends S> observableValue, S oldValue, S newValue) {
-                for (String field : properties.keySet()){
-                    try {
-                        properties.get(field).setValue(newValue != null ? parameter.getClazz().getDeclaredMethod("get" + Character.toUpperCase(field.charAt(0)) + field.substring(1) ).invoke(newValue) : null);
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    } catch (InvocationTargetException e) {
-                        throw new RuntimeException(e);
-                    } catch (NoSuchMethodException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-        });
+
     }
 
     public void refreshAction(){
@@ -85,30 +67,12 @@ public class CrudModel<S extends AbstractBean> {
     }
 
     public void editItemAction(){
-        final HashMap<String, Method> methods = new HashMap<>();
-        Arrays.stream(parameter.getClazz().getDeclaredMethods()).forEach(method -> methods.put(method.getName(), method));
 
-        for (String field : properties.keySet()){
-            try {
-                methods.get("set" + Character.toUpperCase(field.charAt(0)) + field.substring(1))
-                    .invoke(
-                    selectedItem.get(),
-                    properties.get(field).getValue());
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            } catch (InvocationTargetException e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 
     public void deleteItemAction(){
         selectedItem.get().delete();
         items.remove(selectedItem.get());
-    }
-
-    public HashMap<String, Property> getProperties() {
-        return properties;
     }
 
     public ObservableList<S> getItems() {
@@ -138,7 +102,4 @@ public class CrudModel<S extends AbstractBean> {
     public void setSearchText(String searchText) {
         this.searchText.set(searchText);
     }
-
-
-    // TODO: Develop logic and bindings with view.
 }

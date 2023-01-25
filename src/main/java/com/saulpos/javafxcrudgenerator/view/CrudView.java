@@ -20,6 +20,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import org.controlsfx.control.PropertySheet;
 
 import java.util.HashMap;
 
@@ -27,8 +28,7 @@ public class CrudView {
 
     private Node mainView;
 
-    private HashMap<String, Node> parameterNodes;
-
+    private PropertySheet propertySheet;
     private TextField searchBox;
     private TableView tableView;
     private Label totalLabel;
@@ -45,12 +45,12 @@ public class CrudView {
         this.mainView = mainView;
     }
 
-    public HashMap<String, Node> getParameterNodes() {
-        return parameterNodes;
+    public PropertySheet getPropertySheet() {
+        return propertySheet;
     }
 
-    public void setParameterNodes(HashMap<String, Node> parameterNodes) {
-        this.parameterNodes = parameterNodes;
+    public void setPropertySheet(PropertySheet propertySheet) {
+        this.propertySheet = propertySheet;
     }
 
     public TextField getSearchBox() {
