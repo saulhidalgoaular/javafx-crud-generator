@@ -17,6 +17,7 @@ package com.saulpos.javafxcrudgenerator.presenter;
 
 import com.saulpos.javafxcrudgenerator.model.CrudModel;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
+import com.saulpos.javafxcrudgenerator.view.CrudBeanPropertyUtils;
 import com.saulpos.javafxcrudgenerator.view.CrudView;
 import com.saulpos.javafxcrudgenerator.view.ViewUtils;
 import javafx.beans.binding.Binding;
@@ -27,6 +28,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -34,7 +36,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import org.controlsfx.property.BeanPropertyUtils;
+import org.controlsfx.control.PropertySheet;
 
 public class CrudPresenter<S extends AbstractBean> {
 
@@ -90,7 +92,7 @@ public class CrudPresenter<S extends AbstractBean> {
         model.selectedItemProperty().addListener(new ChangeListener<S>() {
             @Override
             public void changed(ObservableValue<? extends S> observableValue, S s, S t1) {
-                view.getPropertySheet().getItems().setAll(BeanPropertyUtils.getProperties(t1));
+                view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(t1));
             }
         });
 
