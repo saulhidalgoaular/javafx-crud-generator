@@ -56,7 +56,7 @@ public class CrudViewGenerator {
         final Field[] allFields = parameter.getClazz().getDeclaredFields();
 
         // Fields area.
-        final Pane fieldsPane = createFieldsPane(allFields);
+        final Pane fieldsPane = createFieldsPane();
         // Buttons area
         final Pane buttonsPane = createButtonsPane();
         // Search area
@@ -149,7 +149,7 @@ public class CrudViewGenerator {
         btnsGridPane.setVgap(10);
 
         addNewButton =  parameter.getAddNextButtonConstructor().generateNode("Add New"); // TODO: Language customizable
-        editButton =  parameter.getEditButtonConstructor().generateNode("Edit");
+        editButton =  parameter.getEditButtonConstructor().generateNode("Save");
         deleteButton =  parameter.getDeleteButtonConstructor().generateNode("Delete");
         refreshButton =  parameter.getRefreshButtonConstructor().generateNode("Refresh");
 
@@ -168,7 +168,7 @@ public class CrudViewGenerator {
         return buttonsPane;
     }
 
-    private Pane createFieldsPane(Field[] allFields) {
+    private Pane createFieldsPane() {
         final Pane fieldsPane = parameter.getFieldsLayout();
 
         propertySheet = new PropertySheet();

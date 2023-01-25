@@ -44,7 +44,7 @@ public class CrudGenerator<S extends AbstractBean> {
         this.parameter = parameter;
     }
 
-    public CrudPresenter generate(){
+    public CrudPresenter generate() throws Exception {
         final CrudModel model = new CrudModel(parameter);
         final CrudView view = new CrudViewGenerator(parameter).generate();
 

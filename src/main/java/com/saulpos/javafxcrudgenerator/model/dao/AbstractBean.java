@@ -22,13 +22,17 @@ import java.io.Serializable;
 /**
  * Created by Saul on 11/16/2016.
  */
-public interface AbstractBean {
+public interface AbstractBean < S extends AbstractBean > {
 
     Integer save();
 
     void update();
 
     void saveOrUpdate();
+
+    void receiveChanges(S currentBean);
+
+    S clone();
 
     void delete();
 }

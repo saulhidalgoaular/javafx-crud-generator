@@ -11,7 +11,7 @@ import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Calendar;
 
-public class Product implements AbstractBean {
+public class Product implements AbstractBean<Product> {
 
     private SimpleStringProperty name = new SimpleStringProperty();
 
@@ -173,6 +173,37 @@ public class Product implements AbstractBean {
     @Override
     public void saveOrUpdate() {
         System.out.println("Product saved/updated");
+    }
+
+    @Override
+    public void receiveChanges(Product currentBean) {
+        // todo: improve
+        this.setName(currentBean.getName());
+        this.setCurrency(currentBean.getCurrency());
+        this.setDescription(currentBean.getDescription());
+        this.setTotal(currentBean.getTotal());
+        this.setMeasuringUnit(currentBean.getMeasuringUnit());
+        this.setExtraLongDescription(currentBean.getExtraLongDescription());
+        this.setInitializationDate(currentBean.getInitializationDate());
+        this.setIsAvailable(currentBean.getIsAvailable());
+        this.setPrice(currentBean.getPrice());
+        this.setWideDescription(currentBean.getWideDescription());
+    }
+
+    @Override
+    public Product clone() {
+        Product clonedProduct = new Product();
+        clonedProduct.setName(this.getName());
+        clonedProduct.setCurrency(this.getCurrency());
+        clonedProduct.setDescription(this.getDescription());
+        clonedProduct.setTotal(this.getTotal());
+        clonedProduct.setMeasuringUnit(this.getMeasuringUnit());
+        clonedProduct.setExtraLongDescription(this.getExtraLongDescription());
+        clonedProduct.setInitializationDate(this.getInitializationDate());
+        clonedProduct.setIsAvailable(this.getIsAvailable());
+        clonedProduct.setPrice(this.getPrice());
+        clonedProduct.setWideDescription(this.getWideDescription());
+        return clonedProduct;
     }
 
     @Override

@@ -17,6 +17,7 @@ package com.saulpos.javafxcrudgenerator.presenter;
 
 import com.saulpos.javafxcrudgenerator.model.CrudModel;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
+import com.saulpos.javafxcrudgenerator.sample.Product;
 import com.saulpos.javafxcrudgenerator.view.CrudView;
 import com.saulpos.javafxcrudgenerator.view.ViewUtils;
 import javafx.beans.binding.Binding;
@@ -36,6 +37,8 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import org.controlsfx.property.BeanPropertyUtils;
 
+import java.lang.reflect.ParameterizedType;
+
 public class CrudPresenter<S extends AbstractBean> {
 
     private CrudModel<S> model;
@@ -45,14 +48,25 @@ public class CrudPresenter<S extends AbstractBean> {
     public CrudPresenter() {
     }
 
-    public CrudPresenter(CrudModel<S> model, CrudView view) {
+    public CrudPresenter(CrudModel<S> model, CrudView view) throws Exception {
         this.model = model;
         this.view = view;
 
         addBindings(); // Optional
         addActions();
+        //todo: solve errors
+        //addInitialBean(this.model);
     }
 
+    private void addInitialBean(CrudModel<S> model) throws Exception {
+
+        //Class<?> cl = Class.forName(model.getClass().toString());
+        //Object newInstance = cl.newInstance();
+        ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
+        S emptyBean = ((Class<S>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]).getDeclaredConstructor().newInstance();
+        model.setBeanInEdition(emptyBean);
+        view.getPropertySheet().getItems().setAll(BeanPropertyUtils.getProperties(model.getBeanInEdition()));
+    }
     public void addActions(){
         ((Button)view.getAddNewButton()).setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -89,8 +103,9 @@ public class CrudPresenter<S extends AbstractBean> {
 
         model.selectedItemProperty().addListener(new ChangeListener<S>() {
             @Override
-            public void changed(ObservableValue<? extends S> observableValue, S s, S t1) {
-                view.getPropertySheet().getItems().setAll(BeanPropertyUtils.getProperties(t1));
+            public void changed(ObservableValue<? extends S> observableValue, S s, S selectedRow) {
+                model.setBeanInEdition((S) selectedRow.clone());
+                view.getPropertySheet().getItems().setAll(BeanPropertyUtils.getProperties(model.getBeanInEdition()));
             }
         });
 

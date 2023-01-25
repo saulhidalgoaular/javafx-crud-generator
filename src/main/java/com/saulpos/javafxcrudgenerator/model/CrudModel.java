@@ -45,7 +45,17 @@ public class CrudModel<S extends AbstractBean> {
 
     private SimpleStringProperty searchText = new SimpleStringProperty();
 
+    public S getBeanInEdition() {
+        return beanInEdition;
+    }
+
+    public void setBeanInEdition(S beanInEdition) {
+        this.beanInEdition = beanInEdition;
+    }
+
     private CrudGeneratorParameter parameter;
+
+    private S beanInEdition;
 
     public CrudModel(CrudGeneratorParameter parameter) {
         this.parameter = parameter;
@@ -67,7 +77,7 @@ public class CrudModel<S extends AbstractBean> {
     }
 
     public void editItemAction(){
-
+        this.getSelectedItem().receiveChanges(this.getBeanInEdition());
     }
 
     public void deleteItemAction(){
