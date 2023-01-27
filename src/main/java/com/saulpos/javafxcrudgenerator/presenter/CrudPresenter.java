@@ -17,6 +17,7 @@ package com.saulpos.javafxcrudgenerator.presenter;
 
 import com.saulpos.javafxcrudgenerator.model.CrudModel;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
+import com.saulpos.javafxcrudgenerator.view.CrudBeanPropertyUtils;
 import com.saulpos.javafxcrudgenerator.view.CrudView;
 import com.saulpos.javafxcrudgenerator.view.ViewUtils;
 import javafx.beans.binding.Binding;
@@ -55,17 +56,22 @@ public class CrudPresenter<S extends AbstractBean> {
         addBindings(); // Optional
         addActions();
         //todo: solve errors
-        //addInitialBean(this.model);
+        addInitialBean(this.model);
+    }
+
+    S createInstance(Class<S> clazz) {
+        try {
+            return clazz.newInstance();
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void addInitialBean(CrudModel<S> model) throws Exception {
-
-        //Class<?> cl = Class.forName(model.getClass().toString());
-        //Object newInstance = cl.newInstance();
-        ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
-        S emptyBean = ((Class<S>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]).getDeclaredConstructor().newInstance();
-        model.setBeanInEdition(emptyBean);
-        view.getPropertySheet().getItems().setAll(BeanPropertyUtils.getProperties(model.getBeanInEdition()));
+        model.setBeanInEdition(createInstance(S::new));
+        view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getBeanInEdition()));
     }
     public void addActions(){
         ((Button)view.getAddNewButton()).setOnAction(new EventHandler<ActionEvent>() {
@@ -105,7 +111,7 @@ public class CrudPresenter<S extends AbstractBean> {
             @Override
             public void changed(ObservableValue<? extends S> observableValue, S s, S selectedRow) {
                 model.setBeanInEdition((S) selectedRow.clone());
-                view.getPropertySheet().getItems().setAll(BeanPropertyUtils.getProperties(model.getBeanInEdition()));
+                view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getBeanInEdition()));
             }
         });
 
