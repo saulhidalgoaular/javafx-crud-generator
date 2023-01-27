@@ -72,14 +72,16 @@ public class CrudPresenter<S extends AbstractBean> {
 
     private void addInitialBean() throws Exception {
 
-        view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getParameter().getClazz().getDeclaredConstructor().newInstance()));
+        view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getNewBean()));
     }
 
     public void addActions(){
         ((Button)view.getAddNewButton()).setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                model.addItemAction();
+
+                view.getTableView().getSelectionModel().select(null);
+                view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getNewBean()));
             }
         }); // TODO: Improve this. It is not Buttons all the time
 

@@ -72,8 +72,17 @@ public class CrudModel<S extends AbstractBean> {
         items.setAll(parameter.getDataProvider().getAllItems(parameter.getClazz()));
     }
 
-    public void addItemAction(){
-        // TODO: Call default constructor and assign the values
+    public S getNewBean() {
+        try {
+            return (S) getParameter().getClazz().getDeclaredConstructor().newInstance();
+        }catch (Exception e){
+            // let's don't worry. It will not happen
+            return null;
+        }
+    }
+    public S addItemAction(){
+        //if item selected then it should unselect current item, and create new empty item
+        return getNewBean();
     }
 
     public void editItemAction(){
