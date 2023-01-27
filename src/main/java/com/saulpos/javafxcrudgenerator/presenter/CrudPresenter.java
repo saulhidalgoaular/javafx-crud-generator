@@ -39,6 +39,7 @@ import javafx.scene.control.TextField;
 import org.controlsfx.control.PropertySheet;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 public class CrudPresenter<S extends AbstractBean> {
 
@@ -56,7 +57,7 @@ public class CrudPresenter<S extends AbstractBean> {
         addBindings(); // Optional
         addActions();
         //todo: solve errors
-        addInitialBean(this.model);
+        addInitialBean();
     }
 
     S createInstance(Class<S> clazz) {
@@ -69,10 +70,11 @@ public class CrudPresenter<S extends AbstractBean> {
         }
     }
 
-    private void addInitialBean(CrudModel<S> model) throws Exception {
-        model.setBeanInEdition(createInstance(S::new));
-        view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getBeanInEdition()));
+    private void addInitialBean() throws Exception {
+
+        view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getParameter().getClazz().getDeclaredConstructor().newInstance()));
     }
+
     public void addActions(){
         ((Button)view.getAddNewButton()).setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -110,7 +112,12 @@ public class CrudPresenter<S extends AbstractBean> {
         model.selectedItemProperty().addListener(new ChangeListener<S>() {
             @Override
             public void changed(ObservableValue<? extends S> observableValue, S s, S selectedRow) {
-                model.setBeanInEdition((S) selectedRow.clone());
+                if (model.getParameter().isLiveUpdateEnabled()) {
+                    model.setBeanInEdition((S) selectedRow);
+                }
+                else {
+                    model.setBeanInEdition((S) selectedRow.clone());
+                }
                 view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getBeanInEdition()));
             }
         });

@@ -112,4 +112,8 @@ public class CrudModel<S extends AbstractBean> {
     public void setSearchText(String searchText) {
         this.searchText.set(searchText);
     }
+
+    public CrudGeneratorParameter getParameter() {
+        return parameter;
+    }
 }

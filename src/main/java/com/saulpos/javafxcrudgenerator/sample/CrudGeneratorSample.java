@@ -89,7 +89,7 @@ public class CrudGeneratorSample extends Application {
         });
 
         crudGeneratorParameter.getExtraButtonsConstructor().add(customButtonConstructor);
-        CrudGenerator crudGenerator = new CrudGenerator(crudGeneratorParameter);
+        CrudGenerator<Product> crudGenerator = new CrudGenerator<>(crudGeneratorParameter);
 
         stage.setTitle("Hello World!");
 
