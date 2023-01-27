@@ -114,13 +114,18 @@ public class CrudPresenter<S extends AbstractBean> {
         model.selectedItemProperty().addListener(new ChangeListener<S>() {
             @Override
             public void changed(ObservableValue<? extends S> observableValue, S s, S selectedRow) {
-                if (model.getParameter().isLiveUpdateEnabled()) {
-                    model.setBeanInEdition((S) selectedRow);
+                try {
+                    if (model.getParameter().isLiveUpdateEnabled()) {
+                        model.setBeanInEdition((S) selectedRow);
+                    } else {
+                        model.setBeanInEdition((S) selectedRow.clone());
+                    }
+                    view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getBeanInEdition()));
+
                 }
-                else {
-                    model.setBeanInEdition((S) selectedRow.clone());
+                catch (Exception e) {
+                    // this should not happen :/
                 }
-                view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getBeanInEdition()));
             }
         });
 
