@@ -56,16 +56,14 @@ public class CrudPresenter<S extends AbstractBean> {
     }
 
     private void addInitialBean() throws Exception {
-        view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getNewBean()));
+        newInitialBean();
     }
 
     public void addActions(){
         ((Button)view.getAddNewButton()).setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-
-                view.getTableView().getSelectionModel().select(null);
-                view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getNewBean()));
+                newInitialBean();
             }
         }); // TODO: Improve this. It is not Buttons all the time
 
@@ -89,6 +87,11 @@ public class CrudPresenter<S extends AbstractBean> {
                 model.refreshAction();
             }
         });
+    }
+
+    private void newInitialBean() {
+        view.getTableView().getSelectionModel().select(null);
+        view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getNewBean()));
     }
 
     public void addBindings(){
