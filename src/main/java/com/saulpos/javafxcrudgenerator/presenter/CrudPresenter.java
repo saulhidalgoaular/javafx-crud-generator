@@ -18,28 +18,14 @@ package com.saulpos.javafxcrudgenerator.presenter;
 import com.saulpos.javafxcrudgenerator.model.CrudModel;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import com.saulpos.javafxcrudgenerator.view.CrudBeanPropertyUtils;
+import com.saulpos.javafxcrudgenerator.view.CrudPropertyEditorFactory;
 import com.saulpos.javafxcrudgenerator.view.CrudView;
-import com.saulpos.javafxcrudgenerator.view.ViewUtils;
-import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
-import org.controlsfx.control.PropertySheet;
-
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import javafx.scene.control.*;
 
 public class CrudPresenter<S extends AbstractBean> {
 
@@ -56,7 +42,6 @@ public class CrudPresenter<S extends AbstractBean> {
 
         addBindings(); // Optional
         addActions();
-        //todo: solve errors
         addInitialBean();
     }
 
@@ -71,7 +56,6 @@ public class CrudPresenter<S extends AbstractBean> {
     }
 
     private void addInitialBean() throws Exception {
-
         view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getNewBean()));
     }
 
@@ -85,10 +69,10 @@ public class CrudPresenter<S extends AbstractBean> {
             }
         }); // TODO: Improve this. It is not Buttons all the time
 
-        ((Button)view.getEditButton()).setOnAction(new EventHandler<ActionEvent>() {
+        ((Button)view.getSaveButton()).setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                model.editItemAction();
+                model.saveItemAction();
             }
         });
 
@@ -115,6 +99,9 @@ public class CrudPresenter<S extends AbstractBean> {
             @Override
             public void changed(ObservableValue<? extends S> observableValue, S s, S selectedRow) {
                 try {
+                    if (selectedRow == null){
+                        return;
+                    }
                     if (model.getParameter().isLiveUpdateEnabled()) {
                         model.setBeanInEdition((S) selectedRow);
                     } else {
@@ -125,10 +112,13 @@ public class CrudPresenter<S extends AbstractBean> {
                 }
                 catch (Exception e) {
                     // this should not happen :/
+                    e.printStackTrace();
                 }
             }
         });
 
+        view.getPropertySheet().setPropertyEditorFactory(
+                CrudPropertyEditorFactory.getCrudPropertyEditorFactory(model.getParameter().getDataProvider()));
     }
 
     public CrudModel<S> getModel() {

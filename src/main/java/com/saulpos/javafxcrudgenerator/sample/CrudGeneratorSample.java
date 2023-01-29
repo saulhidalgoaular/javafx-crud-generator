@@ -62,7 +62,7 @@ public class CrudGeneratorSample extends Application {
                     Product p3 = new Product();
                     p3.setName("Ananas");
                     p3.setIsAvailable(true);
-                    p3.setInitializationDate(new GregorianCalendar(2023,0,24));
+                    //p3.setInitializationDate(new LocalDate);
                     products.add(p3);
                     return products;
                 }else if (Price.class.equals(clazz)){
@@ -85,6 +85,16 @@ public class CrudGeneratorSample extends Application {
                 }
 
                 return new ArrayList();
+            }
+
+            @Override
+            public List getAllItems(Class clazz, String searchText) {
+                return getAllItems(clazz);
+            }
+
+            @Override
+            public boolean isRegisteredClass(Class clazz) {
+                return clazz.equals(Price.class);
             }
         });
 

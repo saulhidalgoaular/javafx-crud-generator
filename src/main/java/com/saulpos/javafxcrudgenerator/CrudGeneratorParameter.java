@@ -61,7 +61,9 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
     private NodeConstructor genericButtonConstructor = new NodeConstructor() {
         @Override
         public Node generateNode(Object... name) {
-            return new Button(name[0] + "");
+            Button button = new Button(name[0] + "");
+            button.setMinWidth(100);
+            return button;
         }
     };
 

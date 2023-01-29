@@ -22,8 +22,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import org.controlsfx.control.PropertySheet;
 
-import java.util.HashMap;
-
 public class CrudView {
 
     private Node mainView;
@@ -33,7 +31,7 @@ public class CrudView {
     private TableView tableView;
     private Label totalLabel;
     private Node addNewButton;
-    private Node editButton;
+    private Node saveButton;
     private Node deleteButton;
     private Node refreshButton;
 
@@ -85,12 +83,12 @@ public class CrudView {
         this.addNewButton = addNewButton;
     }
 
-    public Node getEditButton() {
-        return editButton;
+    public Node getSaveButton() {
+        return saveButton;
     }
 
-    public void setEditButton(Node editButton) {
-        this.editButton = editButton;
+    public void setSaveButton(Node saveButton) {
+        this.saveButton = saveButton;
     }
 
     public Node getDeleteButton() {

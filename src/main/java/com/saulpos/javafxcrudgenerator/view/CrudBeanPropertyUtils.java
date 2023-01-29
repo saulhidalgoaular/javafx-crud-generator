@@ -26,17 +26,21 @@
  */
 package com.saulpos.javafxcrudgenerator.view;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
+import java.beans.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Optional;
 import java.util.function.Predicate;
 
+import com.saulpos.javafxcrudgenerator.annotations.Ignore;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import javafx.scene.control.TextInputControl;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.control.PropertySheet.Item;
+import org.controlsfx.property.editor.PropertyEditor;
 
 /**
  * Convenience utility class for creating {@link PropertySheet} instances based
@@ -61,7 +65,16 @@ public final class CrudBeanPropertyUtils {
      *      JavaBean.
      */
     public static ObservableList<Item> getProperties(final Object bean) {
-        return getProperties(bean, (p) -> {return true;} );
+        return getProperties(bean, (p) -> {
+            if (p instanceof FeatureDescriptor){
+                try {
+                    return !bean.getClass().getDeclaredField(p.getName()).isAnnotationPresent(Ignore.class);
+                } catch (NoSuchFieldException e) {
+                    return true;
+                }
+            }
+            return true;
+        } );
     }
     
     /**
@@ -91,5 +104,16 @@ public final class CrudBeanPropertyUtils {
 
         return list;
     }
-    
+
+
+    public static void enableAutoSelectAll(TextInputControl control) {
+        control.focusedProperty().addListener((o, oldValue, newValue) -> {
+            if (newValue) {
+                Platform.runLater(() -> {
+                    control.selectAll();
+                });
+            }
+
+        });
+    }
 }

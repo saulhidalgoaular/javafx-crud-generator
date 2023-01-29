@@ -1,7 +1,6 @@
 package com.saulpos.javafxcrudgenerator.sample;
 
-import com.saulpos.javafxcrudgenerator.annotations.Ignore;
-import com.saulpos.javafxcrudgenerator.annotations.LongString;
+import com.saulpos.javafxcrudgenerator.annotations.*;
 import com.saulpos.javafxcrudgenerator.annotations.Currency;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -9,13 +8,18 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 
 public class Product implements AbstractBean<Product> {
 
     private SimpleStringProperty name = new SimpleStringProperty();
 
+    @Readonly
     private SimpleStringProperty description = new SimpleStringProperty();
+
+    @Password
+    private SimpleStringProperty password = new SimpleStringProperty();
 
     private SimpleObjectProperty<Price> price = new SimpleObjectProperty<>();
 
@@ -25,7 +29,7 @@ public class Product implements AbstractBean<Product> {
 
     private SimpleBooleanProperty isAvailable = new SimpleBooleanProperty();
 
-    private SimpleObjectProperty<Calendar> initializationDate = new SimpleObjectProperty<>();
+    private SimpleObjectProperty<LocalDate> initializationDate = new SimpleObjectProperty<>();
 
     @Currency
     private SimpleDoubleProperty total = new SimpleDoubleProperty();
@@ -110,15 +114,15 @@ public class Product implements AbstractBean<Product> {
         this.isAvailable.set(isAvailable);
     }
 
-    public Calendar getInitializationDate() {
+    public LocalDate getInitializationDate() {
         return initializationDate.get();
     }
 
-    public SimpleObjectProperty<Calendar> initializationDateProperty() {
+    public SimpleObjectProperty<LocalDate> initializationDateProperty() {
         return initializationDate;
     }
 
-    public void setInitializationDate(Calendar initializationDate) {
+    public void setInitializationDate(LocalDate initializationDate) {
         this.initializationDate.set(initializationDate);
     }
 
@@ -158,6 +162,18 @@ public class Product implements AbstractBean<Product> {
         this.total.set(total);
     }
 
+    public String getPassword() {
+        return password.get();
+    }
+
+    public SimpleStringProperty passwordProperty() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password.set(password);
+    }
+
     @Override
     public Integer save() {
         System.out.println("Product saved");
@@ -188,6 +204,7 @@ public class Product implements AbstractBean<Product> {
         this.setIsAvailable(currentBean.getIsAvailable());
         this.setPrice(currentBean.getPrice());
         this.setWideDescription(currentBean.getWideDescription());
+        this.setPassword(currentBean.getPassword());
     }
 
     @Override
@@ -203,6 +220,7 @@ public class Product implements AbstractBean<Product> {
         clonedProduct.setIsAvailable(this.getIsAvailable());
         clonedProduct.setPrice(this.getPrice());
         clonedProduct.setWideDescription(this.getWideDescription());
+        clonedProduct.setPassword(this.getPassword());
         return clonedProduct;
     }
 

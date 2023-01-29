@@ -15,4 +15,8 @@ public class CrudPropertySheetItem extends BeanProperty {
     public String getName() {
         return ViewUtils.getTitle(super.getName());
     }
+
+    public String getOriginalName(){
+        return super.getName();
+    }
 }

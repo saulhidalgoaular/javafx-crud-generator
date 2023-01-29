@@ -19,17 +19,17 @@ import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
 import com.saulpos.javafxcrudgenerator.NodeConstructor;
 import com.saulpos.javafxcrudgenerator.annotations.*;
 import javafx.beans.property.*;
+import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import com.saulpos.javafxcrudgenerator.view.ViewUtils;
-import jfxtras.scene.control.CalendarPicker;
-import jfxtras.scene.control.ListView;
+import javafx.util.Callback;
 import org.controlsfx.control.PropertySheet;
 
 import java.lang.reflect.*;
@@ -72,7 +72,7 @@ public class CrudViewGenerator {
         view.setMainView(mainPane);
         view.setTableView(tableView);
         view.setAddNewButton(addNewButton);
-        view.setEditButton(editButton);
+        view.setSaveButton(editButton);
         view.setDeleteButton(deleteButton);
         view.setRefreshButton(refreshButton);
         view.setPropertySheet(propertySheet);
@@ -105,14 +105,22 @@ public class CrudViewGenerator {
         TableView tableView = new TableView();
         for (Field field : allFields){
             if (!field.isAnnotationPresent(Ignore.class)){
-                TableColumn<Object, String> column = new TableColumn<>(ViewUtils.getTitle(field.getName())); // TODO: IT NEEDS SOME IMPROVEMENTS
+                TableColumn<Object, String> column = new TableColumn<>(ViewUtils.getTitle(field.getName()));
                 column.setCellValueFactory(cell -> getProperty(cell, field.getName()));
+                column.setCellFactory(tableColum -> getCellFactory(field));
                 tableView.getColumns().add(column);
             }
         }
 
         tableView.setPadding(new Insets(10, 10, 10, 10));
         return tableView;
+    }
+
+    private static TableCell<Object, String> getCellFactory(final Field field) {
+        if (SimpleBooleanProperty.class.equals(field.getType())){
+            return new CheckBoxTableCell<>();
+        }
+        return new TextFieldTableCell<>();
     }
 
     private Property getProperty(final TableColumn.CellDataFeatures instance, final String name){
