@@ -43,6 +43,8 @@ public class CrudModel<S extends AbstractBean> {
 
     private S beanInEdition;
 
+    private S searchBean;
+
     public CrudModel(CrudGeneratorParameter parameter) {
         this.parameter = parameter;
 
@@ -111,5 +113,13 @@ public class CrudModel<S extends AbstractBean> {
 
     public CrudGeneratorParameter getParameter() {
         return parameter;
+    }
+
+    public S getSearchBean() {
+        return searchBean;
+    }
+
+    public void setSearchBean(S searchBean) {
+        this.searchBean = searchBean;
     }
 }

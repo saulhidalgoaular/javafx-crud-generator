@@ -13,6 +13,7 @@ import java.util.Calendar;
 
 public class Product implements AbstractBean<Product> {
 
+    @Search
     private SimpleStringProperty name = new SimpleStringProperty();
 
     @Readonly
@@ -34,6 +35,7 @@ public class Product implements AbstractBean<Product> {
     @Currency
     private SimpleDoubleProperty total = new SimpleDoubleProperty();
     @LongString(rows=5)
+    @Category(name = "Advanced")
     private SimpleStringProperty wideDescription = new SimpleStringProperty();
 
     @Ignore

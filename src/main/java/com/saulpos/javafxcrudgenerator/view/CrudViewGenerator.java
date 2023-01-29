@@ -19,7 +19,6 @@ import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
 import com.saulpos.javafxcrudgenerator.NodeConstructor;
 import com.saulpos.javafxcrudgenerator.annotations.*;
 import javafx.beans.property.*;
-import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -29,7 +28,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 import org.controlsfx.control.PropertySheet;
 
 import java.lang.reflect.*;
@@ -60,7 +58,7 @@ public class CrudViewGenerator {
         // Buttons area
         final Pane buttonsPane = createButtonsPane();
         // Search area
-        final GridPane searchGridPane = createSearchPane();
+        final GridPane searchGridPane = createSearchPane(allFields);
         // Table area
         tableView = createTableViewPane(allFields);
 
@@ -135,8 +133,14 @@ public class CrudViewGenerator {
         }
     }
 
-    private GridPane createSearchPane() {
+    private GridPane createSearchPane(Field[] allFields) {
         final GridPane searchGridPane = new GridPane();
+        for (Field field :
+                allFields) {
+            if (field.isAnnotationPresent(Search.class)){
+
+            }
+        }
         searchGridPane.setPadding(new Insets(10, 10, 10, 10));
         searchGridPane.setHgap(10);
         searchGridPane.setVgap(10);
