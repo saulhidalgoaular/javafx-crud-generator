@@ -33,6 +33,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 import com.saulpos.javafxcrudgenerator.annotations.Ignore;
+import com.saulpos.javafxcrudgenerator.annotations.Search;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -64,11 +65,12 @@ public final class CrudBeanPropertyUtils {
      * @return A list of {@link Item} instances representing the properties of the
      *      JavaBean.
      */
-    public static ObservableList<Item> getProperties(final Object bean) {
+    public static ObservableList<Item> getProperties(final Object bean, boolean search) {
         return getProperties(bean, (p) -> {
             if (p instanceof FeatureDescriptor){
                 try {
-                    return !bean.getClass().getDeclaredField(p.getName()).isAnnotationPresent(Ignore.class);
+                    return !bean.getClass().getDeclaredField(p.getName()).isAnnotationPresent(Ignore.class) &&
+                            (!search || bean.getClass().getDeclaredField(p.getName()).isAnnotationPresent(Search.class));
                 } catch (NoSuchFieldException e) {
                     return true;
                 }

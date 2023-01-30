@@ -30,6 +30,7 @@ public class Product implements AbstractBean<Product> {
 
     private SimpleBooleanProperty isAvailable = new SimpleBooleanProperty();
 
+    @Search
     private SimpleObjectProperty<LocalDate> initializationDate = new SimpleObjectProperty<>();
 
     @Currency

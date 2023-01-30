@@ -43,6 +43,8 @@ public class CrudPresenter<S extends AbstractBean> {
         addBindings(); // Optional
         addActions();
         addInitialBean();
+
+
     }
 
     S createInstance(Class<S> clazz) {
@@ -91,7 +93,7 @@ public class CrudPresenter<S extends AbstractBean> {
 
     private void newInitialBean() {
         view.getTableView().getSelectionModel().select(null);
-        view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getNewBean()));
+        view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getNewBean(), false));
     }
 
     public void addBindings(){
@@ -110,7 +112,8 @@ public class CrudPresenter<S extends AbstractBean> {
                     } else {
                         model.setBeanInEdition((S) selectedRow.clone());
                     }
-                    view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getBeanInEdition()));
+                    // TODO Improve. We are rebuilding all the property sheet instead of reusing the previous one.
+                    view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getBeanInEdition(), false));
 
                 }
                 catch (Exception e) {
@@ -122,6 +125,11 @@ public class CrudPresenter<S extends AbstractBean> {
 
         view.getPropertySheet().setPropertyEditorFactory(
                 CrudPropertyEditorFactory.getCrudPropertyEditorFactory(model.getParameter().getDataProvider()));
+
+        view.getSearchPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getSearchBean(), true));
+        view.getSearchPropertySheet().setPropertyEditorFactory(
+                CrudPropertyEditorFactory.getCrudPropertyEditorFactory(model.getParameter().getDataProvider())
+        );
     }
 
     public CrudModel<S> getModel() {

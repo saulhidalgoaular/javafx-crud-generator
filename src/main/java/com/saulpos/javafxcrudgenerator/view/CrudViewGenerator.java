@@ -44,7 +44,7 @@ public class CrudViewGenerator {
     private Node refreshButton;
     private Label searchResult;
     private TableView tableView;
-    private TextField searchBox;
+    private PropertySheet searchPropertySheet;
 
     public CrudViewGenerator(CrudGeneratorParameter parameter) {
         this.parameter = parameter;
@@ -74,7 +74,7 @@ public class CrudViewGenerator {
         view.setDeleteButton(deleteButton);
         view.setRefreshButton(refreshButton);
         view.setPropertySheet(propertySheet);
-        view.setSearchBox(searchBox);
+        view.setSearchBox(searchPropertySheet);
         view.setTotalLabel(searchResult);
 
         return view;
@@ -134,22 +134,30 @@ public class CrudViewGenerator {
     }
 
     private GridPane createSearchPane(Field[] allFields) {
-        final GridPane searchGridPane = new GridPane();
+        boolean atLeastOneAdded = false;
+
         for (Field field :
                 allFields) {
-            if (field.isAnnotationPresent(Search.class)){
-
-            }
+            atLeastOneAdded |= field.isAnnotationPresent(Search.class);
         }
+        if (!atLeastOneAdded){
+            return new GridPane();
+        }
+
+        final GridPane searchGridPane = new GridPane();
+
         searchGridPane.setPadding(new Insets(10, 10, 10, 10));
         searchGridPane.setHgap(10);
         searchGridPane.setVgap(10);
 
         final Label searchLabel = new Label("Search: ");
-        searchBox = new TextField();
+        searchPropertySheet = new PropertySheet();
+        searchPropertySheet.setSearchBoxVisible(false);
+        searchPropertySheet.setModeSwitcherVisible(false);
 
         searchGridPane.add(searchLabel, 0, 0);
-        searchGridPane.add(searchBox, 1, 0);
+        searchGridPane.add(searchPropertySheet, 0, 1);
+
         return searchGridPane;
     }
 

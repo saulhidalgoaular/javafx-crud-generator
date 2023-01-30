@@ -19,7 +19,6 @@ package com.saulpos.javafxcrudgenerator.view;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import org.controlsfx.control.PropertySheet;
 
 public class CrudView {
@@ -27,7 +26,7 @@ public class CrudView {
     private Node mainView;
 
     private PropertySheet propertySheet;
-    private TextField searchBox;
+    private PropertySheet searchBox;
     private TableView tableView;
     private Label totalLabel;
     private Node addNewButton;
@@ -51,11 +50,11 @@ public class CrudView {
         this.propertySheet = propertySheet;
     }
 
-    public TextField getSearchBox() {
+    public PropertySheet getSearchPropertySheet() {
         return searchBox;
     }
 
-    public void setSearchBox(TextField searchBox) {
+    public void setSearchBox(PropertySheet searchBox) {
         this.searchBox = searchBox;
     }
 

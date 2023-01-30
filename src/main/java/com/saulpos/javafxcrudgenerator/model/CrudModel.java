@@ -29,8 +29,6 @@ public class CrudModel<S extends AbstractBean> {
 
     private SimpleObjectProperty<S> selectedItem = new SimpleObjectProperty<>();
 
-    private SimpleStringProperty searchText = new SimpleStringProperty();
-
     public S getBeanInEdition() {
         return beanInEdition;
     }
@@ -50,6 +48,7 @@ public class CrudModel<S extends AbstractBean> {
 
         addListeners();
         refreshAction();
+        setSearchBean(getNewBean());
     }
 
     private void addListeners() {
@@ -64,6 +63,7 @@ public class CrudModel<S extends AbstractBean> {
         try {
             return (S) getParameter().getClazz().getDeclaredConstructor().newInstance();
         }catch (Exception e){
+            e.printStackTrace();
             // let's not worry. It will not happen
             return null;
         }
@@ -97,18 +97,6 @@ public class CrudModel<S extends AbstractBean> {
 
     public void setSelectedItem(S selectedItem) {
         this.selectedItem.set(selectedItem);
-    }
-
-    public String getSearchText() {
-        return searchText.get();
-    }
-
-    public SimpleStringProperty searchTextProperty() {
-        return searchText;
-    }
-
-    public void setSearchText(String searchText) {
-        this.searchText.set(searchText);
     }
 
     public CrudGeneratorParameter getParameter() {
