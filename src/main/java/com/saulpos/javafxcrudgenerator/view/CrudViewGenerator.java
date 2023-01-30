@@ -104,7 +104,7 @@ public class CrudViewGenerator {
         for (Field field : allFields){
             if (!field.isAnnotationPresent(Ignore.class)){
                 TableColumn<Object, String> column = new TableColumn<>(ViewUtils.getTitle(field.getName()));
-                column.setCellValueFactory(cell -> getProperty(cell, field.getName()));
+                column.setCellValueFactory(cell -> getProperty(cell, field));
                 column.setCellFactory(tableColum -> getCellFactory(field));
                 tableView.getColumns().add(column);
             }
@@ -121,9 +121,12 @@ public class CrudViewGenerator {
         return new TextFieldTableCell<>();
     }
 
-    private Property getProperty(final TableColumn.CellDataFeatures instance, final String name){
+    private Property getProperty(final TableColumn.CellDataFeatures instance, final Field field){
         try {
-            return (Property) parameter.getClazz().getDeclaredMethod(name + "Property").invoke(instance.getValue());
+            if (field.isAnnotationPresent(Password.class)){
+                return new SimpleStringProperty("<hidden>");
+            }
+            return (Property) parameter.getClazz().getDeclaredMethod(field.getName() + "Property").invoke(instance.getValue());
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         } catch (InvocationTargetException e) {
