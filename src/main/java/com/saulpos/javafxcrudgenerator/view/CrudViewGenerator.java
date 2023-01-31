@@ -24,10 +24,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import org.controlsfx.control.PropertySheet;
 
 import java.lang.reflect.*;
@@ -39,7 +36,7 @@ public class CrudViewGenerator {
 
     private PropertySheet propertySheet;
     private Node addNewButton;
-    private Node editButton;
+    private Node saveButton;
     private Node deleteButton;
     private Node refreshButton;
     private Label searchResult;
@@ -70,7 +67,7 @@ public class CrudViewGenerator {
         view.setMainView(mainPane);
         view.setTableView(tableView);
         view.setAddNewButton(addNewButton);
-        view.setSaveButton(editButton);
+        view.setSaveButton(saveButton);
         view.setDeleteButton(deleteButton);
         view.setRefreshButton(refreshButton);
         view.setPropertySheet(propertySheet);
@@ -82,7 +79,6 @@ public class CrudViewGenerator {
 
     private void addBindings() {
         deleteButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
-        editButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
     }
 
     private Pane createMainPane(Pane fieldsPane, Pane buttonsPane, GridPane searchGridPane, TableView tableView) {
@@ -166,17 +162,17 @@ public class CrudViewGenerator {
 
     private Pane createButtonsPane() {
         final Pane buttonsPane = parameter.getButtonLayout();
-        final GridPane btnsGridPane = new GridPane();
-        btnsGridPane.setPadding(new Insets(10, 10, 10, 30));
-        btnsGridPane.setHgap(10);
-        btnsGridPane.setVgap(10);
+        final FlowPane btnsFlowPane = new FlowPane();
+        btnsFlowPane.setPadding(new Insets(10, 10, 10, 30));
+        btnsFlowPane.setHgap(10);
+        btnsFlowPane.setVgap(10);
 
         addNewButton =  parameter.getAddNextButtonConstructor().generateNode("Add New"); // TODO: Language customizable
-        editButton =  parameter.getEditButtonConstructor().generateNode("Save");
+        saveButton =  parameter.getEditButtonConstructor().generateNode("Save");
         deleteButton =  parameter.getDeleteButtonConstructor().generateNode("Delete");
         refreshButton =  parameter.getRefreshButtonConstructor().generateNode("Refresh");
 
-        final Node[] nodes = new Node[]{addNewButton, editButton, deleteButton, refreshButton};
+        final Node[] nodes = new Node[]{addNewButton, saveButton, deleteButton, refreshButton};
         final ArrayList<Node> allButtons = new ArrayList<>(Arrays.asList(nodes));
         for (Object customButtonConstructor :
                 parameter.getExtraButtonsConstructor()) {
@@ -184,10 +180,10 @@ public class CrudViewGenerator {
         }
 
         for (int i = 0; i < allButtons.size(); i++) {
-            btnsGridPane.add(allButtons.get(parameter.getButtonsOrder().isEmpty() ? i :(int)parameter.getButtonsOrder().get(i)), i, 0);
+            btnsFlowPane.getChildren().add(allButtons.get(parameter.getButtonsOrder().isEmpty() ? i :(int)parameter.getButtonsOrder().get(i)));
         }
 
-        buttonsPane.getChildren().addAll(btnsGridPane);
+        buttonsPane.getChildren().addAll(btnsFlowPane);
         return buttonsPane;
     }
 
@@ -204,8 +200,8 @@ public class CrudViewGenerator {
         return addNewButton;
     }
 
-    public Node getEditButton() {
-        return editButton;
+    public Node getSaveButton() {
+        return saveButton;
     }
 
     public Node getDeleteButton() {
