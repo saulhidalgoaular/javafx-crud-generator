@@ -7,10 +7,6 @@ import com.saulpos.javafxcrudgenerator.CrudGenerator;
 import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
 import com.saulpos.javafxcrudgenerator.NodeConstructor;
 import javafx.application.Application;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -18,7 +14,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import org.controlsfx.control.PropertySheet;
 
 import java.util.*;
 
@@ -113,6 +108,7 @@ public class CrudGeneratorSample extends Application {
             @Override
             public Node generateNode(Object... name) {
                 Button customButton = new Button("Custom Button");
+                customButton.setPrefWidth(crudGeneratorParameter.getButtonWidth());
                 customButton.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent actionEvent) {

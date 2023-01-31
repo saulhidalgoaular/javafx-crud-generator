@@ -60,7 +60,7 @@ public class CrudViewGenerator {
         // Table area
         tableView = createTableViewPane(allFields);
 
-        Pane mainPane = createMainPane(fieldsPane, buttonsPane, searchGridPane, tableView);
+        SplitPane mainPane = createMainPane(fieldsPane, buttonsPane, searchGridPane, tableView);
 
         addBindings();
 
@@ -82,26 +82,28 @@ public class CrudViewGenerator {
         deleteButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
     }
 
-    private Pane createMainPane(Pane fieldsPane, Pane buttonsPane, GridPane searchGridPane, TableView tableView) {
-        final HBox mainSplit = new HBox();
-        mainSplit.setFillHeight(true);
+    private SplitPane createMainPane(Pane fieldsPane, Pane buttonsPane, GridPane searchGridPane, TableView tableView) {
+
+        final SplitPane mainSplit = parameter.getMainLayout();
         mainSplit.setBorder(new Border(new BorderStroke(Color.YELLOW, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
         final SplitPane splitPane = new SplitPane();
         final VBox leftSide = new VBox();
         leftSide.setBorder(new Border(new BorderStroke(Color.CHOCOLATE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
 
         final VBox rightSide = new VBox();
-        //rightSide.setMinHeight(900);
         VBox.setVgrow(tableView, Priority.ALWAYS);
         rightSide.setBorder(new Border(new BorderStroke(Color.FUCHSIA, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
+        rightSide.setFillWidth(true);
         splitPane.getItems().addAll(leftSide, rightSide);
-        //splitPane.getItems().addAll(tableView);
         searchResult = new Label("Total");
         leftSide.getChildren().addAll(searchGridPane, tableView, searchResult);
-        //leftSide.getChildren().addAll(tableView);
-        rightSide.getChildren().addAll(fieldsPane, buttonsPane);
-        mainSplit.getChildren().addAll(leftSide, rightSide);
-        return mainSplit;
+        BorderPane bPane = new BorderPane();
+        bPane.setTop(fieldsPane);
+        bPane.setBottom(buttonsPane);
+        bPane.setBorder(new Border(new BorderStroke(Color.ORANGE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
+        bPane.setPrefHeight(10000);
+        rightSide.getChildren().addAll(bPane);
+        return splitPane;
     }
 
     private TableView createTableViewPane(Field[] allFields) {
@@ -174,10 +176,11 @@ public class CrudViewGenerator {
     private Pane createButtonsPane() {
         final Pane buttonsPane = parameter.getButtonLayout();
         buttonsPane.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
-        final FlowPane btnsFlowPane = new FlowPane();
-        btnsFlowPane.setPadding(new Insets(10, 10, 10, 30));
-        btnsFlowPane.setHgap(10);
-        btnsFlowPane.setVgap(10);
+        buttonsPane.setPadding(new Insets(10, 10, 10, 30));
+        if (buttonsPane instanceof FlowPane){
+            ((FlowPane) buttonsPane).setHgap(10); // TODO Improve later.
+            ((FlowPane) buttonsPane).setVgap(10);
+        }
 
         addNewButton =  parameter.getAddNextButtonConstructor().generateNode("Add New"); // TODO: Language customizable
         saveButton =  parameter.getEditButtonConstructor().generateNode("Save");
@@ -192,10 +195,9 @@ public class CrudViewGenerator {
         }
 
         for (int i = 0; i < allButtons.size(); i++) {
-            btnsFlowPane.getChildren().add(allButtons.get(parameter.getButtonsOrder().isEmpty() ? i :(int)parameter.getButtonsOrder().get(i)));
+            buttonsPane.getChildren().add(allButtons.get(parameter.getButtonsOrder().isEmpty() ? i :(int)parameter.getButtonsOrder().get(i)));
         }
 
-        buttonsPane.getChildren().addAll(btnsFlowPane);
         return buttonsPane;
     }
 

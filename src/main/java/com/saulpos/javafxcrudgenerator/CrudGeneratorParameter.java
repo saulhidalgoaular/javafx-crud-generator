@@ -20,6 +20,8 @@ import com.saulpos.javafxcrudgenerator.model.dao.AbstractDataProvider;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.SplitPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -32,9 +34,11 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
 
     private Pane fieldsLayout = new VBox();
 
-    private Pane buttonLayout = new HBox();
+    private Pane buttonLayout = new FlowPane();
 
-    private Pane mainLayout = new VBox();
+    private Integer buttonWidth = 120;
+
+    private SplitPane mainLayout = new SplitPane();
 
     private boolean enableSearch = true;
 
@@ -48,11 +52,19 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
         }
     };
 
+    public Integer getButtonWidth() {
+        return buttonWidth;
+    }
+
+    public void setButtonWidth(Integer buttonWidth) {
+        this.buttonWidth = buttonWidth;
+    }
+
     private NodeConstructor genericButtonConstructor = new NodeConstructor() {
         @Override
         public Node generateNode(Object... name) {
             Button button = new Button(name[0] + "");
-            button.setMinWidth(120);
+            button.setMinWidth(getButtonWidth());
             return button;
         }
     };
@@ -100,11 +112,11 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
         this.labelConstructor = labelConstructor;
     }
 
-    public Pane getMainLayout() {
+    public SplitPane getMainLayout() {
         return mainLayout;
     }
 
-    public void setMainLayout(Pane mainLayout) {
+    public void setMainLayout(SplitPane mainLayout) {
         this.mainLayout = mainLayout;
     }
 
