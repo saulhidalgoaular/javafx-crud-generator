@@ -25,6 +25,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import org.controlsfx.control.PropertySheet;
 
 import java.lang.reflect.*;
@@ -82,17 +83,25 @@ public class CrudViewGenerator {
     }
 
     private Pane createMainPane(Pane fieldsPane, Pane buttonsPane, GridPane searchGridPane, TableView tableView) {
-        final Pane mainPane = parameter.getMainLayout();
-
         final HBox mainSplit = new HBox();
+        mainSplit.setFillHeight(true);
+        mainSplit.setBorder(new Border(new BorderStroke(Color.YELLOW, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
+        final SplitPane splitPane = new SplitPane();
         final VBox leftSide = new VBox();
+        leftSide.setBorder(new Border(new BorderStroke(Color.CHOCOLATE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
+
         final VBox rightSide = new VBox();
+        //rightSide.setMinHeight(900);
+        VBox.setVgrow(tableView, Priority.ALWAYS);
+        rightSide.setBorder(new Border(new BorderStroke(Color.FUCHSIA, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
+        splitPane.getItems().addAll(leftSide, rightSide);
+        //splitPane.getItems().addAll(tableView);
         searchResult = new Label("Total");
         leftSide.getChildren().addAll(searchGridPane, tableView, searchResult);
+        //leftSide.getChildren().addAll(tableView);
         rightSide.getChildren().addAll(fieldsPane, buttonsPane);
         mainSplit.getChildren().addAll(leftSide, rightSide);
-        mainPane.getChildren().add(mainSplit);
-        return mainPane;
+        return mainSplit;
     }
 
     private TableView createTableViewPane(Field[] allFields) {
@@ -107,6 +116,7 @@ public class CrudViewGenerator {
         }
 
         tableView.setPadding(new Insets(10, 10, 10, 10));
+        VBox.setVgrow(tableView, Priority.ALWAYS);
         return tableView;
     }
 
@@ -144,6 +154,7 @@ public class CrudViewGenerator {
         }
 
         final GridPane searchGridPane = new GridPane();
+        searchGridPane.setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
 
         searchGridPane.setPadding(new Insets(10, 10, 10, 10));
         searchGridPane.setHgap(10);
@@ -162,6 +173,7 @@ public class CrudViewGenerator {
 
     private Pane createButtonsPane() {
         final Pane buttonsPane = parameter.getButtonLayout();
+        buttonsPane.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
         final FlowPane btnsFlowPane = new FlowPane();
         btnsFlowPane.setPadding(new Insets(10, 10, 10, 30));
         btnsFlowPane.setHgap(10);
@@ -189,6 +201,7 @@ public class CrudViewGenerator {
 
     private Pane createFieldsPane() {
         final Pane fieldsPane = parameter.getFieldsLayout();
+        fieldsPane.setBorder(new Border(new BorderStroke(Color.GREEN, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
 
         propertySheet = new PropertySheet();
 
