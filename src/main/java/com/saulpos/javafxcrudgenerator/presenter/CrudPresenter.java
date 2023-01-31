@@ -88,6 +88,7 @@ public class CrudPresenter<S extends AbstractBean> {
         );
 
         view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getBeanInEdition(), false));
+        view.getTotalLabel().textProperty().bind(model.totalResultProperty());
     }
 
     public CrudModel<S> getModel() {

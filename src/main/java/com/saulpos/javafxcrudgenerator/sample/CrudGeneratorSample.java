@@ -129,12 +129,9 @@ public class CrudGeneratorSample extends Application {
         crudGeneratorParameter.getExtraButtonsConstructor().add(customButtonConstructor);
         CrudGenerator<Product> crudGenerator = new CrudGenerator<>(crudGeneratorParameter);
 
-        stage.setTitle("Hello World!");
+        stage.setTitle("Crud Generator Sample Application");
 
         StackPane root = new StackPane();
-        ObservableList list = FXCollections.observableArrayList();
-        list.addAll(crudGeneratorParameter.getDataProvider().getAllItems(Product.class));
-        PropertySheet propertySheet = new PropertySheet(list);
 
         CrudPresenter crud = crudGenerator.generate();
         root.getChildren().add(crud.getView().getMainView());

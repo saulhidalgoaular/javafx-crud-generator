@@ -22,6 +22,7 @@ import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 import java.lang.reflect.Field;
@@ -33,6 +34,8 @@ public class CrudModel<S extends AbstractBean> {
     private final ObservableList<S> items = FXCollections.observableArrayList();
 
     private SimpleObjectProperty<S> selectedItem = new SimpleObjectProperty<>();
+
+    private SimpleStringProperty totalResult = new SimpleStringProperty();
 
     public S getBeanInEdition() {
         return beanInEdition;
@@ -58,12 +61,7 @@ public class CrudModel<S extends AbstractBean> {
     }
 
     private void addListeners() {
-        final ChangeListener<Object> refreshChangeListener = new ChangeListener<>() {
-            @Override
-            public void changed(ObservableValue observableValue, Object s, Object newValue) {
-                refreshAction();
-            }
-        };
+        final ChangeListener<Object> refreshChangeListener = (observableValue, s, newValue) -> refreshAction();
 
         for (Method method :
                 getSearchBean().getClass().getDeclaredMethods()) {
@@ -82,20 +80,24 @@ public class CrudModel<S extends AbstractBean> {
         }
 
         final CrudModel crudModel = this;
-        crudModel.selectedItemProperty().addListener(new ChangeListener<S>() {
+        crudModel.selectedItemProperty().addListener((ChangeListener<S>) (observableValue, s, selectedRow) -> {
+            try {
+                if (selectedRow == null){
+                    crudModel.getBeanInEdition().receiveChanges(crudModel.getNewBean());
+                }else {
+                    crudModel.getBeanInEdition().receiveChanges(selectedRow);
+                }
+            }
+            catch (Exception e) {
+                // this should not happen :/
+                e.printStackTrace();
+            }
+        });
+
+        items.addListener(new ListChangeListener<S>() {
             @Override
-            public void changed(ObservableValue<? extends S> observableValue, S s, S selectedRow) {
-                try {
-                    if (selectedRow == null){
-                        crudModel.getBeanInEdition().receiveChanges(crudModel.getNewBean());
-                    }else {
-                        crudModel.getBeanInEdition().receiveChanges(selectedRow);
-                    }
-                }
-                catch (Exception e) {
-                    // this should not happen :/
-                    e.printStackTrace();
-                }
+            public void onChanged(Change<? extends S> change) {
+                crudModel.setTotalResult("Total: " + items.size() + " items");
             }
         });
     }
@@ -162,5 +164,17 @@ public class CrudModel<S extends AbstractBean> {
 
     public void setSearchBean(S searchBean) {
         this.searchBean = searchBean;
+    }
+
+    public String getTotalResult() {
+        return totalResult.get();
+    }
+
+    public SimpleStringProperty totalResultProperty() {
+        return totalResult;
+    }
+
+    public void setTotalResult(String totalResult) {
+        this.totalResult.set(totalResult);
     }
 }
