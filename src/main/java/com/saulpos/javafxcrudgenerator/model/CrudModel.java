@@ -52,6 +52,7 @@ public class CrudModel<S extends AbstractBean> {
         this.parameter = parameter;
 
         setSearchBean(getNewBean());
+        setBeanInEdition(getNewBean());
         addListeners();
         refreshAction();
     }
@@ -79,13 +80,31 @@ public class CrudModel<S extends AbstractBean> {
                 e.printStackTrace();
             }
         }
+
+        final CrudModel crudModel = this;
+        crudModel.selectedItemProperty().addListener(new ChangeListener<S>() {
+            @Override
+            public void changed(ObservableValue<? extends S> observableValue, S s, S selectedRow) {
+                try {
+                    if (selectedRow == null){
+                        crudModel.getBeanInEdition().receiveChanges(crudModel.getNewBean());
+                    }else {
+                        crudModel.getBeanInEdition().receiveChanges(selectedRow);
+                    }
+                }
+                catch (Exception e) {
+                    // this should not happen :/
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void refreshAction(){
         items.setAll(parameter.getDataProvider().getAllItems(parameter.getClazz(), getSearchBean()));
     }
 
-    public S getNewBean() {
+    private S getNewBean() {
         try {
             return (S) getParameter().getClazz().getDeclaredConstructor().newInstance();
         }catch (Exception e){
@@ -100,8 +119,16 @@ public class CrudModel<S extends AbstractBean> {
     }
 
     public void saveItemAction(){
-        this.getSelectedItem().receiveChanges(this.getBeanInEdition());
-        getSelectedItem().save();
+        if (this.getSelectedItem() == null){
+            final S newBean = this.getNewBean();
+            newBean.receiveChanges(this.getBeanInEdition());
+            newBean.save();
+            this.getItems().add(newBean);
+            //this.selectedItemProperty().setValue(newBean);
+        }else{
+            this.getSelectedItem().receiveChanges(this.getBeanInEdition());
+            getSelectedItem().save();
+        }
     }
 
     public void deleteItemAction(){

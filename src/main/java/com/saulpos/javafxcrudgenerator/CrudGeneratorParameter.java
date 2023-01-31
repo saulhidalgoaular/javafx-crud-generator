@@ -40,16 +40,6 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
 
     private Class clazz; // TODO: Improve the logic of it.
 
-    public boolean isLiveUpdateEnabled() {
-        return liveUpdateEnabled;
-    }
-
-    public void setLiveUpdateEnabled(boolean liveUpdateEnabled) {
-        this.liveUpdateEnabled = liveUpdateEnabled;
-    }
-
-    private boolean liveUpdateEnabled = false;
-
     private NodeConstructor labelConstructor = new NodeConstructor() {
 
         @Override
@@ -62,7 +52,7 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
         @Override
         public Node generateNode(Object... name) {
             Button button = new Button(name[0] + "");
-            button.setMinWidth(100);
+            button.setMinWidth(120);
             return button;
         }
     };

@@ -62,66 +62,22 @@ public class CrudPresenter<S extends AbstractBean> {
     }
 
     public void addActions(){
-        ((Button)view.getAddNewButton()).setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                newInitialBean();
-            }
-        }); // TODO: Improve this. It is not Buttons all the time
+        ((Button)view.getAddNewButton()).setOnAction(actionEvent -> newInitialBean());
 
-        ((Button)view.getSaveButton()).setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                model.saveItemAction();
-            }
-        });
+        ((Button)view.getSaveButton()).setOnAction(actionEvent -> model.saveItemAction());
 
-        ((Button)view.getDeleteButton()).setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                model.deleteItemAction();
-            }
-        });
+        ((Button)view.getDeleteButton()).setOnAction(actionEvent -> model.deleteItemAction());
 
-        ((Button)view.getRefreshButton()).setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                model.refreshAction();
-            }
-        });
+        ((Button)view.getRefreshButton()).setOnAction(actionEvent -> model.refreshAction());
     }
 
     private void newInitialBean() {
         view.getTableView().getSelectionModel().select(null);
-        view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getNewBean(), false));
     }
 
     public void addBindings(){
         Bindings.bindContentBidirectional(view.getTableView().getItems(), model.getItems());
         model.selectedItemProperty().bind(view.getTableView().getSelectionModel().selectedItemProperty());
-
-        model.selectedItemProperty().addListener(new ChangeListener<S>() {
-            @Override
-            public void changed(ObservableValue<? extends S> observableValue, S s, S selectedRow) {
-                try {
-                    if (selectedRow == null){
-                        return;
-                    }
-                    if (model.getParameter().isLiveUpdateEnabled()) {
-                        model.setBeanInEdition((S) selectedRow);
-                    } else {
-                        model.setBeanInEdition((S) selectedRow.clone());
-                    }
-                    // TODO Improve. We are rebuilding all the property sheet instead of reusing the previous one.
-                    view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getBeanInEdition(), false));
-
-                }
-                catch (Exception e) {
-                    // this should not happen :/
-                    e.printStackTrace();
-                }
-            }
-        });
 
         view.getPropertySheet().setPropertyEditorFactory(
                 CrudPropertyEditorFactory.getCrudPropertyEditorFactory(model.getParameter().getDataProvider()));
@@ -130,6 +86,8 @@ public class CrudPresenter<S extends AbstractBean> {
         view.getSearchPropertySheet().setPropertyEditorFactory(
                 CrudPropertyEditorFactory.getCrudPropertyEditorFactory(model.getParameter().getDataProvider())
         );
+
+        view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getBeanInEdition(), false));
     }
 
     public CrudModel<S> getModel() {

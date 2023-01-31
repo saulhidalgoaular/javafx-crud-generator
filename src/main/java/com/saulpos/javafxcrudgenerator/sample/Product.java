@@ -1,5 +1,6 @@
 package com.saulpos.javafxcrudgenerator.sample;
 
+import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
 import com.saulpos.javafxcrudgenerator.annotations.*;
 import com.saulpos.javafxcrudgenerator.annotations.Currency;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
@@ -10,6 +11,7 @@ import javafx.beans.property.SimpleStringProperty;
 
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.List;
 
 public class Product implements AbstractBean<Product> {
 
@@ -179,6 +181,12 @@ public class Product implements AbstractBean<Product> {
 
     @Override
     public Integer save() {
+        // just to show how it could be used. Ideally it should be saved into the database.
+        final List allItems = CrudGeneratorSample.CUSTOM_DATA_PROVIDER.getAllItems(Product.class);
+        if (!allItems.contains(this)){
+            allItems.add(this);
+        }
+
         System.out.println("Product saved");
         return null;
     }
@@ -191,6 +199,11 @@ public class Product implements AbstractBean<Product> {
 
     @Override
     public void saveOrUpdate() {
+        // just to show how it could be used. Ideally it should be saved into the database.
+        final List allItems = CrudGeneratorSample.CUSTOM_DATA_PROVIDER.getAllItems(Product.class);
+        if (!allItems.contains(this)){
+            allItems.add(this);
+        }
         System.out.println("Product saved/updated");
     }
 
@@ -229,6 +242,11 @@ public class Product implements AbstractBean<Product> {
 
     @Override
     public void delete() {
+        // just to show how it could be used. Ideally it should be saved into the database.
+        final List allItems = CrudGeneratorSample.CUSTOM_DATA_PROVIDER.getAllItems(Product.class);
+        if (allItems.contains(this)){
+            allItems.remove(this);
+        }
         System.out.println("Product deleted; " + getName());
     }
 }

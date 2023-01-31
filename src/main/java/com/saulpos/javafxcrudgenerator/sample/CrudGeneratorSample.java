@@ -24,6 +24,84 @@ import java.util.*;
 
 public class CrudGeneratorSample extends Application {
 
+    public static final AbstractDataProvider CUSTOM_DATA_PROVIDER = new AbstractDataProvider() {
+
+        private List allItems = new ArrayList();
+
+        {
+            Product p1 = new Product();
+            p1.setName("Apple");
+            p1.setIsAvailable(true);
+            p1.setDescription("Description here");
+            allItems.add(p1);
+            Product p2 = new Product();
+            p2.setName("Banana");
+            p2.setIsAvailable(false);
+            allItems.add(p2);
+            Product p3 = new Product();
+            p3.setName("Ananas");
+            p3.setIsAvailable(true);
+            //p3.setInitializationDate(new LocalDate);
+            allItems.add(p3);
+        }
+
+        @Override
+        public List getAllItems(Class clazz) {
+            if (Product.class.equals(clazz)) {
+                return allItems;
+            } else if (Price.class.equals(clazz)) {
+                final ArrayList<Price> prices = new ArrayList<>();
+                Price p1 = new Price();
+                p1.setDiscount(.2);
+                p1.setValue(35.);
+                p1.setStartingDate(Calendar.getInstance().getTime());
+                p1.setEndingDate(Calendar.getInstance().getTime());
+                prices.add(p1);
+                Price p2 = new Price();
+                p2.setDiscount(.2);
+                p2.setValue(40.);
+                p2.setStartingDate(Calendar.getInstance().getTime());
+                p2.setEndingDate(Calendar.getInstance().getTime());
+                prices.add(p2);
+                return prices;
+            } else if (clazz.isEnum()) {
+                return new ArrayList(EnumSet.allOf(clazz));
+            }
+
+            return new ArrayList();
+        }
+
+        @Override
+        public List getAllItems(Class clazz, AbstractBean filter) {
+            // It is just to show how it works. It is not a real implementation of the filtering
+            // If you are using Database, criteria should go down to database.
+            List allItems = getAllItems(clazz);
+            if (!(filter instanceof Product)) {
+                return allItems;
+            }
+            Product objFilter = (Product) filter;
+            List filtered = new ArrayList();
+            for (Object obj : allItems) {
+                if (!(obj instanceof Product)) {
+                    continue;
+                }
+                Product objProduct = (Product) obj;
+                boolean isOK = true;
+                isOK &= (objFilter.getName() == null) || (objProduct.getName() != null && objProduct.getName().contains(objFilter.getName()));
+                isOK &= (objFilter.getInitializationDate() == null) || (objProduct.getInitializationDate() != null && objProduct.getInitializationDate().equals(objFilter.getInitializationDate()));
+                if (isOK) {
+                    filtered.add(obj);
+                }
+            }
+            return filtered;
+        }
+
+        @Override
+        public boolean isRegisteredClass(Class clazz) {
+            return clazz.equals(Price.class);
+        }
+    };
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -46,78 +124,7 @@ public class CrudGeneratorSample extends Application {
         };
 
         crudGeneratorParameter.setClazz(Product.class);
-        crudGeneratorParameter.setDataProvider(new AbstractDataProvider() {
-            @Override
-            public List getAllItems(Class clazz) {
-                if (Product.class.equals(clazz)){
-                    final ArrayList<Product> products = new ArrayList<>();
-                    Product p1 = new Product();
-                    p1.setName("Apple");
-                    p1.setIsAvailable(true);
-                    p1.setDescription("Description here");
-                    products.add(p1);
-                    Product p2 = new Product();
-                    p2.setName("Banana");
-                    p2.setIsAvailable(false);
-                    products.add(p2);
-                    Product p3 = new Product();
-                    p3.setName("Ananas");
-                    p3.setIsAvailable(true);
-                    //p3.setInitializationDate(new LocalDate);
-                    products.add(p3);
-                    return products;
-                }else if (Price.class.equals(clazz)){
-                    final ArrayList<Price> prices = new ArrayList<>();
-                    Price p1 = new Price();
-                    p1.setDiscount(.2);
-                    p1.setValue(35.);
-                    p1.setStartingDate(Calendar.getInstance().getTime());
-                    p1.setEndingDate(Calendar.getInstance().getTime());
-                    prices.add(p1);
-                    Price p2 = new Price();
-                    p2.setDiscount(.2);
-                    p2.setValue(40.);
-                    p2.setStartingDate(Calendar.getInstance().getTime());
-                    p2.setEndingDate(Calendar.getInstance().getTime());
-                    prices.add(p2);
-                    return prices;
-                }else if (clazz.isEnum()){
-                    return new ArrayList(EnumSet.allOf(clazz));
-                }
-
-                return new ArrayList();
-            }
-
-            @Override
-            public List getAllItems(Class clazz, AbstractBean filter) {
-                // It is just to show how it works. It is not a real implementation of the filtering
-                // If you are using Database, criteria should go down to database.
-                List allItems = getAllItems(clazz);
-                if (!(filter instanceof Product)) {
-                    return allItems;
-                }
-                Product objFilter = (Product) filter;
-                List filtered = new ArrayList();
-                for (Object obj : allItems) {
-                    if (!(obj instanceof Product)) {
-                        continue;
-                    }
-                    Product objProduct = (Product) obj;
-                    boolean isOK = true;
-                    isOK &= (objFilter.getName() == null) || (objProduct.getName() != null && objProduct.getName().contains(objFilter.getName()));
-                    isOK &= (objFilter.getInitializationDate() == null) || (objProduct.getInitializationDate() != null && objProduct.getInitializationDate().equals(objFilter.getInitializationDate()));
-                    if (isOK){
-                        filtered.add(obj);
-                    }
-                }
-                return filtered;
-            }
-
-            @Override
-            public boolean isRegisteredClass(Class clazz) {
-                return clazz.equals(Price.class);
-            }
-        });
+        crudGeneratorParameter.setDataProvider(CUSTOM_DATA_PROVIDER);
 
         crudGeneratorParameter.getExtraButtonsConstructor().add(customButtonConstructor);
         CrudGenerator<Product> crudGenerator = new CrudGenerator<>(crudGeneratorParameter);
