@@ -18,10 +18,15 @@ package com.saulpos.javafxcrudgenerator.model;
 
 import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class CrudModel<S extends AbstractBean> {
 
@@ -46,17 +51,38 @@ public class CrudModel<S extends AbstractBean> {
     public CrudModel(CrudGeneratorParameter parameter) {
         this.parameter = parameter;
 
+        setSearchBean(getNewBean());
         addListeners();
         refreshAction();
-        setSearchBean(getNewBean());
     }
 
     private void addListeners() {
+        final ChangeListener<Object> refreshChangeListener = new ChangeListener<>() {
+            @Override
+            public void changed(ObservableValue observableValue, Object s, Object newValue) {
+                refreshAction();
+            }
+        };
 
+        for (Method method :
+                getSearchBean().getClass().getDeclaredMethods()) {
+            try {
+                if (!method.getName().endsWith("Property")){
+                    continue;
+                }
+                final Object invoke = method.invoke(getSearchBean());
+                final Method addListenerMethod = invoke.getClass().getMethod("addListener", ChangeListener.class);
+                if (addListenerMethod != null){
+                    addListenerMethod.invoke(invoke, refreshChangeListener);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void refreshAction(){
-        items.setAll(parameter.getDataProvider().getAllItems(parameter.getClazz()));
+        items.setAll(parameter.getDataProvider().getAllItems(parameter.getClazz(), getSearchBean()));
     }
 
     public S getNewBean() {

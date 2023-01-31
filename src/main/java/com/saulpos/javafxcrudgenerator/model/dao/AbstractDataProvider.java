@@ -5,7 +5,7 @@ import java.util.List;
 public interface AbstractDataProvider<S extends AbstractBean> {
     List<S> getAllItems(Class clazz);
 
-    List<S> getAllItems(Class clazz, String searchText);
+    List<S> getAllItems(Class clazz, AbstractBean filter);
 
     boolean isRegisteredClass(Class clazz);
 

@@ -1,5 +1,6 @@
 package com.saulpos.javafxcrudgenerator.sample;
 
+import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractDataProvider;
 import com.saulpos.javafxcrudgenerator.presenter.CrudPresenter;
 import com.saulpos.javafxcrudgenerator.CrudGenerator;
@@ -88,8 +89,28 @@ public class CrudGeneratorSample extends Application {
             }
 
             @Override
-            public List getAllItems(Class clazz, String searchText) {
-                return getAllItems(clazz);
+            public List getAllItems(Class clazz, AbstractBean filter) {
+                // It is just to show how it works. It is not a real implementation of the filtering
+                // If you are using Database, criteria should go down to database.
+                List allItems = getAllItems(clazz);
+                if (!(filter instanceof Product)) {
+                    return allItems;
+                }
+                Product objFilter = (Product) filter;
+                List filtered = new ArrayList();
+                for (Object obj : allItems) {
+                    if (!(obj instanceof Product)) {
+                        continue;
+                    }
+                    Product objProduct = (Product) obj;
+                    boolean isOK = true;
+                    isOK &= (objFilter.getName() == null) || (objProduct.getName() != null && objProduct.getName().contains(objFilter.getName()));
+                    isOK &= (objFilter.getInitializationDate() == null) || (objProduct.getInitializationDate() != null && objProduct.getInitializationDate().equals(objFilter.getInitializationDate()));
+                    if (isOK){
+                        filtered.add(obj);
+                    }
+                }
+                return filtered;
             }
 
             @Override
