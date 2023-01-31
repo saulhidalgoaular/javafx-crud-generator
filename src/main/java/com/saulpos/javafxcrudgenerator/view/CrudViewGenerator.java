@@ -83,16 +83,11 @@ public class CrudViewGenerator {
     }
 
     private SplitPane createMainPane(Pane fieldsPane, Pane buttonsPane, GridPane searchGridPane, TableView tableView) {
-
-        final SplitPane mainSplit = parameter.getMainLayout();
-        mainSplit.setBorder(new Border(new BorderStroke(Color.YELLOW, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
-        final SplitPane splitPane = new SplitPane();
+        final SplitPane splitPane = parameter.getMainLayout();
         final VBox leftSide = new VBox();
-        leftSide.setBorder(new Border(new BorderStroke(Color.CHOCOLATE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
 
         final VBox rightSide = new VBox();
         VBox.setVgrow(tableView, Priority.ALWAYS);
-        rightSide.setBorder(new Border(new BorderStroke(Color.FUCHSIA, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
         rightSide.setFillWidth(true);
         splitPane.getItems().addAll(leftSide, rightSide);
         searchResult = new Label("Total");
@@ -100,7 +95,6 @@ public class CrudViewGenerator {
         BorderPane bPane = new BorderPane();
         bPane.setTop(fieldsPane);
         bPane.setBottom(buttonsPane);
-        bPane.setBorder(new Border(new BorderStroke(Color.ORANGE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
         bPane.setPrefHeight(10000);
         rightSide.getChildren().addAll(bPane);
         return splitPane;
@@ -156,13 +150,13 @@ public class CrudViewGenerator {
         }
 
         final GridPane searchGridPane = new GridPane();
-        searchGridPane.setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
 
         searchGridPane.setPadding(new Insets(10, 10, 10, 10));
         searchGridPane.setHgap(10);
         searchGridPane.setVgap(10);
 
         final Label searchLabel = new Label("Search: ");
+        searchLabel.setPadding(new Insets(0, 0, 0 ,15 ));
         searchPropertySheet = new PropertySheet();
         searchPropertySheet.setSearchBoxVisible(false);
         searchPropertySheet.setModeSwitcherVisible(false);
@@ -175,7 +169,6 @@ public class CrudViewGenerator {
 
     private Pane createButtonsPane() {
         final Pane buttonsPane = parameter.getButtonLayout();
-        buttonsPane.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
         buttonsPane.setPadding(new Insets(10, 10, 10, 30));
         if (buttonsPane instanceof FlowPane){
             ((FlowPane) buttonsPane).setHgap(10); // TODO Improve later.
@@ -203,7 +196,6 @@ public class CrudViewGenerator {
 
     private Pane createFieldsPane() {
         final Pane fieldsPane = parameter.getFieldsLayout();
-        fieldsPane.setBorder(new Border(new BorderStroke(Color.GREEN, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
 
         propertySheet = new PropertySheet();
 
