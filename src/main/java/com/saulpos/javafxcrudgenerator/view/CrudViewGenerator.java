@@ -61,7 +61,7 @@ public class CrudViewGenerator {
         // Table area
         tableView = createTableViewPane(allFields);
 
-        SplitPane mainPane = createMainPane(fieldsPane, buttonsPane, searchGridPane, tableView);
+        Node mainPane = createMainPane(fieldsPane, buttonsPane, searchGridPane, tableView);
 
         addBindings();
 
@@ -83,21 +83,26 @@ public class CrudViewGenerator {
         deleteButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
     }
 
-    private SplitPane createMainPane(Pane fieldsPane, Pane buttonsPane, GridPane searchGridPane, TableView tableView) {
+    private Node createMainPane(Pane fieldsPane, Pane buttonsPane, GridPane searchGridPane, TableView tableView) {
+
         final SplitPane splitPane = parameter.getMainLayout();
         final VBox leftSide = new VBox();
-
         final VBox rightSide = new VBox();
         VBox.setVgrow(tableView, Priority.ALWAYS);
         rightSide.setFillWidth(true);
-        splitPane.getItems().addAll(leftSide, rightSide);
-        searchResult = new Label("Total");
-        leftSide.getChildren().addAll(searchGridPane, tableView, searchResult);
         BorderPane bPane = new BorderPane();
         bPane.setTop(fieldsPane);
         bPane.setBottom(buttonsPane);
         bPane.setPrefHeight(10000);
+        searchResult = new Label("Total");
         rightSide.getChildren().addAll(bPane);
+        if (parameter.isHidePropertyEditor()){
+            leftSide.getChildren().addAll(searchGridPane, tableView, buttonsPane, searchResult);
+            return leftSide;
+        }
+        leftSide.getChildren().addAll(searchGridPane, tableView, searchResult);
+
+        splitPane.getItems().addAll(leftSide, rightSide);
         return splitPane;
     }
 

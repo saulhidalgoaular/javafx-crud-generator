@@ -48,7 +48,7 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
 
     private boolean enableSearch = true;
 
-    private boolean hidePropertyEditor = true;
+    private boolean hidePropertyEditor = false;
 
     private Class clazz; // TODO: Improve the logic of it.
 
