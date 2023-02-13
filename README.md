@@ -1,8 +1,10 @@
-# javafx-crud-generator
+Project Goals:
 
-1 - Ordering the layout
-3 - add Annotation @LongString annotation for multiple lines text area, with field/property for lines number
-4 - calendar for dates
-6 - add new feature:
-    a - if item selected then it should unselect current item, and create new empty item
-7 - make 2 labels for edit button: create and save
+1. Adding @LongString annotation for multiple lines of text, with field/property for lines number.
+2. Add an extra paremeter HideEditorProperty. If it's true the PropertyEditor should be hidden.
+3. Add icons to the buttons.
+4. Add language customization.
+
+Visual presentation of the project layout:
+
+[Project image](https://user-images.githubusercontent.com/125213550/218542545-1d1ae737-4fd6-44af-9026-7f1d54e21c31.png)
