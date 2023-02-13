@@ -79,16 +79,16 @@ public class CrudPresenter<S extends AbstractBean> {
         Bindings.bindContentBidirectional(view.getTableView().getItems(), model.getItems());
         model.selectedItemProperty().bind(view.getTableView().getSelectionModel().selectedItemProperty());
 
-        view.getPropertySheet().setPropertyEditorFactory(
-                CrudPropertyEditorFactory.getCrudPropertyEditorFactory(model.getParameter().getDataProvider()));
-
+        if(!model.getParameter().isHidePropertyEditor()) {
+            view.getPropertySheet().setPropertyEditorFactory(
+                    CrudPropertyEditorFactory.getCrudPropertyEditorFactory(model.getParameter().getDataProvider()));
+            view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getBeanInEdition(), false));
+        }
         view.getSearchPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getSearchBean(), true));
         view.getSearchPropertySheet().setPropertyEditorFactory(
                 CrudPropertyEditorFactory.getCrudPropertyEditorFactory(model.getParameter().getDataProvider())
         );
-
-        view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getBeanInEdition(), false));
-        view.getTotalLabel().textProperty().bind(model.totalResultProperty());
+            view.getTotalLabel().textProperty().bind(model.totalResultProperty());
     }
 
     public CrudModel<S> getModel() {

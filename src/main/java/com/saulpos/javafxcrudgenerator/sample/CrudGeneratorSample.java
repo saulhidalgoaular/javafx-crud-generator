@@ -86,7 +86,7 @@ public class CrudGeneratorSample extends Application {
                 }
                 Product objProduct = (Product) obj;
                 boolean isOK = true;
-                isOK &= (objFilter.getName() == null) || (objProduct.getName() != null && objProduct.getName().contains(objFilter.getName()));
+                isOK &= (objFilter.getName() == null) || (objProduct.getName() != null && objProduct.getName().toLowerCase().contains(objFilter.getName().toLowerCase()));
                 isOK &= (objFilter.getInitializationDate() == null) || (objProduct.getInitializationDate() != null && objProduct.getInitializationDate().equals(objFilter.getInitializationDate()));
                 if (isOK) {
                     filtered.add(obj);

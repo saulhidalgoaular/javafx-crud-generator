@@ -48,6 +48,8 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
 
     private boolean enableSearch = true;
 
+    private boolean hidePropertyEditor = true;
+
     private Class clazz; // TODO: Improve the logic of it.
 
     private NodeConstructor labelConstructor = new NodeConstructor() {
@@ -207,5 +209,13 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
 
     public void setDataProvider(AbstractDataProvider<S> dataProvider) {
         this.dataProvider = dataProvider;
+    }
+
+    public void setHidePropertyEditor(boolean hidePropertyEditor) {
+        this.hidePropertyEditor = hidePropertyEditor;
+    }
+
+    public boolean isHidePropertyEditor() {
+        return hidePropertyEditor;
     }
 }

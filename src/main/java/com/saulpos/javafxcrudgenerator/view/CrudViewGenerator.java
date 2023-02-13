@@ -196,12 +196,15 @@ public class CrudViewGenerator {
     }
 
     private Pane createFieldsPane() {
+
         final Pane fieldsPane = parameter.getFieldsLayout();
+        if(!parameter.isHidePropertyEditor())
+        {
+            propertySheet = new PropertySheet();
 
-        propertySheet = new PropertySheet();
-
-        fieldsPane.getChildren().add(propertySheet);
-        return fieldsPane;
+            fieldsPane.getChildren().add(propertySheet);
+        }
+            return fieldsPane;
     }
 
     public Node getAddNewButton() {
