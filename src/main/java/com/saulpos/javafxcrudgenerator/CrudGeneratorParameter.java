@@ -17,15 +17,21 @@ package com.saulpos.javafxcrudgenerator;
 
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractDataProvider;
+import de.jensd.fx.glyphs.GlyphIcons;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import org.controlsfx.glyphfont.Glyph;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class CrudGeneratorParameter <S extends AbstractBean> {
@@ -62,8 +68,11 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
 
     private NodeConstructor genericButtonConstructor = new NodeConstructor() {
         @Override
-        public Node generateNode(Object... name) {
-            Button button = new Button(name[0] + "");
+        public Node generateNode(Object... parameters) { //1st param is the name and the 2nd is the icon
+            //Button button = new Button(name[0] + "");
+            Button button = new Button();
+            Label icon = GlyphsDude.createIconLabel((GlyphIcons) parameters[1], parameters[0] + "", "20px", "10px", ContentDisplay.LEFT);
+            button.setGraphic(icon);
             button.setMinWidth(getButtonWidth());
             return button;
         }

@@ -6,12 +6,16 @@ import com.saulpos.javafxcrudgenerator.presenter.CrudPresenter;
 import com.saulpos.javafxcrudgenerator.CrudGenerator;
 import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
 import com.saulpos.javafxcrudgenerator.NodeConstructor;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -108,6 +112,8 @@ public class CrudGeneratorSample extends Application {
             @Override
             public Node generateNode(Object... name) {
                 Button customButton = new Button("Custom Button");
+                Label icon = GlyphsDude.createIconLabel(FontAwesomeIcon.STAR, "CustomButton", "20px", "10px", ContentDisplay.LEFT);
+                customButton.setGraphic(icon);
                 customButton.setPrefWidth(crudGeneratorParameter.getButtonWidth());
                 customButton.setOnAction(new EventHandler<ActionEvent>() {
                     @Override

@@ -80,6 +80,7 @@ public class CrudPropertyEditorFactory {
     }
     private static AbstractPropertyEditor<String, TextArea> getTextAreaPropertyEditor(PropertySheet.Item item) {
         TextArea textArea = new TextArea();
+        //TODO implement height for the text area
         textArea.setBorder(new Border(new BorderStroke(Color.LIGHTGRAY,
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 

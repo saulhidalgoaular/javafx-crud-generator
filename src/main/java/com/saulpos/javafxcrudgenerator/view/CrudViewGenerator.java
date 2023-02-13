@@ -18,6 +18,7 @@ package com.saulpos.javafxcrudgenerator.view;
 import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
 import com.saulpos.javafxcrudgenerator.NodeConstructor;
 import com.saulpos.javafxcrudgenerator.annotations.*;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.beans.property.*;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -175,10 +176,10 @@ public class CrudViewGenerator {
             ((FlowPane) buttonsPane).setVgap(10);
         }
 
-        addNewButton =  parameter.getAddNextButtonConstructor().generateNode("Add New"); // TODO: Language customizable
-        saveButton =  parameter.getEditButtonConstructor().generateNode("Save");
-        deleteButton =  parameter.getDeleteButtonConstructor().generateNode("Delete");
-        refreshButton =  parameter.getRefreshButtonConstructor().generateNode("Refresh");
+        addNewButton =  parameter.getAddNextButtonConstructor().generateNode("Add New", FontAwesomeIcon.PLUS_SQUARE); // TODO: Language customizable
+        saveButton =  parameter.getEditButtonConstructor().generateNode("Save", FontAwesomeIcon.SAVE);
+        deleteButton =  parameter.getDeleteButtonConstructor().generateNode("Delete", FontAwesomeIcon.REMOVE);
+        refreshButton =  parameter.getRefreshButtonConstructor().generateNode("Refresh", FontAwesomeIcon.REFRESH);
 
         final Node[] nodes = new Node[]{addNewButton, saveButton, deleteButton, refreshButton};
         final ArrayList<Node> allButtons = new ArrayList<>(Arrays.asList(nodes));
