@@ -7,4 +7,4 @@ Project Goals:
 
 Visual presentation of the project layout:
 
-[Project image](https://user-images.githubusercontent.com/125213550/218542545-1d1ae737-4fd6-44af-9026-7f1d54e21c31.png)
+![Project image](https://user-images.githubusercontent.com/125213550/218542545-1d1ae737-4fd6-44af-9026-7f1d54e21c31.png)
