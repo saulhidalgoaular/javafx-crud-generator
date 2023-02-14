@@ -178,7 +178,7 @@ public class CrudViewGenerator {
             ((FlowPane) buttonsPane).setHgap(10); // TODO Improve later.
             ((FlowPane) buttonsPane).setVgap(10);
         }
-        addNewButton = parameter.getAddNextButtonConstructor().generateNode(parameter.getResourceBundle().getString("custom.button"), FontAwesomeIcon.PLUS_SQUARE); // TODO: Language customizable
+        addNewButton = parameter.getAddNextButtonConstructor().generateNode(parameter.getResourceBundle().getString("addNewButton.button"), FontAwesomeIcon.PLUS_SQUARE); // TODO: Language customizable
         saveButton =  parameter.getEditButtonConstructor().generateNode("Save", FontAwesomeIcon.SAVE);
         deleteButton =  parameter.getDeleteButtonConstructor().generateNode("Delete", FontAwesomeIcon.REMOVE);
         refreshButton =  parameter.getRefreshButtonConstructor().generateNode("Refresh", FontAwesomeIcon.REFRESH);
