@@ -15,23 +15,21 @@
  */
 package com.saulpos.javafxcrudgenerator;
 
+import com.saulpos.javafxcrudgenerator.model.Function;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractDataProvider;
+import com.saulpos.javafxcrudgenerator.view.NodeConstructor;
 import de.jensd.fx.glyphs.GlyphIcons;
 import de.jensd.fx.glyphs.GlyphsDude;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import org.controlsfx.glyphfont.Glyph;
 
-import javax.swing.*;
 import java.util.ArrayList;
 
 public class CrudGeneratorParameter <S extends AbstractBean> {
@@ -52,14 +50,6 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
 
     private Class clazz; // TODO: Improve the logic of it.
 
-    private NodeConstructor labelConstructor = new NodeConstructor() {
-
-        @Override
-        public Node generateNode(Object... name) {
-            return new Label(name[0] + ":");
-        }
-    };
-
     public Integer getButtonWidth() {
         return buttonWidth;
     }
@@ -69,9 +59,13 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
     }
 
     private NodeConstructor genericButtonConstructor = new NodeConstructor() {
+        /**
+         * 1st param is the name and the 2nd is the icon
+         * @param parameters
+         * @return
+         */
         @Override
-        public Node generateNode(Object... parameters) { //1st param is the name and the 2nd is the icon
-            //Button button = new Button(name[0] + "");
+        public Node generateNode(Object... parameters) {
             Button button = new Button();
             Label icon = GlyphsDude.createIconLabel((GlyphIcons) parameters[1], parameters[0] + "", "20px", "10px", ContentDisplay.LEFT);
             button.setGraphic(icon);
@@ -90,6 +84,26 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
     private ArrayList<NodeConstructor> extraButtonsConstructor = new ArrayList<>();
 
     private AbstractDataProvider<S> dataProvider;
+
+    private Function beforeSave;
+
+    private Function beforeDelete;
+
+    public Function getBeforeSave() {
+        return beforeSave;
+    }
+
+    public void setBeforeSave(Function beforeSave) {
+        this.beforeSave = beforeSave;
+    }
+
+    public Function getBeforeDelete() {
+        return beforeDelete;
+    }
+
+    public void setBeforeDelete(Function beforeDelete) {
+        this.beforeDelete = beforeDelete;
+    }
 
     public String getTitle() {
         return title;
@@ -113,14 +127,6 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
 
     public void setEnableSearch(boolean enableSearch) {
         this.enableSearch = enableSearch;
-    }
-
-    public NodeConstructor getLabelConstructor() {
-        return labelConstructor;
-    }
-
-    public void setLabelConstructor(NodeConstructor labelConstructor) {
-        this.labelConstructor = labelConstructor;
     }
 
     public SplitPane getMainLayout() {

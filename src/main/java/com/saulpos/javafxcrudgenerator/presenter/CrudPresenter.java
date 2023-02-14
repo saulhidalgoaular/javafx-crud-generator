@@ -20,6 +20,7 @@ import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import com.saulpos.javafxcrudgenerator.view.CrudBeanPropertyUtils;
 import com.saulpos.javafxcrudgenerator.view.CrudPropertyEditorFactory;
 import com.saulpos.javafxcrudgenerator.view.CrudView;
+import com.saulpos.javafxcrudgenerator.view.Dialog;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -64,9 +65,21 @@ public class CrudPresenter<S extends AbstractBean> {
     public void addActions(){
         ((Button)view.getAddNewButton()).setOnAction(actionEvent -> newInitialBean());
 
-        ((Button)view.getSaveButton()).setOnAction(actionEvent -> model.saveItemAction());
+        ((Button)view.getSaveButton()).setOnAction(actionEvent -> {
+            try {
+                model.saveItemAction();
+            } catch (Exception e) {
+                Dialog.showThrowable("Warning", e.getMessage(), e);
+            }
+        });
 
-        ((Button)view.getDeleteButton()).setOnAction(actionEvent -> model.deleteItemAction());
+        ((Button)view.getDeleteButton()).setOnAction(actionEvent -> {
+            try {
+                model.deleteItemAction();
+            } catch (Exception e) {
+                Dialog.showThrowable("Warning", e.getMessage(), e);
+            }
+        });
 
         ((Button)view.getRefreshButton()).setOnAction(actionEvent -> model.refreshAction());
     }

@@ -1,11 +1,12 @@
 package com.saulpos.javafxcrudgenerator.sample;
 
+import com.saulpos.javafxcrudgenerator.model.Function;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractDataProvider;
 import com.saulpos.javafxcrudgenerator.presenter.CrudPresenter;
 import com.saulpos.javafxcrudgenerator.CrudGenerator;
 import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
-import com.saulpos.javafxcrudgenerator.NodeConstructor;
+import com.saulpos.javafxcrudgenerator.view.NodeConstructor;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.application.Application;
@@ -127,6 +128,13 @@ public class CrudGeneratorSample extends Application {
 
         crudGeneratorParameter.setClazz(Product.class);
         crudGeneratorParameter.setDataProvider(CUSTOM_DATA_PROVIDER);
+        crudGeneratorParameter.setBeforeSave(new Function() {
+            @Override
+            public Object[] run(Object[] params) throws Exception {
+                //throw new Exception("You can't save");
+                return null;
+            }
+        });
 
         crudGeneratorParameter.getExtraButtonsConstructor().add(customButtonConstructor);
         CrudGenerator<Product> crudGenerator = new CrudGenerator<>(crudGeneratorParameter);

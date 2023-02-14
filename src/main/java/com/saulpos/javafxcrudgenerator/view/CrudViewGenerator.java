@@ -16,7 +16,6 @@
 package com.saulpos.javafxcrudgenerator.view;
 
 import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
-import com.saulpos.javafxcrudgenerator.NodeConstructor;
 import com.saulpos.javafxcrudgenerator.annotations.*;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.beans.property.*;
@@ -26,7 +25,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import org.controlsfx.control.PropertySheet;
 
 import java.lang.reflect.*;
