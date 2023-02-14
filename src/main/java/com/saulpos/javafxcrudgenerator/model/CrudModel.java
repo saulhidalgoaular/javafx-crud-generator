@@ -97,7 +97,7 @@ public class CrudModel<S extends AbstractBean> {
         items.addListener(new ListChangeListener<S>() {
             @Override
             public void onChanged(Change<? extends S> change) {
-                crudModel.setTotalResult("Total: " + items.size() + " items");
+                crudModel.setTotalResult( parameter.translate("total")+ ": " + items.size() + " "+ parameter.translate("items"));
             }
         });
     }
