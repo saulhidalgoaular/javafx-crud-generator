@@ -36,7 +36,7 @@ import java.util.ResourceBundle;
 
 public class CrudGeneratorParameter <S extends AbstractBean> {
 
-    private Locale currentLocale = Locale.getDefault();
+    private Locale currentLocale = new Locale("bg_BG");
 
     private ResourceBundle resourceBundle = ResourceBundle.getBundle("BundleName", currentLocale);
 
@@ -62,6 +62,15 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
 
     public void setButtonWidth(Integer buttonWidth) {
         this.buttonWidth = buttonWidth;
+    }
+
+    public String translate(String key){
+        try{
+            return resourceBundle.getString(key);
+        }catch(Exception e)
+        {
+            return key;
+        }
     }
 
     private NodeConstructor genericButtonConstructor = new NodeConstructor() {

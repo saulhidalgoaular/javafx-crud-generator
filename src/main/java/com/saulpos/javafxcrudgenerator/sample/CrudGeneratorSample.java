@@ -114,14 +114,13 @@ public class CrudGeneratorSample extends Application {
             @Override
             public Node generateNode(Object... name) {
                 Button customButton = new Button();
-                customButton.setText(crudGeneratorParameter.getResourceBundle().getString("custom.button"));
-                Label icon = GlyphsDude.createIconLabel(FontAwesomeIcon.STAR, crudGeneratorParameter.getResourceBundle().getString("custom.button"), "20px", "10px", ContentDisplay.LEFT);
+                Label icon = GlyphsDude.createIconLabel(FontAwesomeIcon.STAR, crudGeneratorParameter.translate("custom.button"), "20px", "10px", ContentDisplay.LEFT);
                 customButton.setGraphic(icon);
                 customButton.setPrefWidth(crudGeneratorParameter.getButtonWidth());
                 customButton.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent actionEvent) {
-                        System.out.println(crudGeneratorParameter.getResourceBundle().getString("custom.button.clicked"));
+                        System.out.println(crudGeneratorParameter.translate("custom.button.clicked"));
                     }
                 });
                 return customButton;
@@ -141,7 +140,7 @@ public class CrudGeneratorSample extends Application {
         crudGeneratorParameter.getExtraButtonsConstructor().add(customButtonConstructor);
         CrudGenerator<Product> crudGenerator = new CrudGenerator<>(crudGeneratorParameter);
 
-        stage.setTitle(crudGeneratorParameter.getResourceBundle().getString("window.title"));
+        stage.setTitle(crudGeneratorParameter.translate("window.title"));
 
         StackPane root = new StackPane();
 

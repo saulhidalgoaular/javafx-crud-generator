@@ -52,7 +52,7 @@ public class ViewUtils {
         return properties;
     }
 
-    public static String getTitle(final String name){
+    public static String getName(final String name){
         StringBuilder title = new StringBuilder();
         StringBuilder currentWord = new StringBuilder();
         for (char c : name.toCharArray()){

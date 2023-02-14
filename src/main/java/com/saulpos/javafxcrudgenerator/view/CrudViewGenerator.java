@@ -108,7 +108,7 @@ public class CrudViewGenerator {
         TableView tableView = new TableView();
         for (Field field : allFields){
             if (!field.isAnnotationPresent(Ignore.class)){
-                TableColumn<Object, String> column = new TableColumn<>(ViewUtils.getTitle(field.getName()));
+                TableColumn<Object, String> column = new TableColumn<>(ViewUtils.getName(field.getName()));
                 column.setCellValueFactory(cell -> getProperty(cell, field));
                 column.setCellFactory(tableColum -> getCellFactory(field));
                 tableView.getColumns().add(column);
@@ -159,7 +159,7 @@ public class CrudViewGenerator {
         searchGridPane.setHgap(10);
         searchGridPane.setVgap(10);
 
-        final Label searchLabel = new Label("Search: ");
+        final Label searchLabel = new Label(parameter.translate("search.label"));
         searchLabel.setPadding(new Insets(0, 0, 0 ,15 ));
         searchPropertySheet = new PropertySheet();
         searchPropertySheet.setSearchBoxVisible(false);
@@ -178,10 +178,10 @@ public class CrudViewGenerator {
             ((FlowPane) buttonsPane).setHgap(10); // TODO Improve later.
             ((FlowPane) buttonsPane).setVgap(10);
         }
-        addNewButton = parameter.getAddNextButtonConstructor().generateNode(parameter.getResourceBundle().getString("addNewButton.button"), FontAwesomeIcon.PLUS_SQUARE); // TODO: Language customizable
-        saveButton =  parameter.getEditButtonConstructor().generateNode("Save", FontAwesomeIcon.SAVE);
-        deleteButton =  parameter.getDeleteButtonConstructor().generateNode("Delete", FontAwesomeIcon.REMOVE);
-        refreshButton =  parameter.getRefreshButtonConstructor().generateNode("Refresh", FontAwesomeIcon.REFRESH);
+        addNewButton = parameter.getAddNextButtonConstructor().generateNode(parameter.translate("addNewButton.button"), FontAwesomeIcon.PLUS_SQUARE); // TODO: Language customizable
+        saveButton =  parameter.getEditButtonConstructor().generateNode(parameter.translate("saveButton.button"), FontAwesomeIcon.SAVE);
+        deleteButton =  parameter.getDeleteButtonConstructor().generateNode(parameter.translate("deleteButton.button"), FontAwesomeIcon.REMOVE);
+        refreshButton =  parameter.getRefreshButtonConstructor().generateNode(parameter.translate("refreshButton.button"), FontAwesomeIcon.REFRESH);
 
         final Node[] nodes = new Node[]{addNewButton, saveButton, deleteButton, refreshButton};
         final ArrayList<Node> allButtons = new ArrayList<>(Arrays.asList(nodes));
