@@ -7,6 +7,8 @@ TODO List:
 1. Adding @LongString annotation for multiple lines of text, with field/property for lines number.
 2. Add language customization.
 3. Improve the Deep Copy in the clone method.
+4. Use this Dialog Class instead.
+https://code.makery.ch/blog/javafx-dialogs-official (the one with the Exception Dialog - using icons)
 
 Screenshots (Code can be seen in the Sample Package):
 
