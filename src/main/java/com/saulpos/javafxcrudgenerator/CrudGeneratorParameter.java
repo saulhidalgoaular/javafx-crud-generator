@@ -31,8 +31,14 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class CrudGeneratorParameter <S extends AbstractBean> {
+
+    private Locale currentLocale = Locale.getDefault();
+
+    private ResourceBundle resourceBundle = ResourceBundle.getBundle("BundleName", currentLocale);
 
     private String title = "";
 
@@ -40,7 +46,7 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
 
     private Pane buttonLayout = new FlowPane();
 
-    private Integer buttonWidth = 120;
+    private Integer buttonWidth = 150;
 
     private SplitPane mainLayout = new SplitPane();
 
@@ -223,5 +229,13 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
 
     public boolean isHidePropertyEditor() {
         return hidePropertyEditor;
+    }
+
+    public ResourceBundle getResourceBundle() {
+        return resourceBundle;
+    }
+    public void setCurrentLocale(Locale currentLocale) {
+        this.currentLocale = currentLocale;
+        resourceBundle = ResourceBundle.getBundle("BundleName", currentLocale);
     }
 }

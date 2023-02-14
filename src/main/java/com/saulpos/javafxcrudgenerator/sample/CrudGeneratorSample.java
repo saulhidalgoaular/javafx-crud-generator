@@ -109,17 +109,19 @@ public class CrudGeneratorSample extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         CrudGeneratorParameter crudGeneratorParameter = new CrudGeneratorParameter();
+        crudGeneratorParameter.setCurrentLocale(new Locale("bg_BG"));
         NodeConstructor customButtonConstructor = new NodeConstructor() {
             @Override
             public Node generateNode(Object... name) {
-                Button customButton = new Button("Custom Button");
-                Label icon = GlyphsDude.createIconLabel(FontAwesomeIcon.STAR, "CustomButton", "20px", "10px", ContentDisplay.LEFT);
+                Button customButton = new Button();
+                customButton.setText(crudGeneratorParameter.getResourceBundle().getString("custom.button"));
+                Label icon = GlyphsDude.createIconLabel(FontAwesomeIcon.STAR, crudGeneratorParameter.getResourceBundle().getString("custom.button"), "20px", "10px", ContentDisplay.LEFT);
                 customButton.setGraphic(icon);
                 customButton.setPrefWidth(crudGeneratorParameter.getButtonWidth());
                 customButton.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent actionEvent) {
-                        System.out.println("Custom Button");
+                        System.out.println(crudGeneratorParameter.getResourceBundle().getString("custom.button.clicked"));
                     }
                 });
                 return customButton;
@@ -139,7 +141,7 @@ public class CrudGeneratorSample extends Application {
         crudGeneratorParameter.getExtraButtonsConstructor().add(customButtonConstructor);
         CrudGenerator<Product> crudGenerator = new CrudGenerator<>(crudGeneratorParameter);
 
-        stage.setTitle("Crud Generator Sample Application");
+        stage.setTitle(crudGeneratorParameter.getResourceBundle().getString("window.title"));
 
         StackPane root = new StackPane();
 
