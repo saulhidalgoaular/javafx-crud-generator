@@ -2,6 +2,7 @@ package com.saulpos.javafxcrudgenerator.view;
 
 import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
 import com.saulpos.javafxcrudgenerator.annotations.Ignore;
+import com.saulpos.javafxcrudgenerator.model.Function;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -52,7 +53,16 @@ public class ViewUtils {
         return properties;
     }
 
-    public static String getName(final String name){
+    public static String getName(final String name, Function translateFunction){
+        String translatedName = null;
+        try {
+            translatedName = translateFunction.run(new String[]{name})[0].toString();
+        } catch (Exception e) {
+
+        }
+        if (!name.equals(translatedName)){
+            return translatedName;
+        }
         StringBuilder title = new StringBuilder();
         StringBuilder currentWord = new StringBuilder();
         for (char c : name.toCharArray()){

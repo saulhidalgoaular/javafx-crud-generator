@@ -1,8 +1,7 @@
 package com.saulpos.javafxcrudgenerator.view;
 
 import com.saulpos.javafxcrudgenerator.annotations.Category;
-import com.saulpos.javafxcrudgenerator.annotations.LongString;
-import org.controlsfx.control.PropertySheet;
+import com.saulpos.javafxcrudgenerator.model.Function;
 import org.controlsfx.property.BeanProperty;
 
 import java.beans.PropertyDescriptor;
@@ -10,13 +9,17 @@ import java.lang.reflect.Field;
 
 public class CrudPropertySheetItem extends BeanProperty {
 
-    public CrudPropertySheetItem(Object bean, PropertyDescriptor propertyDescriptor) {
+
+    private Function translateFunction;
+
+    public CrudPropertySheetItem(Object bean, PropertyDescriptor propertyDescriptor, Function translateFunction) {
         super(bean, propertyDescriptor);
+        this.translateFunction = translateFunction;
     }
 
     @Override
     public String getName() {
-        return ViewUtils.getName(super.getName());
+        return ViewUtils.getName(super.getName(), translateFunction);
     }
 
     public String getOriginalName(){

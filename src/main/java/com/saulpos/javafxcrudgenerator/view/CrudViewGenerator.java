@@ -108,7 +108,7 @@ public class CrudViewGenerator {
         TableView tableView = new TableView();
         for (Field field : allFields){
             if (!field.isAnnotationPresent(Ignore.class)){
-                TableColumn<Object, String> column = new TableColumn<>(ViewUtils.getName(field.getName()));
+                TableColumn<Object, String> column = new TableColumn<>(ViewUtils.getName(field.getName(), parameter.getTranslateFunction()));
                 column.setCellValueFactory(cell -> getProperty(cell, field));
                 column.setCellFactory(tableColum -> getCellFactory(field));
                 tableView.getColumns().add(column);

@@ -27,13 +27,11 @@
 package com.saulpos.javafxcrudgenerator.view;
 
 import java.beans.*;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Optional;
 import java.util.function.Predicate;
 
 import com.saulpos.javafxcrudgenerator.annotations.Ignore;
 import com.saulpos.javafxcrudgenerator.annotations.Search;
+import com.saulpos.javafxcrudgenerator.model.Function;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -41,7 +39,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TextInputControl;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.control.PropertySheet.Item;
-import org.controlsfx.property.editor.PropertyEditor;
 
 /**
  * Convenience utility class for creating {@link PropertySheet} instances based
@@ -59,13 +56,14 @@ public final class CrudBeanPropertyUtils {
      * {@link PropertySheet#getItems() items list}.
      * <p>
      * This method will not return read-only properties.
-     * 
-     * @param bean The JavaBean that should be introspected and be editable via
-     *      a {@link PropertySheet}.
+     *
+     * @param bean              The JavaBean that should be introspected and be editable via
+     *                          a {@link PropertySheet}.
+     * @param translateFunction
      * @return A list of {@link Item} instances representing the properties of the
-     *      JavaBean.
+     * JavaBean.
      */
-    public static ObservableList<Item> getProperties(final Object bean, boolean search) {
+    public static ObservableList<Item> getProperties(final Object bean, boolean search, Function translateFunction) {
         return getProperties(bean, (p) -> {
             if (p instanceof FeatureDescriptor){
                 try {
@@ -76,7 +74,7 @@ public final class CrudBeanPropertyUtils {
                 }
             }
             return true;
-        } );
+        }, translateFunction );
     }
     
     /**
@@ -91,13 +89,13 @@ public final class CrudBeanPropertyUtils {
      * @return A list of {@link Item} instances representing the properties of the
      *      JavaBean.
      */
-    public static ObservableList<Item> getProperties(final Object bean, Predicate<PropertyDescriptor> test) {
+    public static ObservableList<Item> getProperties(final Object bean, Predicate<PropertyDescriptor> test, Function translateFunction) {
         ObservableList<Item> list = FXCollections.observableArrayList();
         try {
             BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass(), Object.class);
             for (PropertyDescriptor p : beanInfo.getPropertyDescriptors()) {
                 if (test.test(p)) {
-                    list.add(new CrudPropertySheetItem(bean, p));
+                    list.add(new CrudPropertySheetItem(bean, p, translateFunction));
                 }
             }
         } catch (IntrospectionException e) {

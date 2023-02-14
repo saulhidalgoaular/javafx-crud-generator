@@ -22,10 +22,6 @@ import com.saulpos.javafxcrudgenerator.view.CrudPropertyEditorFactory;
 import com.saulpos.javafxcrudgenerator.view.CrudView;
 import com.saulpos.javafxcrudgenerator.view.Dialog;
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.*;
 
 public class CrudPresenter<S extends AbstractBean> {
@@ -95,9 +91,9 @@ public class CrudPresenter<S extends AbstractBean> {
         if(!model.getParameter().isHidePropertyEditor()) {
             view.getPropertySheet().setPropertyEditorFactory(
                     CrudPropertyEditorFactory.getCrudPropertyEditorFactory(model.getParameter().getDataProvider()));
-            view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getBeanInEdition(), false));
+            view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getBeanInEdition(), false, model.getParameter().getTranslateFunction()));
         }
-        view.getSearchPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getSearchBean(), true));
+        view.getSearchPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getSearchBean(), true, model.getParameter().getTranslateFunction()));
         view.getSearchPropertySheet().setPropertyEditorFactory(
                 CrudPropertyEditorFactory.getCrudPropertyEditorFactory(model.getParameter().getDataProvider())
         );

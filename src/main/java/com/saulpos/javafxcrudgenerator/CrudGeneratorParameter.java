@@ -40,6 +40,19 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
 
     private ResourceBundle resourceBundle = ResourceBundle.getBundle("BundleName", currentLocale);
 
+    private Function translateFunction = new Function() {
+        @Override
+        public Object[] run(Object[] params) throws Exception {
+            try{
+                return new String[]{resourceBundle.getString(params[0].toString())};
+            }catch(Exception e)
+            {
+                System.out.println("Not found");
+                return new String[]{params[0].toString()};
+            }
+        }
+    };
+
     private String title = "";
 
     private Pane fieldsLayout = new VBox();
@@ -62,15 +75,6 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
 
     public void setButtonWidth(Integer buttonWidth) {
         this.buttonWidth = buttonWidth;
-    }
-
-    public String translate(String key){
-        try{
-            return resourceBundle.getString(key);
-        }catch(Exception e)
-        {
-            return key;
-        }
     }
 
     private NodeConstructor genericButtonConstructor = new NodeConstructor() {
@@ -246,5 +250,18 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
     public void setCurrentLocale(Locale currentLocale) {
         this.currentLocale = currentLocale;
         resourceBundle = ResourceBundle.getBundle("BundleName", currentLocale);
+    }
+
+    public String translate(String key) {
+        try {
+            return translateFunction.run(new String[]{key})[0].toString();
+        } catch (Exception e) {
+            // this will not happen
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Function getTranslateFunction() {
+        return translateFunction;
     }
 }
