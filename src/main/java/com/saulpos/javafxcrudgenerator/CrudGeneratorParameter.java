@@ -36,7 +36,7 @@ import java.util.ResourceBundle;
 
 public class CrudGeneratorParameter <S extends AbstractBean> {
 
-    private Locale currentLocale = Locale.getDefault();
+    private Locale currentLocale = new Locale("bg_BG");
 
     private ResourceBundle resourceBundle = ResourceBundle.getBundle("BundleName", currentLocale);
 
