@@ -44,6 +44,7 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
         @Override
         public Object[] run(Object[] params) throws Exception {
             try{
+                System.out.println(params[0].toString());
                 return new String[]{resourceBundle.getString(params[0].toString())};
             }catch(Exception e)
             {
