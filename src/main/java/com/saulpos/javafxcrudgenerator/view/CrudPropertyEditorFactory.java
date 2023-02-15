@@ -79,7 +79,16 @@ public class CrudPropertyEditorFactory {
         };
     }
     private static AbstractPropertyEditor<String, TextArea> getTextAreaPropertyEditor(PropertySheet.Item item) {
+        CrudPropertySheetItem itemCrud = (CrudPropertySheetItem) item;
+        int rows = 5;
+        try {
+            rows = itemCrud.getBean().getClass().getDeclaredField(itemCrud.getOriginalName()).getAnnotation(LongString.class).rows();
+        }catch (NoSuchFieldException e) {
+
+        }
+
         TextArea textArea = new TextArea();
+        textArea.setPrefHeight(19 * rows);
         //TODO implement height for the text area
         textArea.setBorder(new Border(new BorderStroke(Color.LIGHTGRAY,
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));

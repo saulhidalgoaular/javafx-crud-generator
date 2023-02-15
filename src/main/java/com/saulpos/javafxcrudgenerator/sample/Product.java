@@ -37,7 +37,7 @@ public class Product implements AbstractBean<Product> {
 
     @Currency
     private SimpleDoubleProperty total = new SimpleDoubleProperty();
-    @LongString(rows=5)
+    @LongString(rows=10)
     @Category(name = "Advanced")
     private SimpleStringProperty wideDescription = new SimpleStringProperty();
 

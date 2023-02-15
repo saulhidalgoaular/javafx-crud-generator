@@ -25,5 +25,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(FIELD)
 public @interface LongString {
 
-    int rows() default 2;
+    int rows() default 5;
 }
