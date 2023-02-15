@@ -36,7 +36,7 @@ import java.util.ResourceBundle;
 
 public class CrudGeneratorParameter <S extends AbstractBean> {
 
-    private Locale currentLocale = Locale.of("bg", "BG");
+    private Locale currentLocale = Locale.of("en", "US");
 
     private ResourceBundle resourceBundle = ResourceBundle.getBundle("BundleName", currentLocale);
 
@@ -44,7 +44,7 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
         @Override
         public Object[] run(Object[] params) throws Exception {
             try{
-                System.out.println(params[0].toString());
+                System.out.println(currentLocale.toString());
                 return new String[]{resourceBundle.getString(params[0].toString())};
             }catch(Exception e)
             {
