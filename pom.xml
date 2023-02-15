@@ -3,11 +3,21 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.saulpos</groupId>
     <artifactId>javafx-crud-generator</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>javafx-crud-generator</name>
+
+    <distributionManagement>
+        <repository>
+            <id>s3-release-repo</id>
+            <url>s3://my-bucket/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>s3-snapshot-repo</id>
+            <url>s3://my-bucket/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -100,6 +110,27 @@
                             <stripDebug>true</stripDebug>
                             <noHeaderFiles>true</noHeaderFiles>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.0.0-M1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.amazonaws</groupId>
+                        <artifactId>aws-java-sdk-s3</artifactId>
+                        <version>1.11.1016</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>deploy-to-s3</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
