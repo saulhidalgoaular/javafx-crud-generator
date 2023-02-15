@@ -17,10 +17,7 @@ package com.saulpos.javafxcrudgenerator.presenter;
 
 import com.saulpos.javafxcrudgenerator.model.CrudModel;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
-import com.saulpos.javafxcrudgenerator.view.CrudBeanPropertyUtils;
-import com.saulpos.javafxcrudgenerator.view.CrudPropertyEditorFactory;
-import com.saulpos.javafxcrudgenerator.view.CrudView;
-import com.saulpos.javafxcrudgenerator.view.Dialog;
+import com.saulpos.javafxcrudgenerator.view.*;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.*;
 
@@ -65,7 +62,7 @@ public class CrudPresenter<S extends AbstractBean> {
             try {
                 model.saveItemAction();
             } catch (Exception e) {
-                Dialog.showThrowable("Warning", e.getMessage(), e);
+                DialogBuilder.createExceptionDialog("Exception saving the item", "SAUL POS", e.getMessage(), e).showAndWait();
             }
         });
 
@@ -73,7 +70,7 @@ public class CrudPresenter<S extends AbstractBean> {
             try {
                 model.deleteItemAction();
             } catch (Exception e) {
-                Dialog.showThrowable("Warning", e.getMessage(), e);
+                DialogBuilder.createExceptionDialog("Exception deleting the item", "SAUL POS", e.getMessage(), e).showAndWait();
             }
         });
 
