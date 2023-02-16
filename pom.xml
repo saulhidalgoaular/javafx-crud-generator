@@ -11,11 +11,11 @@
     <distributionManagement>
         <repository>
             <id>s3-release-repo</id>
-            <url>s3://my-bucket/releases</url>
+            <url>s3://saulpos-maven/releases</url>
         </repository>
         <snapshotRepository>
             <id>s3-snapshot-repo</id>
-            <url>s3://my-bucket/snapshots</url>
+            <url>s3://saulpos-maven/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
@@ -77,6 +77,11 @@
             <artifactId>fontawesomefx</artifactId>
             <version>8.9</version>
         </dependency>
+            <dependency>
+                <groupId>org.apache.ant</groupId>
+                <artifactId>ant-aws-maven</artifactId>
+                <version>1.10.6</version>
+            </dependency>
 
     </dependencies>
 
@@ -86,10 +91,47 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.10.1</version>
+                <executions>
+                    <execution>
+                        <id>deploy-artifacts</id>
+                        <phase>deploy</phase>
+                        <configuration>
+                            <file>${project.build.directory}/${project.build.finalName}.${project.packaging}</file>
+                            <url>http://your-s3-bucket.s3.amazonaws.com/${project.artifactId}/${project.version}/${project.build.finalName}.${project.packaging}</url>
+                        </configuration>
+                    </execution>
+                </executions>
                 <configuration>
                     <source>19</source>
                     <target>19</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>upload-to-s3</id>
+                        <phase>deploy</phase>
+                        <configuration>
+                            <tasks>
+                                <echo message="Uploading ${project.artifactId}-${project.version}.${project.packaging} to S3..." />
+                                <s3upload
+                                        file="${project.build.directory}/${project.build.finalName}.${project.packaging}"
+                                        destbucket="saulpos-maven"
+                                        destkey="${project.artifactId}/${project.version}/${project.build.finalName}.${project.packaging}"
+                                        accesskey="AKIAZXRHNMFBM2IU2CPD"
+                                        secretkey="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"
+                                        region="us-east-1"
+                                />
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.openjfx</groupId>

@@ -9,11 +9,15 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.io.*;
 
-public class Product implements AbstractBean<Product> {
+
+public class Product implements AbstractBean<Product>, Serializable {
 
     @Search
     private SimpleStringProperty name = new SimpleStringProperty();
@@ -237,7 +241,27 @@ public class Product implements AbstractBean<Product> {
         clonedProduct.setPrice(this.getPrice());
         clonedProduct.setWideDescription(this.getWideDescription());
         clonedProduct.setPassword(this.getPassword());
-        return clonedProduct;
+
+        try {
+            return deepClone(clonedProduct);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return  clonedProduct;
+    }
+
+    private Product deepClone(Product toClone) throws IOException, ClassNotFoundException {
+        // Serialize the object
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+        oos.writeObject(toClone);
+
+        // Deserialize the object
+        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        ObjectInputStream ois = new ObjectInputStream(bais);
+        return (Product) ois.readObject();
     }
 
     @Override
