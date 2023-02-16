@@ -121,8 +121,8 @@
                                         file="${project.build.directory}/${project.build.finalName}.${project.packaging}"
                                         destbucket="saulpos-maven"
                                         destkey="${project.artifactId}/${project.version}/${project.build.finalName}.${project.packaging}"
-                                        accesskey="AKIAZXRHNMFBM2IU2CPD"
-                                        secretkey="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"
+                                        accesskey=""
+                                        secretkey="I will hide them because it warned me"
                                         region="us-east-1"
                                 />
                             </tasks>
