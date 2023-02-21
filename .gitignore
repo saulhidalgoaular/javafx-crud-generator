@@ -1,5 +1,6 @@
 target/
 .mvn
+settings.xml
 .idea
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
