@@ -23,6 +23,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.9.1</junit.version>
         <log4j.version>2.19.0</log4j.version>
+        <maven.compiler.source>19</maven.compiler.source>
+        <maven.compiler.target>19</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -77,11 +79,6 @@
             <artifactId>fontawesomefx</artifactId>
             <version>8.9</version>
         </dependency>
-            <dependency>
-                <groupId>org.apache.ant</groupId>
-                <artifactId>ant-aws-maven</artifactId>
-                <version>1.10.6</version>
-            </dependency>
         <dependency>
             <groupId>ant-contrib</groupId>
             <artifactId>ant-contrib</artifactId>
@@ -105,26 +102,6 @@
             </extension>
         </extensions>
         <plugins>
-            <!-- This plugin is currently not being used but I will keep it -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>
-                <executions>
-                    <execution>
-                        <id>deploy-artifacts</id>
-                        <phase>deploy</phase>
-                        <configuration>
-                            <file>target/javafx-crud-generator-1.0-SNAPSHOT.jar</file>
-                            <url>http://saulpos-maven.s3.amazonaws.com/javafx-crud-generator/1.0/javafx-crud-generator-1.0-SNAPSHOT.jar</url>
-                        </configuration>
-                    </execution>
-                </executions>
-                <configuration>
-                    <source>19</source>
-                    <target>19</target>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
@@ -144,27 +121,6 @@
                             <stripDebug>true</stripDebug>
                             <noHeaderFiles>true</noHeaderFiles>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>3.0.0-M1</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.amazonaws</groupId>
-                        <artifactId>aws-java-sdk-s3</artifactId>
-                        <version>1.11.1016</version>
-                    </dependency>
-                </dependencies>
-                <executions>
-                    <execution>
-                        <id>deploy-to-s3</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>deploy</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>
