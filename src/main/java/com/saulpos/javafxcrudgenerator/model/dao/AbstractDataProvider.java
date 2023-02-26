@@ -15,5 +15,7 @@ public interface AbstractDataProvider<S extends AbstractBean> {
      */
     boolean isRegisteredClass(Class clazz);
 
+    void registerClass(Class clazz);
+
     // TODO: We should implement later some filtering directly over database.
 }

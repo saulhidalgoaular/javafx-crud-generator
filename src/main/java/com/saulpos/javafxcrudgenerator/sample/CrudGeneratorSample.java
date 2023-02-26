@@ -100,6 +100,11 @@ public class CrudGeneratorSample extends Application {
         public boolean isRegisteredClass(Class clazz) {
             return clazz.equals(Price.class);
         }
+
+        @Override
+        public void registerClass(Class clazz) {
+
+        }
     };
 
     public static void main(String[] args) {
