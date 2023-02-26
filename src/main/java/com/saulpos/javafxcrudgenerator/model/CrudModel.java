@@ -18,8 +18,10 @@ package com.saulpos.javafxcrudgenerator.model;
 
 import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
+import com.saulpos.javafxcrudgenerator.sample.Product;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -48,7 +50,7 @@ public class CrudModel<S extends AbstractBean> {
 
     private S searchBean;
 
-    public CrudModel(CrudGeneratorParameter parameter) {
+    public CrudModel(CrudGeneratorParameter parameter) throws Exception {
         this.parameter = parameter;
 
         setSearchBean(getNewBean());
@@ -58,7 +60,14 @@ public class CrudModel<S extends AbstractBean> {
     }
 
     private void addListeners() {
-        final ChangeListener<Object> refreshChangeListener = (observableValue, s, newValue) -> refreshAction();
+        final ChangeListener<Object> refreshChangeListener = (observableValue, o, t1) -> {
+            try {
+                refreshAction();
+            } catch (Exception e) {
+                // TODO FIX ME.
+                throw new RuntimeException(e);
+            }
+        };
 
         for (Method method :
                 getSearchBean().getClass().getDeclaredMethods()) {
@@ -99,7 +108,7 @@ public class CrudModel<S extends AbstractBean> {
         });
     }
 
-    public void refreshAction(){
+    public void refreshAction() throws Exception {
         items.setAll(parameter.getDataProvider().getAllItems(parameter.getClazz(), getSearchBean()));
     }
 

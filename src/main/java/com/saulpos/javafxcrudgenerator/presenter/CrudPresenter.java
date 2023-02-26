@@ -74,7 +74,13 @@ public class CrudPresenter<S extends AbstractBean> {
             }
         });
 
-        ((Button)view.getRefreshButton()).setOnAction(actionEvent -> model.refreshAction());
+        ((Button)view.getRefreshButton()).setOnAction(actionEvent -> {
+            try {
+                model.refreshAction();
+            } catch (Exception e) {
+                DialogBuilder.createExceptionDialog("Exception Refreshing", "SAUL POS", e.getMessage(), e).showAndWait();
+            }
+        });
     }
 
     private void newInitialBean() {

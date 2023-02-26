@@ -16,6 +16,10 @@ import org.controlsfx.property.editor.DefaultPropertyEditorFactory;
 import org.controlsfx.property.editor.Editors;
 import org.controlsfx.property.editor.PropertyEditor;
 
+import java.beans.PropertyVetoException;
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 public class CrudPropertyEditorFactory {
 
 
@@ -24,7 +28,12 @@ public class CrudPropertyEditorFactory {
             @Override
             public PropertyEditor<?> call(PropertySheet.Item item) {
                 if (dataProvider.isRegisteredClass(item.getType())) {
-                    return Editors.createChoiceEditor(item, dataProvider.getAllItems(item.getType()));
+                    try {
+                        return Editors.createChoiceEditor(item, dataProvider.getAllItems(item.getType()));
+                    } catch (Exception e) {
+                        // TODO FIX ME
+                        throw new RuntimeException(e);
+                    }
                 }
 
                 if (item instanceof CrudPropertySheetItem) {

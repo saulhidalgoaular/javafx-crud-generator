@@ -9,7 +9,9 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+import java.beans.PropertyVetoException;
 import java.math.BigDecimal;
+import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
@@ -184,7 +186,7 @@ public class Product implements AbstractBean<Product>, Serializable {
     }
 
     @Override
-    public Integer save() {
+    public Integer save() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
         // just to show how it could be used. Ideally it should be saved into the database.
         final List allItems = CrudGeneratorSample.CUSTOM_DATA_PROVIDER.getAllItems(Product.class);
         if (!allItems.contains(this)){
@@ -202,7 +204,7 @@ public class Product implements AbstractBean<Product>, Serializable {
     }
 
     @Override
-    public void saveOrUpdate() {
+    public void saveOrUpdate() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
         // just to show how it could be used. Ideally it should be saved into the database.
         final List allItems = CrudGeneratorSample.CUSTOM_DATA_PROVIDER.getAllItems(Product.class);
         if (!allItems.contains(this)){
@@ -265,7 +267,7 @@ public class Product implements AbstractBean<Product>, Serializable {
     }
 
     @Override
-    public void delete() {
+    public void delete() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
         // just to show how it could be used. Ideally it should be saved into the database.
         final List allItems = CrudGeneratorSample.CUSTOM_DATA_PROVIDER.getAllItems(Product.class);
         if (allItems.contains(this)){

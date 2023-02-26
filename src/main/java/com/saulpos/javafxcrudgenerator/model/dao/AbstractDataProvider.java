@@ -1,11 +1,14 @@
 package com.saulpos.javafxcrudgenerator.model.dao;
 
+import java.beans.PropertyVetoException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 public interface AbstractDataProvider<S extends AbstractBean> {
-    List<S> getAllItems(Class clazz);
+    List<S> getAllItems(Class clazz) throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException;
 
-    List<S> getAllItems(Class clazz, AbstractBean filter);
+    List<S> getAllItems(Class clazz, AbstractBean filter) throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException;
 
     /**
      * Here we will add all the classes that we want our
