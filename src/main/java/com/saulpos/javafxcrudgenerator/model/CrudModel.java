@@ -18,10 +18,8 @@ package com.saulpos.javafxcrudgenerator.model;
 
 import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
-import com.saulpos.javafxcrudgenerator.sample.Product;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;

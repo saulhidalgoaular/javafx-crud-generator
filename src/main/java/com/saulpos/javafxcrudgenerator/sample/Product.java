@@ -186,7 +186,7 @@ public class Product implements AbstractBean<Product>, Serializable {
     }
 
     @Override
-    public Integer save() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
+    public void save() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
         // just to show how it could be used. Ideally it should be saved into the database.
         final List allItems = CrudGeneratorSample.CUSTOM_DATA_PROVIDER.getAllItems(Product.class);
         if (!allItems.contains(this)){
@@ -194,7 +194,6 @@ public class Product implements AbstractBean<Product>, Serializable {
         }
 
         System.out.println("Product saved");
-        return null;
     }
 
     @Override

@@ -25,7 +25,7 @@ import java.net.URISyntaxException;
  */
 public interface AbstractBean < S extends AbstractBean > extends Cloneable {
 
-    Integer save() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException;
+    void save() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException;
 
     void update() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException;
 
