@@ -16,9 +16,12 @@
 
 package com.saulpos.javafxcrudgenerator.model.dao;
 
+import javafx.beans.property.SimpleObjectProperty;
+
 import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
 
 /**
  * Created by Saul on 11/16/2016.
