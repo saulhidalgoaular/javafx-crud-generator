@@ -39,9 +39,9 @@ public class CrudPropertyEditorFactory {
                 if (item instanceof CrudPropertySheetItem) {
                     CrudPropertySheetItem itemCrud = (CrudPropertySheetItem) item;
                     try {
-                        if (itemCrud.getBean().getClass().getDeclaredField(itemCrud.getOriginalName()).isAnnotationPresent(LongString.class)) {
+                        if (itemCrud.getBean().getClass().getField(itemCrud.getOriginalName()).isAnnotationPresent(LongString.class)) {
                             return getTextAreaPropertyEditor(item);
-                        }else if (itemCrud.getBean().getClass().getDeclaredField(itemCrud.getOriginalName()).isAnnotationPresent(Password.class)){
+                        }else if (itemCrud.getBean().getClass().getField(itemCrud.getOriginalName()).isAnnotationPresent(Password.class)){
                             return getPasswordPropertyEditor(item);
                         }
                     } catch (NoSuchFieldException e) {
@@ -53,7 +53,7 @@ public class CrudPropertyEditorFactory {
                 if (item instanceof CrudPropertySheetItem) {
                     CrudPropertySheetItem itemCrud = (CrudPropertySheetItem) item;
                     try {
-                        if (itemCrud.getBean().getClass().getDeclaredField(itemCrud.getOriginalName()).isAnnotationPresent(Readonly.class)) {
+                        if (itemCrud.getBean().getClass().getField(itemCrud.getOriginalName()).isAnnotationPresent(Readonly.class)) {
                             defaultEditor.getEditor().setDisable(true);
                         }
                     } catch (NoSuchFieldException e) {

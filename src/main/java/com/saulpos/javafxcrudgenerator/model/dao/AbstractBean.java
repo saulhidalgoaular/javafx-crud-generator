@@ -16,12 +16,9 @@
 
 package com.saulpos.javafxcrudgenerator.model.dao;
 
-import javafx.beans.property.SimpleObjectProperty;
-
 import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.time.LocalDateTime;
 
 /**
  * Created by Saul on 11/16/2016.
@@ -35,6 +32,8 @@ public interface AbstractBean < S extends AbstractBean > extends Cloneable {
     void saveOrUpdate() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException;
 
     void receiveChanges(S currentBean);
+
+    boolean previouslySaved() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException;
 
     S clone();
 

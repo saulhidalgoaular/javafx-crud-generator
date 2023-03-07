@@ -1,25 +1,22 @@
 package com.saulpos.javafxcrudgenerator.sample;
 
-import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
 import com.saulpos.javafxcrudgenerator.annotations.*;
 import com.saulpos.javafxcrudgenerator.annotations.Currency;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
+import com.saulpos.javafxcrudgenerator.model.dao.AbstractBeanImplementation;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 import java.beans.PropertyVetoException;
-import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.io.*;
 
 
-public class Product implements AbstractBean<Product>, Serializable {
+public class Product extends AbstractBeanImplementation<Product> {
 
     @Search
     private SimpleStringProperty name = new SimpleStringProperty();
@@ -187,9 +184,10 @@ public class Product implements AbstractBean<Product>, Serializable {
 
     @Override
     public void save() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
+        super.save();
         // just to show how it could be used. Ideally it should be saved into the database.
         final List allItems = CrudGeneratorSample.CUSTOM_DATA_PROVIDER.getAllItems(Product.class);
-        if (!allItems.contains(this)){
+        if (!previouslySaved()){
             allItems.add(this);
         }
 
@@ -197,16 +195,18 @@ public class Product implements AbstractBean<Product>, Serializable {
     }
 
     @Override
-    public void update() {
+    public void update() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
+        super.update();
         System.out.println("Product updated");
 
     }
 
     @Override
     public void saveOrUpdate() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
+        super.saveOrUpdate();
         // just to show how it could be used. Ideally it should be saved into the database.
         final List allItems = CrudGeneratorSample.CUSTOM_DATA_PROVIDER.getAllItems(Product.class);
-        if (!allItems.contains(this)){
+        if (!previouslySaved()){
             allItems.add(this);
         }
         System.out.println("Product saved/updated");
@@ -226,6 +226,11 @@ public class Product implements AbstractBean<Product>, Serializable {
         this.setPrice(currentBean.getPrice());
         this.setWideDescription(currentBean.getWideDescription());
         this.setPassword(currentBean.getPassword());
+    }
+
+    @Override
+    public boolean previouslySaved() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
+        return CrudGeneratorSample.CUSTOM_DATA_PROVIDER.getAllItems(Product.class).contains(this);
     }
 
     @Override
@@ -267,6 +272,7 @@ public class Product implements AbstractBean<Product>, Serializable {
 
     @Override
     public void delete() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
+        super.delete();
         // just to show how it could be used. Ideally it should be saved into the database.
         final List allItems = CrudGeneratorSample.CUSTOM_DATA_PROVIDER.getAllItems(Product.class);
         if (allItems.contains(this)){

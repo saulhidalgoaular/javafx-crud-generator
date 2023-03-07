@@ -2,6 +2,9 @@ package com.saulpos.javafxcrudgenerator.model.dao;
 
 import javafx.beans.property.SimpleObjectProperty;
 
+import java.beans.PropertyVetoException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 
 public abstract class AbstractBeanImplementation<T extends AbstractBeanImplementation > implements AbstractBean<T> {
@@ -54,5 +57,39 @@ public abstract class AbstractBeanImplementation<T extends AbstractBeanImplement
 
     public void setBeanStatus(BeanStatus beanStatus) {
         this.beanStatus.set(beanStatus);
+    }
+
+    public AbstractBeanImplementation() {
+        setCreationTime(LocalDateTime.now());
+        setBeanStatus(BeanStatus.Active);
+    }
+
+    @Override
+    public void delete() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
+        setBeanStatus(BeanStatus.Deleted);
+        setLastModificationTime(LocalDateTime.now());
+    }
+
+    @Override
+    public void update() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
+        setBeanStatus(BeanStatus.Modified);
+        setLastModificationTime(LocalDateTime.now());
+        AbstractBeanImplementation newActiveObject = this.clone();
+        newActiveObject.save();
+    }
+
+    @Override
+    public void saveOrUpdate() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
+        if (previouslySaved()){
+            update();
+        }else{
+            setBeanStatus(BeanStatus.Active);
+            setLastModificationTime(LocalDateTime.now());
+        }
+    }
+
+    @Override
+    public void save() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
+
     }
 }
