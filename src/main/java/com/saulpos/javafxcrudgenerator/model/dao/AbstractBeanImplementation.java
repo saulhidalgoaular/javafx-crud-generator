@@ -1,5 +1,6 @@
 package com.saulpos.javafxcrudgenerator.model.dao;
 
+import com.saulpos.javafxcrudgenerator.annotations.Ignore;
 import javafx.beans.property.SimpleObjectProperty;
 
 import java.beans.PropertyVetoException;
@@ -17,10 +18,13 @@ public abstract class AbstractBeanImplementation<T extends AbstractBeanImplement
         Active, Modified, Deleted
     }
 
+    @Ignore
     private SimpleObjectProperty<LocalDateTime> lastModificationTime = new SimpleObjectProperty<>();
 
+    @Ignore
     private SimpleObjectProperty<LocalDateTime> creationTime = new SimpleObjectProperty<>();
 
+    @Ignore
     private SimpleObjectProperty<BeanStatus> beanStatus = new SimpleObjectProperty<>();
 
     public LocalDateTime getLastModificationTime() {

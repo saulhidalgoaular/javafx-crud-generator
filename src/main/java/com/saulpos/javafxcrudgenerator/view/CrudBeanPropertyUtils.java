@@ -70,7 +70,7 @@ public final class CrudBeanPropertyUtils {
                     return !bean.getClass().getDeclaredField(p.getName()).isAnnotationPresent(Ignore.class) &&
                             (!search || bean.getClass().getDeclaredField(p.getName()).isAnnotationPresent(Search.class));
                 } catch (NoSuchFieldException e) {
-                    return true;
+                    return false;
                 }
             }
             return true;

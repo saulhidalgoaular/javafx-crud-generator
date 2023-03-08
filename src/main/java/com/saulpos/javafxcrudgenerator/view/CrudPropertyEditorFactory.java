@@ -18,7 +18,11 @@ import org.controlsfx.property.editor.PropertyEditor;
 
 import java.beans.PropertyVetoException;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 public class CrudPropertyEditorFactory {
 
@@ -38,26 +42,19 @@ public class CrudPropertyEditorFactory {
 
                 if (item instanceof CrudPropertySheetItem) {
                     CrudPropertySheetItem itemCrud = (CrudPropertySheetItem) item;
-                    try {
-                        if (itemCrud.getBean().getClass().getField(itemCrud.getOriginalName()).isAnnotationPresent(LongString.class)) {
-                            return getTextAreaPropertyEditor(item);
-                        }else if (itemCrud.getBean().getClass().getField(itemCrud.getOriginalName()).isAnnotationPresent(Password.class)){
-                            return getPasswordPropertyEditor(item);
-                        }
-                    } catch (NoSuchFieldException e) {
-                        e.printStackTrace();
+                    if (getFields(itemCrud).get(itemCrud.getOriginalName()).isAnnotationPresent(LongString.class)) {
+                        return getTextAreaPropertyEditor(item);
+                    }else if (getFields(itemCrud).get(itemCrud.getOriginalName()).isAnnotationPresent(Password.class)){
+                        return getPasswordPropertyEditor(item);
                     }
                 }
 
                 PropertyEditor<?> defaultEditor = new DefaultPropertyEditorFactory().call(item);
                 if (item instanceof CrudPropertySheetItem) {
                     CrudPropertySheetItem itemCrud = (CrudPropertySheetItem) item;
-                    try {
-                        if (itemCrud.getBean().getClass().getField(itemCrud.getOriginalName()).isAnnotationPresent(Readonly.class)) {
-                            defaultEditor.getEditor().setDisable(true);
-                        }
-                    } catch (NoSuchFieldException e) {
-                        throw new RuntimeException(e);
+
+                    if (getFields(itemCrud).get(itemCrud.getOriginalName()).isAnnotationPresent(Readonly.class)) {
+                        defaultEditor.getEditor().setDisable(true);
                     }
                 }
                 return defaultEditor;
@@ -65,6 +62,16 @@ public class CrudPropertyEditorFactory {
 
 
         };
+    }
+
+    private static HashMap<String, Field> getFields(CrudPropertySheetItem itemCrud) {
+        HashMap<String, Field> fields = new HashMap<>();
+        for (Class<?> c = itemCrud.getBean().getClass(); c != null; c = c.getSuperclass()) {
+            for (Field f : c.getDeclaredFields()){
+                fields.put(f.getName(), f);
+            }
+        }
+        return fields;
     }
 
     // TODO Improve. Remove repeated code.
@@ -98,7 +105,6 @@ public class CrudPropertyEditorFactory {
 
         TextArea textArea = new TextArea();
         textArea.setPrefHeight(19 * rows);
-        //TODO implement height for the text area
         textArea.setBorder(new Border(new BorderStroke(Color.LIGHTGRAY,
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
