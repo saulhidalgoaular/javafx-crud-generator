@@ -127,16 +127,16 @@ public class CrudModel<S extends AbstractBean> {
     public void saveItemAction() throws Exception {
         Function beforeSave = this.getParameter().getBeforeSave();
         if (beforeSave != null){
-            beforeSave.run(new Object[]{this.getBeanInEdition()});
+            beforeSave.run(new Object[]{getBeanInEdition()});
         }
         if (this.getSelectedItem() == null){
             final S newBean = this.getNewBean();
-            newBean.receiveChanges(this.getBeanInEdition());
+            newBean.receiveChanges(getBeanInEdition());
             newBean.save();
             this.getItems().add(newBean);
             //this.selectedItemProperty().setValue(newBean);
         }else{
-            this.getSelectedItem().receiveChanges(this.getBeanInEdition());
+            getSelectedItem().receiveChanges(getBeanInEdition());
             getSelectedItem().update();
         }
     }

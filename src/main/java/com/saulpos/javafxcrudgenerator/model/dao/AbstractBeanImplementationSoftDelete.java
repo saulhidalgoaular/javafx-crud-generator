@@ -1,6 +1,8 @@
 package com.saulpos.javafxcrudgenerator.model.dao;
 
 import com.saulpos.javafxcrudgenerator.annotations.Ignore;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;
 import javafx.beans.property.SimpleObjectProperty;
 
@@ -17,7 +19,7 @@ public abstract class AbstractBeanImplementationSoftDelete<T extends AbstractBea
         return null;
     }
 
-    enum BeanStatus{
+    public enum BeanStatus{
         Active, Modified, Deleted
     }
 
@@ -54,6 +56,7 @@ public abstract class AbstractBeanImplementationSoftDelete<T extends AbstractBea
         this.creationTime.set(creationTime);
     }
 
+    @Enumerated(EnumType.STRING)
     public BeanStatus getBeanStatus() {
         return beanStatus.get();
     }
@@ -85,7 +88,9 @@ public abstract class AbstractBeanImplementationSoftDelete<T extends AbstractBea
         modify();
         AbstractBeanImplementationSoftDelete newActiveObject = this.clone();
         AbstractBeanImplementationSoftDelete.removeId(newActiveObject); // force it to be a new object.
+        newActiveObject.setBeanStatus(BeanStatus.Active);
         newActiveObject.save();
+
     }
 
     @Override
