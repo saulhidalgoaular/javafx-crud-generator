@@ -18,6 +18,7 @@ package com.saulpos.javafxcrudgenerator.model;
 
 import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
+import com.saulpos.javafxcrudgenerator.model.dao.AbstractDataProvider;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
@@ -107,7 +108,7 @@ public class CrudModel<S extends AbstractBean> {
     }
 
     public void refreshAction() throws Exception {
-        items.setAll(parameter.getDataProvider().getAllItems(parameter.getClazz(), getSearchBean()));
+        items.setAll(parameter.getDataProvider().getAllItems(parameter.getClazz(), getSearchBean(), AbstractDataProvider.SearchType.LIKE));
     }
 
     private S getNewBean() {

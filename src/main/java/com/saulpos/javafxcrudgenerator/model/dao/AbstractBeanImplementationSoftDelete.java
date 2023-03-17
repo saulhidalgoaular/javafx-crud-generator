@@ -1,9 +1,8 @@
 package com.saulpos.javafxcrudgenerator.model.dao;
 
 import com.saulpos.javafxcrudgenerator.annotations.Ignore;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 import java.beans.PropertyVetoException;
@@ -23,6 +22,22 @@ public abstract class AbstractBeanImplementationSoftDelete<T extends AbstractBea
         Active, Modified, Deleted
     }
 
+    @Ignore
+    private SimpleIntegerProperty id = new SimpleIntegerProperty();
+
+    @Id
+    @GeneratedValue
+    public int getId() {
+        return id.get();
+    }
+
+    public SimpleIntegerProperty idProperty() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id.set(id);
+    }
     @Ignore
     private SimpleObjectProperty<LocalDateTime> lastModificationTime = new SimpleObjectProperty<>();
 

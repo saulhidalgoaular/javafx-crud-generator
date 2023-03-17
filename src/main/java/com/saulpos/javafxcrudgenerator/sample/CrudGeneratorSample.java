@@ -72,7 +72,7 @@ public class CrudGeneratorSample extends Application {
         }
 
         @Override
-        public List getAllItems(Class clazz, AbstractBean filter) {
+        public List getAllItems(Class clazz, AbstractBean filter, SearchType type) {
             // It is just to show how it works. It is not a real implementation of the filtering
             // If you are using Database, criteria should go down to database.
             List allItems = getAllItems(clazz);
