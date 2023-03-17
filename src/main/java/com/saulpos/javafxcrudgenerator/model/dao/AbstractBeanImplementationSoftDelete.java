@@ -1,14 +1,17 @@
 package com.saulpos.javafxcrudgenerator.model.dao;
 
 import com.saulpos.javafxcrudgenerator.annotations.Ignore;
+import jakarta.persistence.MappedSuperclass;
 import javafx.beans.property.SimpleObjectProperty;
 
 import java.beans.PropertyVetoException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 
-public abstract class AbstractBeanImplementation<T extends AbstractBeanImplementation > implements AbstractBean<T> {
+@MappedSuperclass
+public abstract class AbstractBeanImplementationSoftDelete<T extends AbstractBeanImplementationSoftDelete> implements AbstractBean<T> {
     @Override
     public T clone() {
         return null;
@@ -63,7 +66,7 @@ public abstract class AbstractBeanImplementation<T extends AbstractBeanImplement
         this.beanStatus.set(beanStatus);
     }
 
-    public AbstractBeanImplementation() {
+    public AbstractBeanImplementationSoftDelete() {
         setCreationTime(LocalDateTime.now());
         setBeanStatus(BeanStatus.Active);
     }
@@ -72,15 +75,16 @@ public abstract class AbstractBeanImplementation<T extends AbstractBeanImplement
     public void delete() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
         setBeanStatus(BeanStatus.Deleted);
         setLastModificationTime(LocalDateTime.now());
-        save();
+        modify();
     }
 
     @Override
     public void update() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
         setBeanStatus(BeanStatus.Modified);
         setLastModificationTime(LocalDateTime.now());
-        save();
-        AbstractBeanImplementation newActiveObject = this.clone();
+        modify();
+        AbstractBeanImplementationSoftDelete newActiveObject = this.clone();
+        AbstractBeanImplementationSoftDelete.removeId(newActiveObject); // force it to be a new object.
         newActiveObject.save();
     }
 
@@ -98,5 +102,17 @@ public abstract class AbstractBeanImplementation<T extends AbstractBeanImplement
     @Override
     public void save() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
 
+    }
+
+    public static void removeId(Object object){
+        try {
+            object.getClass().getDeclaredMethod("setId", int.class).invoke(object, 0);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

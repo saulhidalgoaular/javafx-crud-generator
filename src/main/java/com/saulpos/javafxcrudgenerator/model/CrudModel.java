@@ -137,7 +137,7 @@ public class CrudModel<S extends AbstractBean> {
             //this.selectedItemProperty().setValue(newBean);
         }else{
             this.getSelectedItem().receiveChanges(this.getBeanInEdition());
-            getSelectedItem().save();
+            getSelectedItem().update();
         }
     }
 

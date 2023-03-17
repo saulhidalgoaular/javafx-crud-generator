@@ -27,11 +27,13 @@ public interface AbstractBean < S extends AbstractBean > extends Cloneable {
 
     void save() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException;
 
+    // This could be implemented as a soft update...
     void update() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException;
 
     void saveOrUpdate() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException;
 
     void receiveChanges(S currentBean);
+    void modify() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException;
 
     boolean previouslySaved() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException;
 

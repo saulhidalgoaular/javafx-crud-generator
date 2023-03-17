@@ -2,8 +2,7 @@ package com.saulpos.javafxcrudgenerator.sample;
 
 import com.saulpos.javafxcrudgenerator.annotations.*;
 import com.saulpos.javafxcrudgenerator.annotations.Currency;
-import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
-import com.saulpos.javafxcrudgenerator.model.dao.AbstractBeanImplementation;
+import com.saulpos.javafxcrudgenerator.model.dao.AbstractBeanImplementationSoftDelete;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -16,7 +15,7 @@ import java.util.List;
 import java.io.*;
 
 
-public class Product extends AbstractBeanImplementation<Product> {
+public class Product extends AbstractBeanImplementationSoftDelete<Product> {
 
     @Search
     private SimpleStringProperty name = new SimpleStringProperty();
@@ -196,7 +195,6 @@ public class Product extends AbstractBeanImplementation<Product> {
 
     @Override
     public void update() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
-        super.update();
         System.out.println("Product updated");
 
     }
@@ -226,6 +224,11 @@ public class Product extends AbstractBeanImplementation<Product> {
         this.setPrice(currentBean.getPrice());
         this.setWideDescription(currentBean.getWideDescription());
         this.setPassword(currentBean.getPassword());
+    }
+
+    @Override
+    public void modify() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
+        update();
     }
 
     @Override
