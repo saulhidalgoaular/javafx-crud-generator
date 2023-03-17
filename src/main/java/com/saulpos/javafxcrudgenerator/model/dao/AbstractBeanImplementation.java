@@ -72,12 +72,14 @@ public abstract class AbstractBeanImplementation<T extends AbstractBeanImplement
     public void delete() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
         setBeanStatus(BeanStatus.Deleted);
         setLastModificationTime(LocalDateTime.now());
+        save();
     }
 
     @Override
     public void update() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
         setBeanStatus(BeanStatus.Modified);
         setLastModificationTime(LocalDateTime.now());
+        save();
         AbstractBeanImplementation newActiveObject = this.clone();
         newActiveObject.save();
     }
@@ -89,6 +91,7 @@ public abstract class AbstractBeanImplementation<T extends AbstractBeanImplement
         }else{
             setBeanStatus(BeanStatus.Active);
             setLastModificationTime(LocalDateTime.now());
+            save();
         }
     }
 
