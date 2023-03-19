@@ -96,11 +96,14 @@ public class CrudPresenter<S extends AbstractBean> {
                     CrudPropertyEditorFactory.getCrudPropertyEditorFactory(model.getParameter().getDataProvider()));
             view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getBeanInEdition(), false, model.getParameter().getTranslateFunction()));
         }
-        view.getSearchPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getSearchBean(), true, model.getParameter().getTranslateFunction()));
-        view.getSearchPropertySheet().setPropertyEditorFactory(
-                CrudPropertyEditorFactory.getCrudPropertyEditorFactory(model.getParameter().getDataProvider())
-        );
-            view.getTotalLabel().textProperty().bind(model.totalResultProperty());
+        if (view.getSearchPropertySheet() != null){
+            view.getSearchPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getSearchBean(), true, model.getParameter().getTranslateFunction()));
+            view.getSearchPropertySheet().setPropertyEditorFactory(
+                    CrudPropertyEditorFactory.getCrudPropertyEditorFactory(model.getParameter().getDataProvider())
+            );
+        }
+
+        view.getTotalLabel().textProperty().bind(model.totalResultProperty());
     }
 
     public CrudModel<S> getModel() {
