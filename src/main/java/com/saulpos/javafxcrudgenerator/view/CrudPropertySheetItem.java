@@ -1,6 +1,7 @@
 package com.saulpos.javafxcrudgenerator.view;
 
 import com.saulpos.javafxcrudgenerator.annotations.Category;
+import com.saulpos.javafxcrudgenerator.annotations.DisplayOrder;
 import com.saulpos.javafxcrudgenerator.model.Function;
 import org.controlsfx.property.BeanProperty;
 
@@ -38,5 +39,18 @@ public class CrudPropertySheetItem extends BeanProperty {
         }
 
         return Category.defaultCategory;
+    }
+
+    public int getDisplayOrder() {
+        try {
+            Field field = getBean().getClass().getDeclaredField(getOriginalName());
+            if (field.isAnnotationPresent(DisplayOrder.class)) {
+                return field.getAnnotation(DisplayOrder.class).orderValue();
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Integer.MAX_VALUE;
     }
 }

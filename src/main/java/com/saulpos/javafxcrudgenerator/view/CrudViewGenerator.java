@@ -47,9 +47,33 @@ public class CrudViewGenerator {
         this.parameter = parameter;
     }
 
-    public CrudView generate(){
-        final Field[] allFields = parameter.getClazz().getDeclaredFields();
+    int orderValue (Field field) {
+        try {
+            return field.getAnnotation(DisplayOrder.class).orderValue();
+        }
+        catch (Exception e) {
+            return Integer.MAX_VALUE;
+        }
+    }
 
+    Field[] sortFields(Field[] allFileds) {
+        for(int i = 0; i < allFileds.length; i++) {
+            for(int j=1; j < (allFileds.length-i); j++) {
+                if (orderValue(allFileds[j-1]) > orderValue(allFileds[j])) {
+                    Field tempField = allFileds[j-1];
+                    allFileds[j-1] = allFileds[j];
+                    allFileds[j] = tempField;
+                }
+            }
+        }
+        return allFileds;
+    }
+
+    public CrudView generate(){
+
+        Field[] fields = parameter.getClazz().getDeclaredFields();
+        // Sort fields by display order
+        final Field[] allFields = sortFields(fields);
         // Fields area.
         final Pane fieldsPane = createFieldsPane();
         // Buttons area

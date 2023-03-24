@@ -18,32 +18,43 @@ import java.io.*;
 public class Product extends AbstractBeanImplementationSoftDelete<Product> {
 
     @Search
+    @DisplayOrder(orderValue = 100)
     private SimpleStringProperty name = new SimpleStringProperty();
 
     @Readonly
+    @DisplayOrder(orderValue = 2)
     private SimpleStringProperty description = new SimpleStringProperty();
 
     @Password
+    @DisplayOrder(orderValue = 3)
     private SimpleStringProperty password = new SimpleStringProperty();
 
+    @DisplayOrder(orderValue = 4)
     private SimpleObjectProperty<Price> price = new SimpleObjectProperty<>();
 
+    @DisplayOrder(orderValue = 5)
     private SimpleStringProperty measuringUnit = new SimpleStringProperty();
 
+    @DisplayOrder(orderValue = 6)
     private SimpleObjectProperty<com.saulpos.javafxcrudgenerator.sample.Currency> currency = new SimpleObjectProperty<>();
 
+    @DisplayOrder(orderValue = 7)
     private SimpleBooleanProperty isAvailable = new SimpleBooleanProperty();
 
     @Search
+    @DisplayOrder(orderValue = 8)
     private SimpleObjectProperty<LocalDate> initializationDate = new SimpleObjectProperty<>();
 
     @Currency
+    @DisplayOrder(orderValue = 9)
     private SimpleDoubleProperty total = new SimpleDoubleProperty();
     @LongString(rows=10)
     @Category(name = "Advanced")
+    @DisplayOrder(orderValue = 10)
     private SimpleStringProperty wideDescription = new SimpleStringProperty();
 
     @Ignore
+    @DisplayOrder(orderValue = 11)
     private SimpleStringProperty extraLongDescription = new SimpleStringProperty();
 
     public Product() {

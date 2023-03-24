@@ -1,5 +1,6 @@
 package com.saulpos.javafxcrudgenerator.view;
 
+import com.saulpos.javafxcrudgenerator.annotations.DisplayOrder;
 import com.saulpos.javafxcrudgenerator.annotations.LongString;
 import com.saulpos.javafxcrudgenerator.annotations.Password;
 import com.saulpos.javafxcrudgenerator.annotations.Readonly;
@@ -68,6 +69,12 @@ public class CrudPropertyEditorFactory {
         HashMap<String, Field> fields = new HashMap<>();
         for (Class<?> c = itemCrud.getBean().getClass(); c != null; c = c.getSuperclass()) {
             for (Field f : c.getDeclaredFields()){
+                /*try {
+                    //System.out.println("name: " + f.getName() + " //// displayOrder: " + orderValue(f));
+                }
+                catch (Exception e) {
+
+                }*/
                 fields.put(f.getName(), f);
             }
         }
@@ -94,6 +101,16 @@ public class CrudPropertyEditorFactory {
             }
         };
     }
+
+    private static int orderValue(Field field) {
+        try {
+            return field.getAnnotation(DisplayOrder.class).orderValue();
+        }
+        catch (Exception e) {
+            return Integer.MAX_VALUE;
+        }
+    }
+
     private static AbstractPropertyEditor<String, TextArea> getTextAreaPropertyEditor(PropertySheet.Item item) {
         CrudPropertySheetItem itemCrud = (CrudPropertySheetItem) item;
         int rows = 5;
