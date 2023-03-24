@@ -1,6 +1,6 @@
 Project Goals:
 
-Creating a CRUD panel automatically, including search and items edition given only the Class and a Data Provider. It can be integrated with any ORM, like Hibernate, MyBatis, etc or even in memory data (like the example).
+Creating a CRUD panel automatically, including search and items edition given only the Class and a Data Provider. It can be integrated with Java Persistence API and with any of their implementation, like Hibernate, MyBatis, etc or even in memory data (like the example).
 
 TODO List:
 
