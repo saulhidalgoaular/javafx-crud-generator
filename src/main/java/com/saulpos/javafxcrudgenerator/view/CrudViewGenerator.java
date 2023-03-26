@@ -55,7 +55,10 @@ public class CrudViewGenerator {
             @Override
             public int compare(Field o1, Field o2) {
                 if (!o1.isAnnotationPresent(DisplayOrder.class)){
-                    return 0;
+                    return Integer.MAX_VALUE;
+                }
+                if (!o2.isAnnotationPresent(DisplayOrder.class)){
+                    return Integer.MIN_VALUE;
                 }
                 return o1.getAnnotation(DisplayOrder.class).orderValue() -
                         o2.getAnnotation(DisplayOrder.class).orderValue();
