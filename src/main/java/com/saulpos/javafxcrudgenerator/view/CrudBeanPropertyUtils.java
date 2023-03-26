@@ -27,8 +27,11 @@
 package com.saulpos.javafxcrudgenerator.view;
 
 import java.beans.*;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.function.Predicate;
 
+import com.saulpos.javafxcrudgenerator.annotations.DisplayOrder;
 import com.saulpos.javafxcrudgenerator.annotations.Ignore;
 import com.saulpos.javafxcrudgenerator.annotations.Search;
 import com.saulpos.javafxcrudgenerator.model.Function;
@@ -64,8 +67,8 @@ public final class CrudBeanPropertyUtils {
      * JavaBean.
      */
     public static ObservableList<Item> getProperties(final Object bean, boolean search, Function translateFunction) {
-        return getProperties(bean, (p) -> {
-            if (p instanceof FeatureDescriptor){
+        ObservableList<Item> properties = getProperties(bean, (p) -> {
+            if (p instanceof FeatureDescriptor) {
                 try {
                     return !bean.getClass().getDeclaredField(p.getName()).isAnnotationPresent(Ignore.class) &&
                             (!search || bean.getClass().getDeclaredField(p.getName()).isAnnotationPresent(Search.class));
@@ -74,7 +77,15 @@ public final class CrudBeanPropertyUtils {
                 }
             }
             return true;
-        }, translateFunction );
+        }, translateFunction);
+
+        Collections.sort(properties, new Comparator<Item>() {
+            @Override
+            public int compare(Item o1, Item o2) {
+                return ((CrudPropertySheetItem)o1).getDisplayOrder() - ((CrudPropertySheetItem)o2).getDisplayOrder();
+            }
+        });
+        return properties;
     }
     
     /**

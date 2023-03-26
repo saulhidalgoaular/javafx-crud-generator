@@ -126,7 +126,7 @@ public abstract class AbstractBeanImplementationSoftDelete<T extends AbstractBea
 
     public static void removeId(Object object){
         try {
-            object.getClass().getDeclaredMethod("setId", int.class).invoke(object, 0);
+            object.getClass().getMethod("setId", int.class).invoke(object, 0);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         } catch (InvocationTargetException e) {

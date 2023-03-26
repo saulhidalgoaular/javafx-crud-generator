@@ -47,41 +47,28 @@ public class CrudViewGenerator {
         this.parameter = parameter;
     }
 
-    int orderValue (Field field) {
-        try {
-            return field.getAnnotation(DisplayOrder.class).orderValue();
-        }
-        catch (Exception e) {
-            return Integer.MAX_VALUE;
-        }
-    }
-
-    Field[] sortFields(Field[] allFileds) {
-        for(int i = 0; i < allFileds.length; i++) {
-            for(int j=1; j < (allFileds.length-i); j++) {
-                if (orderValue(allFileds[j-1]) > orderValue(allFileds[j])) {
-                    Field tempField = allFileds[j-1];
-                    allFileds[j-1] = allFileds[j];
-                    allFileds[j] = tempField;
-                }
-            }
-        }
-        return allFileds;
-    }
-
     public CrudView generate(){
 
         Field[] fields = parameter.getClazz().getDeclaredFields();
         // Sort fields by display order
-        final Field[] allFields = sortFields(fields);
+        Arrays.sort(fields, new Comparator<Field>() {
+            @Override
+            public int compare(Field o1, Field o2) {
+                if (!o1.isAnnotationPresent(DisplayOrder.class)){
+                    return 0;
+                }
+                return o1.getAnnotation(DisplayOrder.class).orderValue() -
+                        o2.getAnnotation(DisplayOrder.class).orderValue();
+            }
+        });
         // Fields area.
         final Pane fieldsPane = createFieldsPane();
         // Buttons area
         final Pane buttonsPane = createButtonsPane();
         // Search area
-        final GridPane searchGridPane = createSearchPane(allFields);
+        final GridPane searchGridPane = createSearchPane(fields);
         // Table area
-        tableView = createTableViewPane(allFields);
+        tableView = createTableViewPane(fields);
 
         Node mainPane = createMainPane(fieldsPane, buttonsPane, searchGridPane, tableView);
 
