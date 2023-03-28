@@ -1,29 +1,27 @@
 package com.saulpos.javafxcrudgenerator.view;
 
-import com.saulpos.javafxcrudgenerator.annotations.DisplayOrder;
 import com.saulpos.javafxcrudgenerator.annotations.LongString;
 import com.saulpos.javafxcrudgenerator.annotations.Password;
 import com.saulpos.javafxcrudgenerator.annotations.Readonly;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractDataProvider;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.Node;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
+import jfxtras.scene.control.CalendarTimePicker;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.AbstractPropertyEditor;
 import org.controlsfx.property.editor.DefaultPropertyEditorFactory;
 import org.controlsfx.property.editor.Editors;
 import org.controlsfx.property.editor.PropertyEditor;
 
-import java.beans.PropertyVetoException;
-import java.io.IOException;
 import java.lang.reflect.Field;
-import java.net.URISyntaxException;
-import java.util.Arrays;
+import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
 
 public class CrudPropertyEditorFactory {
 
@@ -47,6 +45,9 @@ public class CrudPropertyEditorFactory {
                         return getTextAreaPropertyEditor(item);
                     }else if (getFields(itemCrud).get(itemCrud.getOriginalName()).isAnnotationPresent(Password.class)){
                         return getPasswordPropertyEditor(item);
+                    }
+                    else if (java.time.LocalDateTime.class.equals (itemCrud.getPropertyDescriptor().getPropertyType())){
+                        return getLocalDateTimePropertyEditor(item);
                     }
                 }
 
@@ -96,12 +97,27 @@ public class CrudPropertyEditorFactory {
         };
     }
 
+    private static AbstractPropertyEditor<LocalDateTime, CalendarTimePicker> getLocalDateTimePropertyEditor(PropertySheet.Item item) {
+
+        CalendarTimePicker calendarTimePicker = new CalendarTimePicker();
+        return new AbstractPropertyEditor<>(item, (CalendarTimePicker)calendarTimePicker) {
+            @Override
+            public void setValue(LocalDateTime value) {
+                this.setValue(value);
+            }
+
+            protected ObservableValue<LocalDateTime> getObservableValue() {
+                return ((CalendarTimePicker) this.getEditor()).prop
+            }
+        };
+    }
+
     private static AbstractPropertyEditor<String, TextArea> getTextAreaPropertyEditor(PropertySheet.Item item) {
         CrudPropertySheetItem itemCrud = (CrudPropertySheetItem) item;
         int rows = 5;
         try {
             rows = itemCrud.getBean().getClass().getDeclaredField(itemCrud.getOriginalName()).getAnnotation(LongString.class).rows();
-        }catch (NoSuchFieldException e) {
+        }catch (Exception e) {
 
         }
 

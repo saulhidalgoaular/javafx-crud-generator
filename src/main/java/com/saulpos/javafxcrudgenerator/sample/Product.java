@@ -3,14 +3,12 @@ package com.saulpos.javafxcrudgenerator.sample;
 import com.saulpos.javafxcrudgenerator.annotations.*;
 import com.saulpos.javafxcrudgenerator.annotations.Currency;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBeanImplementationSoftDelete;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 
 import java.beans.PropertyVetoException;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.io.*;
 
@@ -20,6 +18,20 @@ public class Product extends AbstractBeanImplementationSoftDelete<Product> {
     @Search
     @DisplayOrder(orderValue = 100)
     private SimpleStringProperty name = new SimpleStringProperty();
+
+    public LocalDateTime getAssignmentDay() {
+        return assignmentDay.get();
+    }
+
+    public ObjectProperty<LocalDateTime> assignmentDayProperty() {
+        return assignmentDay;
+    }
+
+    public void setAssignmentDay(LocalDateTime assignmentDay) {
+        this.assignmentDay.set(assignmentDay);
+    }
+
+    private ObjectProperty<LocalDateTime> assignmentDay = new SimpleObjectProperty<>();
 
     @Readonly
     @DisplayOrder(orderValue = 2)
