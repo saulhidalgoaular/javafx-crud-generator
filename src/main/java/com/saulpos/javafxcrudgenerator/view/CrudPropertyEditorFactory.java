@@ -4,7 +4,9 @@ import com.saulpos.javafxcrudgenerator.annotations.LongString;
 import com.saulpos.javafxcrudgenerator.annotations.Password;
 import com.saulpos.javafxcrudgenerator.annotations.Readonly;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractDataProvider;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.control.PasswordField;
@@ -21,6 +23,8 @@ import org.controlsfx.property.editor.PropertyEditor;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashMap;
 
 public class CrudPropertyEditorFactory {
@@ -100,14 +104,40 @@ public class CrudPropertyEditorFactory {
     private static AbstractPropertyEditor<LocalDateTime, CalendarTimePicker> getLocalDateTimePropertyEditor(PropertySheet.Item item) {
 
         CalendarTimePicker calendarTimePicker = new CalendarTimePicker();
-        return new AbstractPropertyEditor<>(item, (CalendarTimePicker)calendarTimePicker) {
+        return new AbstractPropertyEditor<>(item, calendarTimePicker) {
             @Override
             public void setValue(LocalDateTime value) {
-                this.setValue(value);
+                if (value != null)
+                    calendarTimePicker.getCalendar().setTime(Date.from(value.atZone(ZoneId.systemDefault()).toInstant()));
             }
 
             protected ObservableValue<LocalDateTime> getObservableValue() {
-                return ((CalendarTimePicker) this.getEditor()).prop
+                return new ObservableValue<LocalDateTime>() {
+                    @Override
+                    public void addListener(ChangeListener<? super LocalDateTime> changeListener) {
+
+                    }
+
+                    @Override
+                    public void removeListener(ChangeListener<? super LocalDateTime> changeListener) {
+
+                    }
+
+                    @Override
+                    public LocalDateTime getValue() {
+                        return LocalDateTime.ofInstant(calendarTimePicker.getCalendar().toInstant(), ZoneId.systemDefault());
+                    }
+
+                    @Override
+                    public void addListener(InvalidationListener invalidationListener) {
+
+                    }
+
+                    @Override
+                    public void removeListener(InvalidationListener invalidationListener) {
+
+                    }
+                };
             }
         };
     }
