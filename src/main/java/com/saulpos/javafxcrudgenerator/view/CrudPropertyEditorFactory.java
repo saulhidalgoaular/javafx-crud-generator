@@ -9,6 +9,7 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.*;
@@ -22,10 +23,11 @@ import org.controlsfx.property.editor.Editors;
 import org.controlsfx.property.editor.PropertyEditor;
 
 import java.lang.reflect.Field;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.util.Date;
 import java.util.HashMap;
+
+import jfxtras.scene.control.LocalDateTimePicker;
 
 public class CrudPropertyEditorFactory {
 
@@ -65,8 +67,6 @@ public class CrudPropertyEditorFactory {
                 }
                 return defaultEditor;
             }
-
-
         };
     }
 
@@ -101,41 +101,51 @@ public class CrudPropertyEditorFactory {
         };
     }
 
-    private static AbstractPropertyEditor<LocalDateTime, CalendarTimePicker> getLocalDateTimePropertyEditor(PropertySheet.Item item) {
+    private static AbstractPropertyEditor<LocalDateTime, HBox> getLocalDateTimePropertyEditor(PropertySheet.Item item) {
+        HBox hbox = new HBox();
+        LocalDateTimePicker dateTimePicker = new LocalDateTimePicker();
+        dateTimePicker.setLocalDateTime(LocalDateTime.now());
 
-        CalendarTimePicker calendarTimePicker = new CalendarTimePicker();
-        return new AbstractPropertyEditor<>(item, calendarTimePicker) {
+        hbox.getChildren().add(dateTimePicker);
+
+        return new AbstractPropertyEditor<>(item, hbox) {
             @Override
             public void setValue(LocalDateTime value) {
-                if (value != null)
-                    calendarTimePicker.getCalendar().setTime(Date.from(value.atZone(ZoneId.systemDefault()).toInstant()));
+                if (value != null) {
+                    dateTimePicker.setLocalDateTime(value);
+                }
             }
 
+            @Override
             protected ObservableValue<LocalDateTime> getObservableValue() {
                 return new ObservableValue<LocalDateTime>() {
                     @Override
                     public void addListener(ChangeListener<? super LocalDateTime> changeListener) {
-
+                        dateTimePicker.localDateTimeProperty().addListener((observableValue, oldValue, newValue) -> {
+                            changeListener.changed(this, oldValue, newValue);
+                        });
                     }
 
                     @Override
                     public void removeListener(ChangeListener<? super LocalDateTime> changeListener) {
-
+                        dateTimePicker.localDateTimeProperty().removeListener((InvalidationListener) changeListener);
                     }
 
                     @Override
                     public LocalDateTime getValue() {
-                        return LocalDateTime.ofInstant(calendarTimePicker.getCalendar().toInstant(), ZoneId.systemDefault());
+                        return dateTimePicker.getLocalDateTime();
                     }
 
                     @Override
                     public void addListener(InvalidationListener invalidationListener) {
-
+                        dateTimePicker.localDateTimeProperty().addListener((observableValue, oldValue, newValue) -> {
+                            invalidationListener.invalidated(this);
+                        });
                     }
 
                     @Override
                     public void removeListener(InvalidationListener invalidationListener) {
-
+                        dateTimePicker.localDateTimeProperty().removeListener((InvalidationListener) invalidationListener);
                     }
                 };
             }
