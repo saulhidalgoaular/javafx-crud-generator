@@ -39,6 +39,8 @@ public class CrudViewGenerator {
     private Node saveButton;
     private Node deleteButton;
     private Node refreshButton;
+
+    private ArrayList<Node> extraButtons = new ArrayList<>();
     private Label searchResult;
     private TableView tableView;
     private PropertySheet searchPropertySheet;
@@ -84,6 +86,7 @@ public class CrudViewGenerator {
         view.setSaveButton(saveButton);
         view.setDeleteButton(deleteButton);
         view.setRefreshButton(refreshButton);
+        view.getExtraButtons().addAll(extraButtons);
         view.setPropertySheet(propertySheet);
         view.setSearchBox(searchPropertySheet);
         view.setTotalLabel(searchResult);
@@ -201,7 +204,9 @@ public class CrudViewGenerator {
         final ArrayList<Node> allButtons = new ArrayList<>(Arrays.asList(nodes));
         for (Object customButtonConstructor :
                 parameter.getExtraButtonsConstructor()) {
-            allButtons.add(((NodeConstructor)customButtonConstructor).generateNode(null));
+            final Node newExtraButton = ((NodeConstructor) customButtonConstructor).generateNode(null);
+            extraButtons.add(newExtraButton);
+            allButtons.add(newExtraButton);
         }
 
         for (int i = 0; i < allButtons.size(); i++) {
