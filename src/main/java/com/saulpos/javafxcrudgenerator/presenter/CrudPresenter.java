@@ -81,6 +81,11 @@ public class CrudPresenter<S extends AbstractBean> {
                 DialogBuilder.createExceptionDialog("Exception Refreshing", "SAUL POS", e.getMessage(), e).showAndWait();
             }
         });
+
+        // first custom buttom.
+        ((Button)view.getExtraButtons().get(0)).setOnAction(event -> {
+            model.myCustomButtonAction();
+        });
     }
 
     private void newInitialBean() {

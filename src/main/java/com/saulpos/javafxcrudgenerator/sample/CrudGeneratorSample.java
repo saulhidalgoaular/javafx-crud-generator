@@ -125,6 +125,7 @@ public class CrudGeneratorSample extends Application {
                 customButton.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent actionEvent) {
+                        System.out.println(name);
                         System.out.println(crudGeneratorParameter.translate("custom.button.clicked"));
                     }
                 });

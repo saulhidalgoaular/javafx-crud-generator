@@ -21,6 +21,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import org.controlsfx.control.PropertySheet;
 
+import java.util.ArrayList;
+
 public class CrudView {
 
     private Node mainView;
@@ -33,6 +35,8 @@ public class CrudView {
     private Node saveButton;
     private Node deleteButton;
     private Node refreshButton;
+
+    private ArrayList<Node> extraButtons = new ArrayList<>();
 
     public Node getMainView() {
         return mainView;
@@ -104,5 +108,13 @@ public class CrudView {
 
     public void setRefreshButton(Node refreshButton) {
         this.refreshButton = refreshButton;
+    }
+
+    public ArrayList<Node> getExtraButtons() {
+        return extraButtons;
+    }
+
+    public void setExtraButtons(ArrayList<Node> extraButtons) {
+        this.extraButtons = extraButtons;
     }
 }
