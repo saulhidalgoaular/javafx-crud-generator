@@ -22,11 +22,16 @@ import javafx.beans.property.*;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.control.skin.TableViewSkin;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.util.Callback;
 import org.controlsfx.control.PropertySheet;
 
+import java.awt.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -125,6 +130,11 @@ public class CrudViewGenerator {
                 TableColumn<Object, String> column = new TableColumn<>(ViewUtils.getName(field.getName(), parameter.getTranslateFunction()));
                 column.setCellValueFactory(cell -> getProperty(cell, field));
                 column.setCellFactory(tableColum -> getCellFactory(field));
+                if(field.isAnnotationPresent(TableViewColumn.class)) {
+                    column.setMinWidth(field.getAnnotation(TableViewColumn.class).minWidth());
+                    column.setMaxWidth(field.getAnnotation(TableViewColumn.class).maxWidth());
+                    column.setPrefWidth(field.getAnnotation(TableViewColumn.class).prefWidth());
+                }
                 tableView.getColumns().add(column);
             }
         }
