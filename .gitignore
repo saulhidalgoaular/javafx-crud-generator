@@ -16,6 +16,7 @@ settings.xml
 *.iws
 *.iml
 *.ipr
+settings.xml
 
 ### Eclipse ###
 .apt_generated
