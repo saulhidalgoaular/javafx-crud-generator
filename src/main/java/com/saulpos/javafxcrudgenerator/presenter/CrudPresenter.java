@@ -83,9 +83,11 @@ public class CrudPresenter<S extends AbstractBean> {
         });
 
         // first custom buttom.
-        ((Button)view.getExtraButtons().get(0)).setOnAction(event -> {
-            model.myCustomButtonAction();
-        });
+        if (!view.getExtraButtons().isEmpty()) {
+            ((Button) view.getExtraButtons().get(0)).setOnAction(event -> {
+                model.myCustomButtonAction();
+            });
+        }
     }
 
     private void newInitialBean() {
