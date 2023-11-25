@@ -85,7 +85,6 @@ public class CrudPresenter<S extends AbstractBean> {
             }
         });
 
-        // first custom buttom.
         for (int i = 0; i < model.getParameter().getExtraButtonsConstructor().size(); i++) {
             final int finalIntI = i;
             ((Button)view.getExtraButtons().get(i)).setOnAction(event -> {
@@ -97,7 +96,6 @@ public class CrudPresenter<S extends AbstractBean> {
                 }
             });
         }
-
     }
 
     private void newInitialBean() {
