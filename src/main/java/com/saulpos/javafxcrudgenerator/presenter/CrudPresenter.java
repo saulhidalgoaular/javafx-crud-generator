@@ -16,10 +16,13 @@
 package com.saulpos.javafxcrudgenerator.presenter;
 
 import com.saulpos.javafxcrudgenerator.model.CrudModel;
+import com.saulpos.javafxcrudgenerator.model.Function;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import com.saulpos.javafxcrudgenerator.view.*;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.*;
+
+import java.util.ArrayList;
 
 public class CrudPresenter<S extends AbstractBean> {
 
@@ -81,6 +84,18 @@ public class CrudPresenter<S extends AbstractBean> {
                 DialogBuilder.createExceptionDialog("Exception Refreshing", "SAUL POS", e.getMessage(), e).showAndWait();
             }
         });
+
+        for (int i = 0; i < model.getParameter().getExtraButtonsConstructor().size(); i++) {
+            final int finalIntI = i;
+            ((Button)view.getExtraButtons().get(i)).setOnAction(event -> {
+                ArrayList<Function> extraButtonsFunction = model.getParameter().getExtraButtonsFunction();
+                try {
+                    extraButtonsFunction.get(finalIntI).run(new Object[]{model.getBeanInEdition()});
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
     }
 
     private void newInitialBean() {

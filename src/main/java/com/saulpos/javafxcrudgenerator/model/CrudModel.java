@@ -190,4 +190,5 @@ public class CrudModel<S extends AbstractBean> {
     public void setTotalResult(String totalResult) {
         this.totalResult.set(totalResult);
     }
+
 }
