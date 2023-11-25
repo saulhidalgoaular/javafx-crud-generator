@@ -122,16 +122,20 @@ public class CrudGeneratorSample extends Application {
                 Label icon = GlyphsDude.createIconLabel(FontAwesomeIcon.STAR, crudGeneratorParameter.translate("custom.button"), "20px", "10px", ContentDisplay.LEFT);
                 customButton.setGraphic(icon);
                 customButton.setPrefWidth(crudGeneratorParameter.getButtonWidth());
-                customButton.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
-                        System.out.println(name);
-                        System.out.println(crudGeneratorParameter.translate("custom.button.clicked"));
-                    }
-                });
                 return customButton;
             }
         };
+
+        Function customButtonFunction = new Function() {
+            @Override
+            public Object[] run(Object[] params) throws Exception {
+                Product productBeingEdited = (Product) params[0];
+                System.out.println(productBeingEdited.getName());
+                return null;
+            }
+        };
+
+        crudGeneratorParameter.addCustomButton(customButtonConstructor, customButtonFunction);
 
         crudGeneratorParameter.setClazz(Product.class);
         crudGeneratorParameter.setDataProvider(CUSTOM_DATA_PROVIDER);
@@ -143,7 +147,6 @@ public class CrudGeneratorSample extends Application {
             }
         });
 
-        crudGeneratorParameter.getExtraButtonsConstructor().add(customButtonConstructor);
         CrudGenerator<Product> crudGenerator = new CrudGenerator<>(crudGeneratorParameter);
 
         stage.setTitle(crudGeneratorParameter.translate("window.title"));
