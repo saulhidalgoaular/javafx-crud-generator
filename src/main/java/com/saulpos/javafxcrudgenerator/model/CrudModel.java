@@ -191,7 +191,4 @@ public class CrudModel<S extends AbstractBean> {
         this.totalResult.set(totalResult);
     }
 
-    public void myCustomButtonAction() {
-        System.out.println(beanInEdition);
-    }
 }

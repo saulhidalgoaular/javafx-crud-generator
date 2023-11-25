@@ -101,6 +101,8 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
 
     private ArrayList<NodeConstructor> extraButtonsConstructor = new ArrayList<>();
 
+    private ArrayList<Function> extraButtonsFunction = new ArrayList<>();
+
     private AbstractDataProvider<S> dataProvider;
 
     private Function beforeSave;
@@ -262,5 +264,18 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
 
     public Function getTranslateFunction() {
         return translateFunction;
+    }
+
+    public ArrayList<Function> getExtraButtonsFunction() {
+        return extraButtonsFunction;
+    }
+
+    public void setExtraButtonsFunction(ArrayList<Function> extraButtonsFunction) {
+        this.extraButtonsFunction = extraButtonsFunction;
+    }
+
+    public void addCustomButton(final NodeConstructor buttonConstructor, final Function buttonFunction){
+        extraButtonsConstructor.add(buttonConstructor);
+        extraButtonsFunction.add(buttonFunction);
     }
 }
