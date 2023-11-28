@@ -101,6 +101,13 @@ public class CrudViewGenerator {
 
     private void addBindings() {
         deleteButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
+
+        ArrayList<CustomButton> extraButtonsList = parameter.getExtraButtons();
+        for (CustomButton customButton : extraButtonsList){
+            if (customButton.isEnableOnlyOnSelection()){
+                customButton.getButton().disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
+            }
+        }
     }
 
     private Node createMainPane(Pane fieldsPane, Pane buttonsPane, GridPane searchGridPane, TableView tableView) {
@@ -212,11 +219,12 @@ public class CrudViewGenerator {
 
         final Node[] nodes = new Node[]{addNewButton, saveButton, deleteButton, refreshButton};
         final ArrayList<Node> allButtons = new ArrayList<>(Arrays.asList(nodes));
-        for (Object customButtonConstructor :
-                parameter.getExtraButtonsConstructor()) {
-            final Node newExtraButton = ((NodeConstructor) customButtonConstructor).generateNode(null);
-            extraButtons.add(newExtraButton);
-            allButtons.add(newExtraButton);
+        for (Object customButtonObject :
+                parameter.getExtraButtons()) {
+            final CustomButton customButton = (CustomButton) customButtonObject;
+            Node button = customButton.getButton();
+            extraButtons.add(button);
+            allButtons.add(button);
         }
 
         for (int i = 0; i < allButtons.size(); i++) {

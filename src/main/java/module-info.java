@@ -1,4 +1,4 @@
-module com.saulpos.javafxcrudgenerator {
+module com.saulpos {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
@@ -9,7 +9,6 @@ module com.saulpos.javafxcrudgenerator {
     requires jakarta.persistence;
     requires jfxtras.controls;
 
-    opens com.saulpos.javafxcrudgenerator to javafx.fxml;
-    exports com.saulpos.javafxcrudgenerator.sample;
+    opens com.saulpos.javafxcrudgenerator.sample;
 
 }

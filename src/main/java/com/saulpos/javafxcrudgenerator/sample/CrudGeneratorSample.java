@@ -6,6 +6,7 @@ import com.saulpos.javafxcrudgenerator.model.dao.AbstractDataProvider;
 import com.saulpos.javafxcrudgenerator.presenter.CrudPresenter;
 import com.saulpos.javafxcrudgenerator.CrudGenerator;
 import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
+import com.saulpos.javafxcrudgenerator.view.CustomButton;
 import com.saulpos.javafxcrudgenerator.view.NodeConstructor;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -135,7 +136,7 @@ public class CrudGeneratorSample extends Application {
             }
         };
 
-        crudGeneratorParameter.addCustomButton(customButtonConstructor, customButtonFunction);
+        crudGeneratorParameter.addCustomButton(new CustomButton(customButtonConstructor, customButtonFunction, true));
 
         crudGeneratorParameter.setClazz(Product.class);
         crudGeneratorParameter.setDataProvider(CUSTOM_DATA_PROVIDER);

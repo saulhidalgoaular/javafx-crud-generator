@@ -85,17 +85,19 @@ public class CrudPresenter<S extends AbstractBean> {
             }
         });
 
-        for (int i = 0; i < model.getParameter().getExtraButtonsConstructor().size(); i++) {
-            final int finalIntI = i;
-            ((Button)view.getExtraButtons().get(i)).setOnAction(event -> {
-                ArrayList<Function> extraButtonsFunction = model.getParameter().getExtraButtonsFunction();
+        // custom buttons action
+        ArrayList<CustomButton> extraButtons = model.getParameter().getExtraButtons();
+        for (CustomButton extraButton : extraButtons){
+            Button button = extraButton.getButton();
+            button.setOnAction(event -> {
                 try {
-                    extraButtonsFunction.get(finalIntI).run(new Object[]{model.getBeanInEdition()});
+                    extraButton.getFunction().run(new Object[]{model.getBeanInEdition()});
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    DialogBuilder.createExceptionDialog("Exception", "SAUL POS", e.getMessage(), e).showAndWait();
                 }
             });
         }
+
     }
 
     private void newInitialBean() {

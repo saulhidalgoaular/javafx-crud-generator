@@ -18,6 +18,7 @@ package com.saulpos.javafxcrudgenerator;
 import com.saulpos.javafxcrudgenerator.model.Function;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractDataProvider;
+import com.saulpos.javafxcrudgenerator.view.CustomButton;
 import com.saulpos.javafxcrudgenerator.view.NodeConstructor;
 import de.jensd.fx.glyphs.GlyphIcons;
 import de.jensd.fx.glyphs.GlyphsDude;
@@ -99,9 +100,7 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
 
     private ArrayList<Integer> buttonsOrder = new ArrayList<>();
 
-    private ArrayList<NodeConstructor> extraButtonsConstructor = new ArrayList<>();
-
-    private ArrayList<Function> extraButtonsFunction = new ArrayList<>();
+    private ArrayList<CustomButton> extraButtons = new ArrayList<>();
 
     private AbstractDataProvider<S> dataProvider;
 
@@ -205,13 +204,6 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
         this.refreshButtonConstructor = refreshButtonConstructor;
     }
 
-    public ArrayList<NodeConstructor> getExtraButtonsConstructor() {
-        return extraButtonsConstructor;
-    }
-
-    public void setExtraButtonsConstructor(ArrayList<NodeConstructor> extraButtonsConstructor) {
-        this.extraButtonsConstructor = extraButtonsConstructor;
-    }
 
     public ArrayList<Integer> getButtonsOrder() {
         return buttonsOrder;
@@ -266,16 +258,15 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
         return translateFunction;
     }
 
-    public ArrayList<Function> getExtraButtonsFunction() {
-        return extraButtonsFunction;
+    public ArrayList<CustomButton> getExtraButtons() {
+        return extraButtons;
     }
 
-    public void setExtraButtonsFunction(ArrayList<Function> extraButtonsFunction) {
-        this.extraButtonsFunction = extraButtonsFunction;
+    public void setExtraButtons(ArrayList<CustomButton> extraButtons) {
+        this.extraButtons = extraButtons;
     }
 
-    public void addCustomButton(final NodeConstructor buttonConstructor, final Function buttonFunction){
-        extraButtonsConstructor.add(buttonConstructor);
-        extraButtonsFunction.add(buttonFunction);
+    public void addCustomButton(CustomButton customButton){
+        getExtraButtons().add(customButton);
     }
 }
