@@ -139,6 +139,7 @@ public class CrudModel<S extends AbstractBean> {
         }else{
             getSelectedItem().receiveChanges(getBeanInEdition());
             getSelectedItem().update();
+            getBeanInEdition().receiveChanges(getSelectedItem()); // Send back the info from database.
         }
     }
 
