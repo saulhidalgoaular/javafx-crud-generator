@@ -102,10 +102,12 @@ public abstract class AbstractBeanImplementationSoftDelete<T extends AbstractBea
         setLastModificationTime(LocalDateTime.now());
         modify();
         AbstractBeanImplementationSoftDelete newActiveObject = this.clone();
-        AbstractBeanImplementationSoftDelete.removeId(newActiveObject); // force it to be a new object.
+        removeId(); // force it to be a new object.
+        newActiveObject.setCreationTime(LocalDateTime.now());
         newActiveObject.setBeanStatus(BeanStatus.Active);
         newActiveObject.save();
-
+        setId(newActiveObject.getId());
+        setCreationTime(newActiveObject.getCreationTime());
     }
 
     @Override
@@ -124,15 +126,7 @@ public abstract class AbstractBeanImplementationSoftDelete<T extends AbstractBea
 
     }
 
-    public static void removeId(Object object){
-        try {
-            object.getClass().getMethod("setId", int.class).invoke(object, 0);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
+    public void removeId(){
+        setId(0);
     }
 }
