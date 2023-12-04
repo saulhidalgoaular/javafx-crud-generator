@@ -8,14 +8,12 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.Node;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
-import jfxtras.scene.control.CalendarTimePicker;
+import jfxtras.scene.control.LocalTimePicker;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.AbstractPropertyEditor;
 import org.controlsfx.property.editor.DefaultPropertyEditorFactory;
@@ -24,7 +22,6 @@ import org.controlsfx.property.editor.PropertyEditor;
 
 import java.lang.reflect.Field;
 import java.time.*;
-import java.util.Date;
 import java.util.HashMap;
 
 import jfxtras.scene.control.LocalDateTimePicker;
@@ -54,6 +51,9 @@ public class CrudPropertyEditorFactory {
                     }
                     else if (java.time.LocalDateTime.class.equals (itemCrud.getPropertyDescriptor().getPropertyType())){
                         return getLocalDateTimePropertyEditor(item);
+                    }
+                    else if (java.time.LocalTime.class.equals( itemCrud.getPropertyDescriptor().getPropertyType())){
+                        return getLocalTimePropertyEditor(item);
                     }
                 }
 
@@ -97,6 +97,55 @@ public class CrudPropertyEditorFactory {
 
             public void setValue(String value) {
                 this.getEditor().setText(value);
+            }
+        };
+    }
+
+    private static AbstractPropertyEditor<LocalTime, LocalTimePicker> getLocalTimePropertyEditor(PropertySheet.Item item) {
+        LocalTimePicker timePicker = new LocalTimePicker();
+        timePicker.setLocalTime(LocalTime.now());
+
+
+        return new AbstractPropertyEditor<>(item, timePicker) {
+            @Override
+            public void setValue(LocalTime value) {
+                if (value != null) {
+                    timePicker.setLocalTime(value);
+                }
+            }
+
+            @Override
+            protected ObservableValue<LocalTime> getObservableValue() {
+                return new ObservableValue<LocalTime>() {
+                    @Override
+                    public void addListener(ChangeListener<? super LocalTime> changeListener) {
+                        timePicker.localTimeProperty().addListener((observableValue, oldValue, newValue) -> {
+                            changeListener.changed(this, oldValue, newValue);
+                        });
+                    }
+
+                    @Override
+                    public void removeListener(ChangeListener<? super LocalTime> changeListener) {
+                        timePicker.localTimeProperty().removeListener((InvalidationListener) changeListener);
+                    }
+
+                    @Override
+                    public LocalTime getValue() {
+                        return timePicker.getLocalTime();
+                    }
+
+                    @Override
+                    public void addListener(InvalidationListener invalidationListener) {
+                        timePicker.localTimeProperty().addListener((observableValue, oldValue, newValue) -> {
+                            invalidationListener.invalidated(this);
+                        });
+                    }
+
+                    @Override
+                    public void removeListener(InvalidationListener invalidationListener) {
+                        timePicker.localTimeProperty().removeListener((InvalidationListener) invalidationListener);
+                    }
+                };
             }
         };
     }

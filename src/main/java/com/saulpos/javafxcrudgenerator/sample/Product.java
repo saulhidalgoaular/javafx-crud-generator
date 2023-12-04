@@ -9,6 +9,7 @@ import java.beans.PropertyVetoException;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.io.*;
 
@@ -68,6 +69,8 @@ public class Product extends AbstractBeanImplementationSoftDelete<Product> {
     @Ignore
     @DisplayOrder(orderValue = 11)
     private SimpleStringProperty extraLongDescription = new SimpleStringProperty();
+
+    private SimpleObjectProperty<LocalTime> startingTime = new SimpleObjectProperty<>();
 
     public Product() {
     }
@@ -202,6 +205,18 @@ public class Product extends AbstractBeanImplementationSoftDelete<Product> {
 
     public void setPassword(String password) {
         this.password.set(password);
+    }
+
+    public LocalTime getStartingTime() {
+        return startingTime.get();
+    }
+
+    public SimpleObjectProperty<LocalTime> startingTimeProperty() {
+        return startingTime;
+    }
+
+    public void setStartingTime(LocalTime startingTime) {
+        this.startingTime.set(startingTime);
     }
 
     @Override
