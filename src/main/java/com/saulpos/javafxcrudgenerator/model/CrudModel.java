@@ -139,6 +139,7 @@ public class CrudModel<S extends AbstractBean> {
             getSelectedItem().receiveChanges(getBeanInEdition());
             getSelectedItem().saveOrUpdate();
         }
+        refreshAction(); // FIXME. This should not be needed.
     }
 
     public void deleteItemAction() throws Exception {
