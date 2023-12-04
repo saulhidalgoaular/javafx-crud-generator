@@ -19,7 +19,7 @@ public abstract class AbstractBeanImplementationSoftDelete<T extends AbstractBea
     }
 
     public enum BeanStatus{
-        Active, Modified, Deleted
+        Active, Deleted
     }
 
     @Ignore
@@ -92,38 +92,12 @@ public abstract class AbstractBeanImplementationSoftDelete<T extends AbstractBea
     @Override
     public void delete() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
         setBeanStatus(BeanStatus.Deleted);
-        setLastModificationTime(LocalDateTime.now());
-        modify();
-    }
-
-    @Override
-    public void update() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
-        setBeanStatus(BeanStatus.Modified);
-        setLastModificationTime(LocalDateTime.now());
-        modify();
-        AbstractBeanImplementationSoftDelete newActiveObject = this.clone();
-        removeId(); // force it to be a new object.
-        newActiveObject.setCreationTime(LocalDateTime.now());
-        newActiveObject.setBeanStatus(BeanStatus.Active);
-        newActiveObject.save();
-        setId(newActiveObject.getId());
-        setCreationTime(newActiveObject.getCreationTime());
+        saveOrUpdate();
     }
 
     @Override
     public void saveOrUpdate() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
-        if (previouslySaved()){
-            update();
-        }else{
-            setBeanStatus(BeanStatus.Active);
-            setLastModificationTime(LocalDateTime.now());
-            save();
-        }
-    }
-
-    @Override
-    public void save() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
-
+        setLastModificationTime(LocalDateTime.now());
     }
 
     public void removeId(){

@@ -133,13 +133,11 @@ public class CrudModel<S extends AbstractBean> {
         if (this.getSelectedItem() == null){
             final S newBean = this.getNewBean();
             newBean.receiveChanges(getBeanInEdition());
-            newBean.save();
+            newBean.saveOrUpdate();
             this.getItems().add(newBean);
-            //this.selectedItemProperty().setValue(newBean);
         }else{
             getSelectedItem().receiveChanges(getBeanInEdition());
-            getSelectedItem().update();
-            getBeanInEdition().receiveChanges(getSelectedItem()); // Send back the info from database.
+            getSelectedItem().saveOrUpdate();
         }
     }
 

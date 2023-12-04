@@ -205,24 +205,6 @@ public class Product extends AbstractBeanImplementationSoftDelete<Product> {
     }
 
     @Override
-    public void save() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
-        super.save();
-        // just to show how it could be used. Ideally it should be saved into the database.
-        final List allItems = CrudGeneratorSample.CUSTOM_DATA_PROVIDER.getAllItems(Product.class);
-        if (!previouslySaved()){
-            allItems.add(this);
-        }
-
-        System.out.println("Product saved");
-    }
-
-    @Override
-    public void update() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
-        System.out.println("Product updated");
-
-    }
-
-    @Override
     public void saveOrUpdate() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
         super.saveOrUpdate();
         // just to show how it could be used. Ideally it should be saved into the database.
@@ -247,11 +229,6 @@ public class Product extends AbstractBeanImplementationSoftDelete<Product> {
         this.setPrice(currentBean.getPrice());
         this.setWideDescription(currentBean.getWideDescription());
         this.setPassword(currentBean.getPassword());
-    }
-
-    @Override
-    public void modify() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
-        update();
     }
 
     @Override

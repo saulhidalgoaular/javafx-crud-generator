@@ -9,6 +9,7 @@ module com.saulpos {
     requires jakarta.persistence;
     requires jfxtras.controls;
 
-    opens com.saulpos.javafxcrudgenerator.sample;
+    exports com.saulpos.javafxcrudgenerator.sample;
+    opens com.saulpos.javafxcrudgenerator;
 
 }
