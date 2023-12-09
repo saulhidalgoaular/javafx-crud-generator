@@ -16,7 +16,6 @@
 package com.saulpos.javafxcrudgenerator.view;
 
 import com.saulpos.javafxcrudgenerator.model.Function;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 
 public class CustomButton {
@@ -42,7 +41,7 @@ public class CustomButton {
     }
 
     public Button getButton() {
-        if (button == null){
+        if (button == null) {
             button = (Button) getConstructor().generateNode(null);
         }
         return button;

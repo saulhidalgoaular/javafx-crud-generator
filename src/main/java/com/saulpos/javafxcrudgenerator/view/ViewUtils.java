@@ -31,34 +31,28 @@ import java.util.HashMap;
 
 public class ViewUtils {
     public static Type getActualTypeArgument(Field field) {
-        if (field.getGenericType() instanceof ParameterizedType){
+        if (field.getGenericType() instanceof ParameterizedType) {
             Type[] actualTypeArguments = ((ParameterizedType) field.getGenericType()).getActualTypeArguments();
-            if (actualTypeArguments.length > 0){
+            if (actualTypeArguments.length > 0) {
                 return actualTypeArguments[0];
             }
         }
         return null;
     }
 
-    public static HashMap<String, Property> createModelProperties(CrudGeneratorParameter parameter){
+    public static HashMap<String, Property> createModelProperties(CrudGeneratorParameter parameter) {
         final HashMap<String, Property> properties = new HashMap<>();
         for (Field field : parameter.getClazz().getDeclaredFields()) {
-            if (!field.isAnnotationPresent(Ignore.class)){
+            if (!field.isAnnotationPresent(Ignore.class)) {
                 Property property;
 
                 if (SimpleStringProperty.class.equals(field.getType())) {
                     property = new SimpleStringProperty();
-                }
-
-                else if (SimpleBooleanProperty.class.equals(field.getType())) {
+                } else if (SimpleBooleanProperty.class.equals(field.getType())) {
                     property = new SimpleBooleanProperty();
-                }
-
-                else if (SimpleObjectProperty.class.equals(field.getType()) && Calendar.class.equals(getActualTypeArgument(field))) {
+                } else if (SimpleObjectProperty.class.equals(field.getType()) && Calendar.class.equals(getActualTypeArgument(field))) {
                     property = new SimpleObjectProperty();
-                }
-
-                else {
+                } else {
                     property = new SimpleStringProperty();
                 }
 
@@ -68,31 +62,31 @@ public class ViewUtils {
         return properties;
     }
 
-    public static String getName(final String name, Function translateFunction){
+    public static String getName(final String name, Function translateFunction) {
         String translatedName = null;
         try {
             translatedName = translateFunction.run(new String[]{name})[0].toString();
         } catch (Exception e) {
 
         }
-        if (!name.equals(translatedName)){
+        if (!name.equals(translatedName)) {
             return translatedName;
         }
         StringBuilder title = new StringBuilder();
         StringBuilder currentWord = new StringBuilder();
-        for (char c : name.toCharArray()){
-            if (currentWord.isEmpty()){
+        for (char c : name.toCharArray()) {
+            if (currentWord.isEmpty()) {
                 currentWord.append(Character.toUpperCase(c));
-            }else if (Character.isUpperCase(c)){
+            } else if (Character.isUpperCase(c)) {
                 title.append(currentWord);
                 title.append(" ");
                 currentWord.setLength(0);
                 currentWord.append(Character.toUpperCase(c));
-            }else{
+            } else {
                 currentWord.append(c);
             }
         }
-        if (!currentWord.isEmpty()){
+        if (!currentWord.isEmpty()) {
             title.append(currentWord);
         }
 

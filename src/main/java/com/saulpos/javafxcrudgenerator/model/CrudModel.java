@@ -19,7 +19,8 @@ package com.saulpos.javafxcrudgenerator.model;
 import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractDataProvider;
-import javafx.beans.property.*;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -31,22 +32,11 @@ public class CrudModel<S extends AbstractBean> {
 
     private final ObservableList<S> items = FXCollections.observableArrayList();
 
-    private SimpleObjectProperty<S> selectedItem = new SimpleObjectProperty<>();
+    private final SimpleObjectProperty<S> selectedItem = new SimpleObjectProperty<>();
 
-    private SimpleStringProperty totalResult = new SimpleStringProperty();
-
-    public S getBeanInEdition() {
-        return beanInEdition;
-    }
-
-    public void setBeanInEdition(S beanInEdition) {
-        this.beanInEdition = beanInEdition;
-    }
-
-    private CrudGeneratorParameter parameter;
-
+    private final SimpleStringProperty totalResult = new SimpleStringProperty();
+    private final CrudGeneratorParameter parameter;
     private S beanInEdition;
-
     private S searchBean;
 
     public CrudModel(CrudGeneratorParameter parameter) throws Exception {
@@ -56,6 +46,14 @@ public class CrudModel<S extends AbstractBean> {
         setBeanInEdition(getNewBean());
         addListeners();
         refreshAction();
+    }
+
+    public S getBeanInEdition() {
+        return beanInEdition;
+    }
+
+    public void setBeanInEdition(S beanInEdition) {
+        this.beanInEdition = beanInEdition;
     }
 
     private void addListeners() {
@@ -71,12 +69,12 @@ public class CrudModel<S extends AbstractBean> {
         for (Method method :
                 getSearchBean().getClass().getDeclaredMethods()) {
             try {
-                if (!method.getName().endsWith("Property")){
+                if (!method.getName().endsWith("Property")) {
                     continue;
                 }
                 final Object invoke = method.invoke(getSearchBean());
                 final Method addListenerMethod = invoke.getClass().getMethod("addListener", ChangeListener.class);
-                if (addListenerMethod != null){
+                if (addListenerMethod != null) {
                     addListenerMethod.invoke(invoke, refreshChangeListener);
                 }
             } catch (Exception e) {
@@ -87,13 +85,12 @@ public class CrudModel<S extends AbstractBean> {
         final CrudModel crudModel = this;
         crudModel.selectedItemProperty().addListener((ChangeListener<S>) (observableValue, s, selectedRow) -> {
             try {
-                if (selectedRow == null){
+                if (selectedRow == null) {
                     crudModel.getBeanInEdition().receiveChanges(crudModel.getNewBean());
-                }else {
+                } else {
                     crudModel.getBeanInEdition().receiveChanges(selectedRow);
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 // this should not happen :/
                 e.printStackTrace();
             }
@@ -102,7 +99,7 @@ public class CrudModel<S extends AbstractBean> {
         items.addListener(new ListChangeListener<S>() {
             @Override
             public void onChanged(Change<? extends S> change) {
-                crudModel.setTotalResult( parameter.translate("total")+ ": " + items.size() + " "+ parameter.translate("items"));
+                crudModel.setTotalResult(parameter.translate("total") + ": " + items.size() + " " + parameter.translate("items"));
             }
         });
     }
@@ -114,28 +111,29 @@ public class CrudModel<S extends AbstractBean> {
     public S getNewBean() {
         try {
             return (S) getParameter().getClazz().getDeclaredConstructor().newInstance();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             // let's not worry. It will not happen
             return null;
         }
     }
-    public S addItemAction(){
+
+    public S addItemAction() {
         //if item selected then it should unselect current item, and create new empty item
         return getNewBean();
     }
 
     public void saveItemAction() throws Exception {
         Function beforeSave = this.getParameter().getBeforeSave();
-        if (beforeSave != null){
+        if (beforeSave != null) {
             beforeSave.run(new Object[]{getBeanInEdition()});
         }
-        if (this.getSelectedItem() == null){
+        if (this.getSelectedItem() == null) {
             final S newBean = this.getNewBean();
             newBean.receiveChanges(getBeanInEdition());
             newBean.saveOrUpdate();
             this.getItems().add(newBean);
-        }else{
+        } else {
             getSelectedItem().receiveChanges(getBeanInEdition());
             getSelectedItem().saveOrUpdate();
         }
@@ -144,7 +142,7 @@ public class CrudModel<S extends AbstractBean> {
 
     public void deleteItemAction() throws Exception {
         Function beforeDelete = this.getParameter().getBeforeDelete();
-        if (beforeDelete != null){
+        if (beforeDelete != null) {
             beforeDelete.run(new Object[]{this.getBeanInEdition()});
         }
         selectedItem.get().delete();
@@ -159,12 +157,12 @@ public class CrudModel<S extends AbstractBean> {
         return selectedItem.get();
     }
 
-    public SimpleObjectProperty<S> selectedItemProperty() {
-        return selectedItem;
-    }
-
     public void setSelectedItem(S selectedItem) {
         this.selectedItem.set(selectedItem);
+    }
+
+    public SimpleObjectProperty<S> selectedItemProperty() {
+        return selectedItem;
     }
 
     public CrudGeneratorParameter getParameter() {
@@ -183,12 +181,12 @@ public class CrudModel<S extends AbstractBean> {
         return totalResult.get();
     }
 
-    public SimpleStringProperty totalResultProperty() {
-        return totalResult;
-    }
-
     public void setTotalResult(String totalResult) {
         this.totalResult.set(totalResult);
+    }
+
+    public SimpleStringProperty totalResultProperty() {
+        return totalResult;
     }
 
 }

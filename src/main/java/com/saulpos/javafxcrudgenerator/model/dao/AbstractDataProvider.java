@@ -22,9 +22,6 @@ import java.util.List;
 
 public interface AbstractDataProvider<S extends AbstractBean> {
 
-    enum SearchType{
-        EQUAL, LIKE
-    }
     List<S> getAllItems(Class clazz) throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException;
 
     List<S> getAllItems(Class clazz, AbstractBean filter, SearchType type) throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException;
@@ -32,6 +29,7 @@ public interface AbstractDataProvider<S extends AbstractBean> {
     /**
      * Here we will add all the classes that we want our
      * crud to list into the editor
+     *
      * @param clazz
      * @return
      */
@@ -40,4 +38,8 @@ public interface AbstractDataProvider<S extends AbstractBean> {
     void registerClass(Class clazz);
 
     List<Object[]> getItems(String query) throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException;
+
+    enum SearchType {
+        EQUAL, LIKE
+    }
 }

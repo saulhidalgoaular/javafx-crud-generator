@@ -25,6 +25,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(FIELD)
 public @interface TableViewColumn {
     double minWidth() default 100;
+
     double maxWidth() default Integer.MAX_VALUE;
+
     double prefWidth() default 100;
 }

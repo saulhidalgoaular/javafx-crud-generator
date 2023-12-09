@@ -38,21 +38,23 @@ public class DialogBuilder {
         return alert;
     }
 
-    public static Alert createInformation(String header, String title, String content){
+    public static Alert createInformation(String header, String title, String content) {
         return createBasic(header, title, content, Alert.AlertType.INFORMATION);
     }
 
-    public static Alert createWarning(String header, String title, String content){
+    public static Alert createWarning(String header, String title, String content) {
         return createBasic(header, title, content, Alert.AlertType.WARNING);
     }
-    public static Alert createError(String header, String title, String content){
+
+    public static Alert createError(String header, String title, String content) {
         return createBasic(header, title, content, Alert.AlertType.ERROR);
     }
-    public static Alert createConfirmation(String header, String title, String content){
+
+    public static Alert createConfirmation(String header, String title, String content) {
         return createBasic(header, title, content, Alert.AlertType.CONFIRMATION);
     }
 
-    public static Alert createExceptionDialog(String header, String title, String content, Exception exception){
+    public static Alert createExceptionDialog(String header, String title, String content, Exception exception) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(header);

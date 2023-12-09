@@ -1,18 +1,18 @@
 /**
  * Copyright (c) 2013, ControlsFX
  * All rights reserved.
- *
+ * <p>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *     * Redistributions of source code must retain the above copyright
+ * * Redistributions of source code must retain the above copyright
  * notice, this list of conditions and the following disclaimer.
- *     * Redistributions in binary form must reproduce the above copyright
+ * * Redistributions in binary form must reproduce the above copyright
  * notice, this list of conditions and the following disclaimer in the
  * documentation and/or other materials provided with the distribution.
- *     * Neither the name of ControlsFX, any associated website, nor the
+ * * Neither the name of ControlsFX, any associated website, nor the
  * names of its contributors may be used to endorse or promote products
  * derived from this software without specific prior written permission.
- *
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -26,22 +26,20 @@
  */
 package com.saulpos.javafxcrudgenerator.view;
 
-import java.beans.*;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.function.Predicate;
-
-import com.saulpos.javafxcrudgenerator.annotations.DisplayOrder;
 import com.saulpos.javafxcrudgenerator.annotations.Ignore;
 import com.saulpos.javafxcrudgenerator.annotations.Search;
 import com.saulpos.javafxcrudgenerator.model.Function;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
 import javafx.scene.control.TextInputControl;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.control.PropertySheet.Item;
+
+import java.beans.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.function.Predicate;
 
 /**
  * Convenience utility class for creating {@link PropertySheet} instances based
@@ -82,17 +80,17 @@ public final class CrudBeanPropertyUtils {
         Collections.sort(properties, new Comparator<Item>() {
             @Override
             public int compare(Item o1, Item o2) {
-                return ((CrudPropertySheetItem)o1).getDisplayOrder() - ((CrudPropertySheetItem)o2).getDisplayOrder();
+                return ((CrudPropertySheetItem) o1).getDisplayOrder() - ((CrudPropertySheetItem) o2).getDisplayOrder();
             }
         });
         return properties;
     }
-    
+
     /**
      * Given a JavaBean, this method will return a list of {@link Item} intances,
      * which may be directly placed inside a {@link PropertySheet} (via its
      * {@link PropertySheet#getItems() items list}.
-     * 
+     *
      * @param bean The JavaBean that should be introspected and be editable via
      *      a {@link PropertySheet}.
      * @param test Predicate to test whether the property should be included in the 

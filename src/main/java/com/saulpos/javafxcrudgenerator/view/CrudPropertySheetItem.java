@@ -26,7 +26,7 @@ import java.lang.reflect.Field;
 public class CrudPropertySheetItem extends BeanProperty {
 
 
-    private Function translateFunction;
+    private final Function translateFunction;
 
     public CrudPropertySheetItem(Object bean, PropertyDescriptor propertyDescriptor, Function translateFunction) {
         super(bean, propertyDescriptor);
@@ -38,7 +38,7 @@ public class CrudPropertySheetItem extends BeanProperty {
         return ViewUtils.getName(super.getName(), translateFunction);
     }
 
-    public String getOriginalName(){
+    public String getOriginalName() {
         return super.getName();
     }
 
@@ -46,7 +46,7 @@ public class CrudPropertySheetItem extends BeanProperty {
     public String getCategory() {
         try {
             Field field = getBean().getClass().getDeclaredField(getOriginalName());
-            if (field.isAnnotationPresent(Category.class)){
+            if (field.isAnnotationPresent(Category.class)) {
                 return field.getAnnotation(Category.class).name();
             }
         } catch (NoSuchFieldException e) {
@@ -62,8 +62,7 @@ public class CrudPropertySheetItem extends BeanProperty {
             if (field.isAnnotationPresent(DisplayOrder.class)) {
                 return field.getAnnotation(DisplayOrder.class).orderValue();
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return Integer.MAX_VALUE;

@@ -16,11 +16,10 @@
 package com.saulpos.javafxcrudgenerator.presenter;
 
 import com.saulpos.javafxcrudgenerator.model.CrudModel;
-import com.saulpos.javafxcrudgenerator.model.Function;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import com.saulpos.javafxcrudgenerator.view.*;
 import javafx.beans.binding.Bindings;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
 
 import java.util.ArrayList;
 
@@ -58,10 +57,10 @@ public class CrudPresenter<S extends AbstractBean> {
         newInitialBean();
     }
 
-    public void addActions(){
-        ((Button)view.getAddNewButton()).setOnAction(actionEvent -> newInitialBean());
+    public void addActions() {
+        ((Button) view.getAddNewButton()).setOnAction(actionEvent -> newInitialBean());
 
-        ((Button)view.getSaveButton()).setOnAction(actionEvent -> {
+        ((Button) view.getSaveButton()).setOnAction(actionEvent -> {
             try {
                 model.saveItemAction();
             } catch (Exception e) {
@@ -69,7 +68,7 @@ public class CrudPresenter<S extends AbstractBean> {
             }
         });
 
-        ((Button)view.getDeleteButton()).setOnAction(actionEvent -> {
+        ((Button) view.getDeleteButton()).setOnAction(actionEvent -> {
             try {
                 model.deleteItemAction();
             } catch (Exception e) {
@@ -77,7 +76,7 @@ public class CrudPresenter<S extends AbstractBean> {
             }
         });
 
-        ((Button)view.getRefreshButton()).setOnAction(actionEvent -> {
+        ((Button) view.getRefreshButton()).setOnAction(actionEvent -> {
             try {
                 model.refreshAction();
             } catch (Exception e) {
@@ -87,7 +86,7 @@ public class CrudPresenter<S extends AbstractBean> {
 
         // custom buttons action
         ArrayList<CustomButton> extraButtons = model.getParameter().getExtraButtons();
-        for (CustomButton extraButton : extraButtons){
+        for (CustomButton extraButton : extraButtons) {
             Button button = extraButton.getButton();
             button.setOnAction(event -> {
                 try {
@@ -104,16 +103,16 @@ public class CrudPresenter<S extends AbstractBean> {
         view.getTableView().getSelectionModel().select(null);
     }
 
-    public void addBindings(){
+    public void addBindings() {
         Bindings.bindContentBidirectional(view.getTableView().getItems(), model.getItems());
         model.selectedItemProperty().bind(view.getTableView().getSelectionModel().selectedItemProperty());
 
-        if(!model.getParameter().isHidePropertyEditor()) {
+        if (!model.getParameter().isHidePropertyEditor()) {
             view.getPropertySheet().setPropertyEditorFactory(
                     CrudPropertyEditorFactory.getCrudPropertyEditorFactory(model.getParameter().getDataProvider()));
             view.getPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getBeanInEdition(), false, model.getParameter().getTranslateFunction()));
         }
-        if (view.getSearchPropertySheet() != null){
+        if (view.getSearchPropertySheet() != null) {
             view.getSearchPropertySheet().getItems().setAll(CrudBeanPropertyUtils.getProperties(model.getSearchBean(), true, model.getParameter().getTranslateFunction()));
             view.getSearchPropertySheet().setPropertyEditorFactory(
                     CrudPropertyEditorFactory.getCrudPropertyEditorFactory(model.getParameter().getDataProvider())

@@ -15,19 +15,17 @@
  */
 package com.saulpos.javafxcrudgenerator.sample;
 
+import com.saulpos.javafxcrudgenerator.CrudGenerator;
+import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
 import com.saulpos.javafxcrudgenerator.model.Function;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractDataProvider;
 import com.saulpos.javafxcrudgenerator.presenter.CrudPresenter;
-import com.saulpos.javafxcrudgenerator.CrudGenerator;
-import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
 import com.saulpos.javafxcrudgenerator.view.CustomButton;
 import com.saulpos.javafxcrudgenerator.view.NodeConstructor;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -42,7 +40,7 @@ public class CrudGeneratorSample extends Application {
 
     public static final AbstractDataProvider CUSTOM_DATA_PROVIDER = new AbstractDataProvider() {
 
-        private List allItems = new ArrayList();
+        private final List allItems = new ArrayList();
 
         {
             Product p1 = new Product();
@@ -92,16 +90,14 @@ public class CrudGeneratorSample extends Application {
             // It is just to show how it works. It is not a real implementation of the filtering
             // If you are using Database, criteria should go down to database.
             List allItems = getAllItems(clazz);
-            if (!(filter instanceof Product)) {
+            if (!(filter instanceof Product objFilter)) {
                 return allItems;
             }
-            Product objFilter = (Product) filter;
             List filtered = new ArrayList();
             for (Object obj : allItems) {
-                if (!(obj instanceof Product)) {
+                if (!(obj instanceof Product objProduct)) {
                     continue;
                 }
-                Product objProduct = (Product) obj;
                 boolean isOK = true;
                 isOK &= (objFilter.getName() == null) || (objProduct.getName() != null && objProduct.getName().toLowerCase().contains(objFilter.getName().toLowerCase()));
                 isOK &= (objFilter.getInitializationDate() == null) || (objProduct.getInitializationDate() != null && objProduct.getInitializationDate().equals(objFilter.getInitializationDate()));

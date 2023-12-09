@@ -22,23 +22,29 @@ import javafx.beans.property.SimpleObjectProperty;
 
 import java.beans.PropertyVetoException;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
 public abstract class AbstractBeanImplementationSoftDelete<T extends AbstractBeanImplementationSoftDelete> implements AbstractBean<T> {
+    @Ignore
+    private final SimpleIntegerProperty id = new SimpleIntegerProperty();
+    @Ignore
+    private final SimpleObjectProperty<LocalDateTime> lastModificationTime = new SimpleObjectProperty<>();
+    @Ignore
+    private final SimpleObjectProperty<LocalDateTime> creationTime = new SimpleObjectProperty<>();
+    @Ignore
+    private final SimpleObjectProperty<BeanStatus> beanStatus = new SimpleObjectProperty<>();
+
+    public AbstractBeanImplementationSoftDelete() {
+        setCreationTime(LocalDateTime.now());
+        setBeanStatus(BeanStatus.Active);
+    }
+
     @Override
     public T clone() {
         return null;
     }
-
-    public enum BeanStatus{
-        Active, Deleted
-    }
-
-    @Ignore
-    private SimpleIntegerProperty id = new SimpleIntegerProperty();
 
     @Id
     @GeneratedValue
@@ -46,44 +52,36 @@ public abstract class AbstractBeanImplementationSoftDelete<T extends AbstractBea
         return id.get();
     }
 
+    public void setId(int id) {
+        this.id.set(id);
+    }
+
     public SimpleIntegerProperty idProperty() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id.set(id);
-    }
-    @Ignore
-    private SimpleObjectProperty<LocalDateTime> lastModificationTime = new SimpleObjectProperty<>();
-
-    @Ignore
-    private SimpleObjectProperty<LocalDateTime> creationTime = new SimpleObjectProperty<>();
-
-    @Ignore
-    private SimpleObjectProperty<BeanStatus> beanStatus = new SimpleObjectProperty<>();
-
     public LocalDateTime getLastModificationTime() {
         return lastModificationTime.get();
-    }
-
-    public SimpleObjectProperty<LocalDateTime> lastModificationTimeProperty() {
-        return lastModificationTime;
     }
 
     public void setLastModificationTime(LocalDateTime lastModificationTime) {
         this.lastModificationTime.set(lastModificationTime);
     }
 
+    public SimpleObjectProperty<LocalDateTime> lastModificationTimeProperty() {
+        return lastModificationTime;
+    }
+
     public LocalDateTime getCreationTime() {
         return creationTime.get();
     }
 
-    public SimpleObjectProperty<LocalDateTime> creationTimeProperty() {
-        return creationTime;
-    }
-
     public void setCreationTime(LocalDateTime creationTime) {
         this.creationTime.set(creationTime);
+    }
+
+    public SimpleObjectProperty<LocalDateTime> creationTimeProperty() {
+        return creationTime;
     }
 
     @Enumerated(EnumType.STRING)
@@ -91,17 +89,12 @@ public abstract class AbstractBeanImplementationSoftDelete<T extends AbstractBea
         return beanStatus.get();
     }
 
-    public SimpleObjectProperty<BeanStatus> beanStatusProperty() {
-        return beanStatus;
-    }
-
     public void setBeanStatus(BeanStatus beanStatus) {
         this.beanStatus.set(beanStatus);
     }
 
-    public AbstractBeanImplementationSoftDelete() {
-        setCreationTime(LocalDateTime.now());
-        setBeanStatus(BeanStatus.Active);
+    public SimpleObjectProperty<BeanStatus> beanStatusProperty() {
+        return beanStatus;
     }
 
     @Override
@@ -115,7 +108,11 @@ public abstract class AbstractBeanImplementationSoftDelete<T extends AbstractBea
         setLastModificationTime(LocalDateTime.now());
     }
 
-    public void removeId(){
+    public void removeId() {
         setId(0);
+    }
+
+    public enum BeanStatus {
+        Active, Deleted
     }
 }
