@@ -111,7 +111,7 @@ public class CrudModel<S extends AbstractBean> {
         items.setAll(parameter.getDataProvider().getAllItems(parameter.getClazz(), getSearchBean(), AbstractDataProvider.SearchType.LIKE));
     }
 
-    private S getNewBean() {
+    public S getNewBean() {
         try {
             return (S) getParameter().getClazz().getDeclaredConstructor().newInstance();
         }catch (Exception e){
