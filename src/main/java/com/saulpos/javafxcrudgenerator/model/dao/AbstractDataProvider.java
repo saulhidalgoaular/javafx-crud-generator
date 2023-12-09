@@ -39,5 +39,5 @@ public interface AbstractDataProvider<S extends AbstractBean> {
 
     void registerClass(Class clazz);
 
-    // TODO: We should implement later some filtering directly over database.
+    List<Object[]> getItems(String query) throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException;
 }

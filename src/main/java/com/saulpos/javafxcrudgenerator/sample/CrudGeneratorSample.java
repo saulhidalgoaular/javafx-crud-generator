@@ -121,6 +121,11 @@ public class CrudGeneratorSample extends Application {
         public void registerClass(Class clazz) {
 
         }
+
+        @Override
+        public List<Object[]> getItems(String query) {
+            return null;
+        }
     };
 
     public static void main(String[] args) {
