@@ -35,6 +35,10 @@ public class Product extends AbstractBeanImplementationSoftDelete<Product> {
     @DisplayOrder(orderValue = 100)
     private final SimpleStringProperty name = new SimpleStringProperty();
     private final ObjectProperty<LocalDateTime> assignmentDay = new SimpleObjectProperty<>();
+
+    @Code
+    private final SimpleStringProperty code = new SimpleStringProperty("SELECT name from UserB");
+
     @Readonly
     @DisplayOrder(orderValue = 2)
     private final SimpleStringProperty description = new SimpleStringProperty();
@@ -220,6 +224,18 @@ public class Product extends AbstractBeanImplementationSoftDelete<Product> {
 
     public SimpleObjectProperty<LocalTime> startingTimeProperty() {
         return startingTime;
+    }
+
+    public String getCode() {
+        return code.get();
+    }
+
+    public SimpleStringProperty codeProperty() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code.set(code);
     }
 
     @Override

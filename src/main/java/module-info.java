@@ -8,6 +8,7 @@ module com.saulpos.crud {
     requires fontawesomefx;
     requires jakarta.persistence;
     requires jfxtras.controls;
+    requires highlightfx;
 
     exports com.saulpos.javafxcrudgenerator;
     exports com.saulpos.javafxcrudgenerator.sample;

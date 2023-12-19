@@ -27,6 +27,14 @@
         <maven.compiler.target>19</maven.compiler.target>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>Sonatype</id>
+            <name>Sonatype Repo</name>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-graphics -->
         <dependency>
@@ -94,6 +102,11 @@
             <groupId>de.jensd</groupId>
             <artifactId>fontawesomefx</artifactId>
             <version>8.9</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.eugener</groupId>
+            <artifactId>highlightfx</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
 

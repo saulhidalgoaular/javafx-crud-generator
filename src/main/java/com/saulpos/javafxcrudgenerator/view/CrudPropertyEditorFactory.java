@@ -15,10 +15,13 @@
  */
 package com.saulpos.javafxcrudgenerator.view;
 
+import com.saulpos.javafxcrudgenerator.annotations.Code;
 import com.saulpos.javafxcrudgenerator.annotations.LongString;
 import com.saulpos.javafxcrudgenerator.annotations.Password;
 import com.saulpos.javafxcrudgenerator.annotations.Readonly;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractDataProvider;
+import io.github.eugener.highlightfx.Syntax;
+import io.github.eugener.highlightfx.SyntaxPane;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -58,7 +61,9 @@ public class CrudPropertyEditorFactory {
                 }
 
                 if (item instanceof CrudPropertySheetItem itemCrud) {
-                    if (getFields(itemCrud).get(itemCrud.getOriginalName()).isAnnotationPresent(LongString.class)) {
+                    if (getFields(itemCrud).get(itemCrud.getOriginalName()).isAnnotationPresent(Code.class)) {
+                        return getRichTextFXPropertyEditor(item);
+                    } else if (getFields(itemCrud).get(itemCrud.getOriginalName()).isAnnotationPresent(LongString.class)) {
                         return getTextAreaPropertyEditor(item);
                     } else if (getFields(itemCrud).get(itemCrud.getOriginalName()).isAnnotationPresent(Password.class)) {
                         return getPasswordPropertyEditor(item);
@@ -209,6 +214,28 @@ public class CrudPropertyEditorFactory {
             }
 
 
+        };
+    }
+
+    private static AbstractPropertyEditor<String, SyntaxPane> getRichTextFXPropertyEditor(PropertySheet.Item item) {
+        CrudPropertySheetItem itemCrud = (CrudPropertySheetItem) item;
+
+        SyntaxPane syntaxPane = new SyntaxPane();
+        syntaxPane.setDisable(false);
+        syntaxPane.setSyntax(Syntax.SQL);
+
+        return new AbstractPropertyEditor<>(item, syntaxPane) {
+            {
+                //CrudBeanPropertyUtils.enableAutoSelectAll(this.getEditor());
+            }
+
+            protected StringProperty getObservableValue() {
+                return this.getEditor().textProperty();
+            }
+
+            public void setValue(String value) {
+                this.getEditor().setText(value);
+            }
         };
     }
 
