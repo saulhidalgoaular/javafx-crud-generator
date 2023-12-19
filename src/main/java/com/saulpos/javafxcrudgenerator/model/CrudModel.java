@@ -118,11 +118,6 @@ public class CrudModel<S extends AbstractBean> {
         }
     }
 
-    public S addItemAction() {
-        //if item selected then it should unselect current item, and create new empty item
-        return getNewBean();
-    }
-
     public void saveItemAction() throws Exception {
         Function beforeSave = this.getParameter().getBeforeSave();
         if (beforeSave != null) {
@@ -137,7 +132,6 @@ public class CrudModel<S extends AbstractBean> {
             getSelectedItem().receiveChanges(getBeanInEdition());
             getSelectedItem().saveOrUpdate();
         }
-        refreshAction(); // FIXME. This should not be needed.
     }
 
     public void deleteItemAction() throws Exception {

@@ -19,9 +19,14 @@ import com.saulpos.javafxcrudgenerator.model.CrudModel;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import com.saulpos.javafxcrudgenerator.view.*;
 import javafx.beans.binding.Bindings;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class CrudPresenter<S extends AbstractBean> {
 
@@ -58,11 +63,21 @@ public class CrudPresenter<S extends AbstractBean> {
     }
 
     public void addActions() {
-        ((Button) view.getAddNewButton()).setOnAction(actionEvent -> newInitialBean());
+        ((Button) view.getAddNewButton()).setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                newInitialBean();
+            }
+        });
 
         ((Button) view.getSaveButton()).setOnAction(actionEvent -> {
             try {
                 model.saveItemAction();
+                // Let's select the item in case it was a new one.
+
+                if (view.getTableView().getSelectionModel().selectedItemProperty().get() == null){
+                    view.getTableView().getSelectionModel().selectLast();
+                }
             } catch (Exception e) {
                 DialogBuilder.createExceptionDialog("Exception saving the item", "SAUL POS", e.getMessage(), e).showAndWait();
             }
