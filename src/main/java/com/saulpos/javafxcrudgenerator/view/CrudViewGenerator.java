@@ -18,26 +18,26 @@ package com.saulpos.javafxcrudgenerator.view;
 import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
 import com.saulpos.javafxcrudgenerator.annotations.*;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import javafx.beans.property.*;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.control.Label;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.control.skin.TableViewSkin;
 import javafx.scene.layout.*;
-import javafx.scene.text.Font;
-import javafx.util.Callback;
 import org.controlsfx.control.PropertySheet;
 
-import java.awt.*;
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class CrudViewGenerator {
 
-    private CrudGeneratorParameter parameter;
+    private final CrudGeneratorParameter parameter;
 
     private PropertySheet propertySheet;
     private Node addNewButton;
@@ -45,7 +45,7 @@ public class CrudViewGenerator {
     private Node deleteButton;
     private Node refreshButton;
 
-    private ArrayList<Node> extraButtons = new ArrayList<>();
+    private final ArrayList<Node> extraButtons = new ArrayList<>();
     private Label searchResult;
     private TableView tableView;
     private PropertySheet searchPropertySheet;
@@ -54,17 +54,24 @@ public class CrudViewGenerator {
         this.parameter = parameter;
     }
 
-    public CrudView generate(){
+    private static TableCell<Object, String> getCellFactory(final Field field) {
+        if (SimpleBooleanProperty.class.equals(field.getType())) {
+            return new CheckBoxTableCell<>();
+        }
+        return new TextFieldTableCell<>();
+    }
+
+    public CrudView generate() {
 
         Field[] fields = parameter.getClazz().getDeclaredFields();
         // Sort fields by display order
         Arrays.sort(fields, new Comparator<Field>() {
             @Override
             public int compare(Field o1, Field o2) {
-                if (!o1.isAnnotationPresent(DisplayOrder.class)){
+                if (!o1.isAnnotationPresent(DisplayOrder.class)) {
                     return Integer.MAX_VALUE;
                 }
-                if (!o2.isAnnotationPresent(DisplayOrder.class)){
+                if (!o2.isAnnotationPresent(DisplayOrder.class)) {
                     return Integer.MIN_VALUE;
                 }
                 return o1.getAnnotation(DisplayOrder.class).orderValue() -
@@ -101,6 +108,13 @@ public class CrudViewGenerator {
 
     private void addBindings() {
         deleteButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
+
+        ArrayList<CustomButton> extraButtonsList = parameter.getExtraButtons();
+        for (CustomButton customButton : extraButtonsList) {
+            if (customButton.isEnableOnlyOnSelection()) {
+                customButton.getButton().disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
+            }
+        }
     }
 
     private Node createMainPane(Pane fieldsPane, Pane buttonsPane, GridPane searchGridPane, TableView tableView) {
@@ -116,7 +130,7 @@ public class CrudViewGenerator {
         bPane.setPrefHeight(10000);
         searchResult = new Label("Total");
         rightSide.getChildren().addAll(bPane);
-        if (parameter.isHidePropertyEditor()){
+        if (parameter.isHidePropertyEditor()) {
             leftSide.getChildren().addAll(searchGridPane, tableView, buttonsPane, searchResult);
             return leftSide;
         }
@@ -128,12 +142,12 @@ public class CrudViewGenerator {
 
     private TableView createTableViewPane(Field[] allFields) {
         TableView tableView = new TableView();
-        for (Field field : allFields){
-            if (!field.isAnnotationPresent(Ignore.class)){
+        for (Field field : allFields) {
+            if (!field.isAnnotationPresent(Ignore.class)) {
                 TableColumn<Object, String> column = new TableColumn<>(ViewUtils.getName(field.getName(), parameter.getTranslateFunction()));
                 column.setCellValueFactory(cell -> getProperty(cell, field));
                 column.setCellFactory(tableColum -> getCellFactory(field));
-                if(field.isAnnotationPresent(TableViewColumn.class)) {
+                if (field.isAnnotationPresent(TableViewColumn.class)) {
                     column.setMinWidth(field.getAnnotation(TableViewColumn.class).minWidth());
                     column.setMaxWidth(field.getAnnotation(TableViewColumn.class).maxWidth());
                     column.setPrefWidth(field.getAnnotation(TableViewColumn.class).prefWidth());
@@ -147,16 +161,9 @@ public class CrudViewGenerator {
         return tableView;
     }
 
-    private static TableCell<Object, String> getCellFactory(final Field field) {
-        if (SimpleBooleanProperty.class.equals(field.getType())){
-            return new CheckBoxTableCell<>();
-        }
-        return new TextFieldTableCell<>();
-    }
-
-    private Property getProperty(final TableColumn.CellDataFeatures instance, final Field field){
+    private Property getProperty(final TableColumn.CellDataFeatures instance, final Field field) {
         try {
-            if (field.isAnnotationPresent(Password.class)){
+            if (field.isAnnotationPresent(Password.class)) {
                 return new SimpleStringProperty("<hidden>");
             }
             return (Property) parameter.getClazz().getDeclaredMethod(field.getName() + "Property").invoke(instance.getValue());
@@ -176,7 +183,7 @@ public class CrudViewGenerator {
                 allFields) {
             atLeastOneAdded |= field.isAnnotationPresent(Search.class);
         }
-        if (!atLeastOneAdded){
+        if (!atLeastOneAdded) {
             return new GridPane();
         }
 
@@ -187,7 +194,7 @@ public class CrudViewGenerator {
         searchGridPane.setVgap(10);
 
         final Label searchLabel = new Label(parameter.translate("search.label"));
-        searchLabel.setPadding(new Insets(0, 0, 0 ,15 ));
+        searchLabel.setPadding(new Insets(0, 0, 0, 15));
         searchPropertySheet = new PropertySheet();
         searchPropertySheet.setSearchBoxVisible(false);
         searchPropertySheet.setModeSwitcherVisible(false);
@@ -201,26 +208,27 @@ public class CrudViewGenerator {
     private Pane createButtonsPane() {
         final Pane buttonsPane = parameter.getButtonLayout();
         buttonsPane.setPadding(new Insets(10, 10, 10, 30));
-        if (buttonsPane instanceof FlowPane){
+        if (buttonsPane instanceof FlowPane) {
             ((FlowPane) buttonsPane).setHgap(10); // TODO Improve later.
             ((FlowPane) buttonsPane).setVgap(10);
         }
         addNewButton = parameter.getAddNextButtonConstructor().generateNode(parameter.translate("addNewButton.button"), FontAwesomeIcon.PLUS_SQUARE); // TODO: Language customizable
-        saveButton =  parameter.getEditButtonConstructor().generateNode(parameter.translate("saveButton.button"), FontAwesomeIcon.SAVE);
-        deleteButton =  parameter.getDeleteButtonConstructor().generateNode(parameter.translate("deleteButton.button"), FontAwesomeIcon.REMOVE);
-        refreshButton =  parameter.getRefreshButtonConstructor().generateNode(parameter.translate("refreshButton.button"), FontAwesomeIcon.REFRESH);
+        saveButton = parameter.getEditButtonConstructor().generateNode(parameter.translate("saveButton.button"), FontAwesomeIcon.SAVE);
+        deleteButton = parameter.getDeleteButtonConstructor().generateNode(parameter.translate("deleteButton.button"), FontAwesomeIcon.REMOVE);
+        refreshButton = parameter.getRefreshButtonConstructor().generateNode(parameter.translate("refreshButton.button"), FontAwesomeIcon.REFRESH);
 
         final Node[] nodes = new Node[]{addNewButton, saveButton, deleteButton, refreshButton};
         final ArrayList<Node> allButtons = new ArrayList<>(Arrays.asList(nodes));
-        for (Object customButtonConstructor :
-                parameter.getExtraButtonsConstructor()) {
-            final Node newExtraButton = ((NodeConstructor) customButtonConstructor).generateNode(null);
-            extraButtons.add(newExtraButton);
-            allButtons.add(newExtraButton);
+        for (Object customButtonObject :
+                parameter.getExtraButtons()) {
+            final CustomButton customButton = (CustomButton) customButtonObject;
+            Node button = customButton.getButton();
+            extraButtons.add(button);
+            allButtons.add(button);
         }
 
         for (int i = 0; i < allButtons.size(); i++) {
-            buttonsPane.getChildren().add(allButtons.get(parameter.getButtonsOrder().isEmpty() ? i :(int)parameter.getButtonsOrder().get(i)));
+            buttonsPane.getChildren().add(allButtons.get(parameter.getButtonsOrder().isEmpty() ? i : (int) parameter.getButtonsOrder().get(i)));
         }
 
         return buttonsPane;
@@ -229,13 +237,12 @@ public class CrudViewGenerator {
     private Pane createFieldsPane() {
 
         final Pane fieldsPane = parameter.getFieldsLayout();
-        if(!parameter.isHidePropertyEditor())
-        {
+        if (!parameter.isHidePropertyEditor()) {
             propertySheet = new PropertySheet();
 
             fieldsPane.getChildren().add(propertySheet);
         }
-            return fieldsPane;
+        return fieldsPane;
     }
 
     public Node getAddNewButton() {

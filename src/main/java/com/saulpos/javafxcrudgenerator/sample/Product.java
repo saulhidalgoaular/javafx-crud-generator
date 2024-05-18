@@ -1,183 +1,189 @@
+/*
+ * Copyright (C) 2012-2023 Saúl Hidalgo <saulhidalgoaular at gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.saulpos.javafxcrudgenerator.sample;
 
-import com.saulpos.javafxcrudgenerator.annotations.*;
 import com.saulpos.javafxcrudgenerator.annotations.Currency;
+import com.saulpos.javafxcrudgenerator.annotations.*;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBeanImplementationSoftDelete;
 import javafx.beans.property.*;
 
 import java.beans.PropertyVetoException;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
-import java.io.*;
 
 
 public class Product extends AbstractBeanImplementationSoftDelete<Product> {
 
     @Search
     @DisplayOrder(orderValue = 100)
-    private SimpleStringProperty name = new SimpleStringProperty();
+    private final SimpleStringProperty name = new SimpleStringProperty();
+    private final ObjectProperty<LocalDateTime> assignmentDay = new SimpleObjectProperty<>();
+    @Readonly
+    @DisplayOrder(orderValue = 2)
+    private final SimpleStringProperty description = new SimpleStringProperty();
+    @Password
+    @DisplayOrder(orderValue = 3)
+    private final SimpleStringProperty password = new SimpleStringProperty();
+    @DisplayOrder(orderValue = 4)
+    private final SimpleObjectProperty<Price> price = new SimpleObjectProperty<>();
+    @DisplayOrder(orderValue = 5)
+    private final SimpleStringProperty measuringUnit = new SimpleStringProperty();
+    @DisplayOrder(orderValue = 6)
+    private final SimpleObjectProperty<com.saulpos.javafxcrudgenerator.sample.Currency> currency = new SimpleObjectProperty<>();
+    @DisplayOrder(orderValue = 7)
+    private final SimpleBooleanProperty isAvailable = new SimpleBooleanProperty();
+    @Search
+    @DisplayOrder(orderValue = 8)
+    private final SimpleObjectProperty<LocalDate> initializationDate = new SimpleObjectProperty<>();
+    @Currency
+    @DisplayOrder(orderValue = 9)
+    private final SimpleDoubleProperty total = new SimpleDoubleProperty();
+    @LongString(rows = 10)
+    @Category(name = "Advanced")
+    @DisplayOrder(orderValue = 10)
+    private final SimpleStringProperty wideDescription = new SimpleStringProperty();
+    @Ignore
+    @DisplayOrder(orderValue = 11)
+    private final SimpleStringProperty extraLongDescription = new SimpleStringProperty();
+    private final SimpleObjectProperty<LocalTime> startingTime = new SimpleObjectProperty<>();
+    public Product() {
+    }
 
     public LocalDateTime getAssignmentDay() {
         return assignmentDay.get();
-    }
-
-    public ObjectProperty<LocalDateTime> assignmentDayProperty() {
-        return assignmentDay;
     }
 
     public void setAssignmentDay(LocalDateTime assignmentDay) {
         this.assignmentDay.set(assignmentDay);
     }
 
-    private ObjectProperty<LocalDateTime> assignmentDay = new SimpleObjectProperty<>();
-
-    @Readonly
-    @DisplayOrder(orderValue = 2)
-    private SimpleStringProperty description = new SimpleStringProperty();
-
-    @Password
-    @DisplayOrder(orderValue = 3)
-    private SimpleStringProperty password = new SimpleStringProperty();
-
-    @DisplayOrder(orderValue = 4)
-    private SimpleObjectProperty<Price> price = new SimpleObjectProperty<>();
-
-    @DisplayOrder(orderValue = 5)
-    private SimpleStringProperty measuringUnit = new SimpleStringProperty();
-
-    @DisplayOrder(orderValue = 6)
-    private SimpleObjectProperty<com.saulpos.javafxcrudgenerator.sample.Currency> currency = new SimpleObjectProperty<>();
-
-    @DisplayOrder(orderValue = 7)
-    private SimpleBooleanProperty isAvailable = new SimpleBooleanProperty();
-
-    @Search
-    @DisplayOrder(orderValue = 8)
-    private SimpleObjectProperty<LocalDate> initializationDate = new SimpleObjectProperty<>();
-
-    @Currency
-    @DisplayOrder(orderValue = 9)
-    private SimpleDoubleProperty total = new SimpleDoubleProperty();
-    @LongString(rows=10)
-    @Category(name = "Advanced")
-    @DisplayOrder(orderValue = 10)
-    private SimpleStringProperty wideDescription = new SimpleStringProperty();
-
-    @Ignore
-    @DisplayOrder(orderValue = 11)
-    private SimpleStringProperty extraLongDescription = new SimpleStringProperty();
-
-    public Product() {
+    public ObjectProperty<LocalDateTime> assignmentDayProperty() {
+        return assignmentDay;
     }
 
     public String getName() {
         return name.get();
     }
 
-    public SimpleStringProperty nameProperty() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name.set(name);
+    }
+
+    public SimpleStringProperty nameProperty() {
+        return name;
     }
 
     public String getDescription() {
         return description.get();
     }
 
-    public SimpleStringProperty descriptionProperty() {
-        return description;
-    }
-
     public void setDescription(String description) {
         this.description.set(description);
+    }
+
+    public SimpleStringProperty descriptionProperty() {
+        return description;
     }
 
     public Price getPrice() {
         return price.get();
     }
 
-    public SimpleObjectProperty<Price> priceProperty() {
-        return price;
-    }
-
     public void setPrice(Price price) {
         this.price.set(price);
+    }
+
+    public SimpleObjectProperty<Price> priceProperty() {
+        return price;
     }
 
     public String getMeasuringUnit() {
         return measuringUnit.get();
     }
 
-    public SimpleStringProperty measuringUnitProperty() {
-        return measuringUnit;
-    }
-
     public void setMeasuringUnit(String measuringUnit) {
         this.measuringUnit.set(measuringUnit);
+    }
+
+    public SimpleStringProperty measuringUnitProperty() {
+        return measuringUnit;
     }
 
     public com.saulpos.javafxcrudgenerator.sample.Currency getCurrency() {
         return currency.get();
     }
 
-    public SimpleObjectProperty<com.saulpos.javafxcrudgenerator.sample.Currency> currencyProperty() {
-        return currency;
-    }
-
     public void setCurrency(com.saulpos.javafxcrudgenerator.sample.Currency currency) {
         this.currency.set(currency);
+    }
+
+    public SimpleObjectProperty<com.saulpos.javafxcrudgenerator.sample.Currency> currencyProperty() {
+        return currency;
     }
 
     public boolean getIsAvailable() {
         return isAvailable.get();
     }
 
-    public SimpleBooleanProperty isAvailableProperty() {
-        return isAvailable;
-    }
-
     public void setIsAvailable(boolean isAvailable) {
         this.isAvailable.set(isAvailable);
+    }
+
+    public SimpleBooleanProperty isAvailableProperty() {
+        return isAvailable;
     }
 
     public LocalDate getInitializationDate() {
         return initializationDate.get();
     }
 
-    public SimpleObjectProperty<LocalDate> initializationDateProperty() {
-        return initializationDate;
-    }
-
     public void setInitializationDate(LocalDate initializationDate) {
         this.initializationDate.set(initializationDate);
+    }
+
+    public SimpleObjectProperty<LocalDate> initializationDateProperty() {
+        return initializationDate;
     }
 
     public String getWideDescription() {
         return wideDescription.get();
     }
 
-    public SimpleStringProperty wideDescriptionProperty() {
-        return wideDescription;
-    }
-
     public void setWideDescription(String wideDescription) {
         this.wideDescription.set(wideDescription);
+    }
+
+    public SimpleStringProperty wideDescriptionProperty() {
+        return wideDescription;
     }
 
     public String getExtraLongDescription() {
         return extraLongDescription.get();
     }
 
-    public SimpleStringProperty extraLongDescriptionProperty() {
-        return extraLongDescription;
-    }
-
     public void setExtraLongDescription(String extraLongDescription) {
         this.extraLongDescription.set(extraLongDescription);
+    }
+
+    public SimpleStringProperty extraLongDescriptionProperty() {
+        return extraLongDescription;
     }
 
     public SimpleDoubleProperty totalProperty() {
@@ -196,30 +202,24 @@ public class Product extends AbstractBeanImplementationSoftDelete<Product> {
         return password.get();
     }
 
-    public SimpleStringProperty passwordProperty() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password.set(password);
     }
 
-    @Override
-    public void save() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
-        super.save();
-        // just to show how it could be used. Ideally it should be saved into the database.
-        final List allItems = CrudGeneratorSample.CUSTOM_DATA_PROVIDER.getAllItems(Product.class);
-        if (!previouslySaved()){
-            allItems.add(this);
-        }
-
-        System.out.println("Product saved");
+    public SimpleStringProperty passwordProperty() {
+        return password;
     }
 
-    @Override
-    public void update() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
-        System.out.println("Product updated");
+    public LocalTime getStartingTime() {
+        return startingTime.get();
+    }
 
+    public void setStartingTime(LocalTime startingTime) {
+        this.startingTime.set(startingTime);
+    }
+
+    public SimpleObjectProperty<LocalTime> startingTimeProperty() {
+        return startingTime;
     }
 
     @Override
@@ -227,7 +227,7 @@ public class Product extends AbstractBeanImplementationSoftDelete<Product> {
         super.saveOrUpdate();
         // just to show how it could be used. Ideally it should be saved into the database.
         final List allItems = CrudGeneratorSample.CUSTOM_DATA_PROVIDER.getAllItems(Product.class);
-        if (!previouslySaved()){
+        if (!previouslySaved()) {
             allItems.add(this);
         }
         System.out.println("Product saved/updated");
@@ -247,11 +247,6 @@ public class Product extends AbstractBeanImplementationSoftDelete<Product> {
         this.setPrice(currentBean.getPrice());
         this.setWideDescription(currentBean.getWideDescription());
         this.setPassword(currentBean.getPassword());
-    }
-
-    @Override
-    public void modify() throws PropertyVetoException, IOException, URISyntaxException, ClassNotFoundException {
-        update();
     }
 
     @Override
@@ -281,7 +276,7 @@ public class Product extends AbstractBeanImplementationSoftDelete<Product> {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return  clonedProduct;
+        return clonedProduct;
     }
 
     private Product deepClone(Product toClone) throws IOException, ClassNotFoundException {
@@ -301,9 +296,7 @@ public class Product extends AbstractBeanImplementationSoftDelete<Product> {
         super.delete();
         // just to show how it could be used. Ideally it should be saved into the database.
         final List allItems = CrudGeneratorSample.CUSTOM_DATA_PROVIDER.getAllItems(Product.class);
-        if (allItems.contains(this)){
-            allItems.remove(this);
-        }
+        allItems.remove(this);
         System.out.println("Product deleted; " + getName());
     }
 }

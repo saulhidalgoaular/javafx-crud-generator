@@ -18,6 +18,7 @@ package com.saulpos.javafxcrudgenerator;
 import com.saulpos.javafxcrudgenerator.model.Function;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractDataProvider;
+import com.saulpos.javafxcrudgenerator.view.CustomButton;
 import com.saulpos.javafxcrudgenerator.view.NodeConstructor;
 import de.jensd.fx.glyphs.GlyphIcons;
 import de.jensd.fx.glyphs.GlyphsDude;
@@ -34,19 +35,18 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class CrudGeneratorParameter <S extends AbstractBean> {
+public class CrudGeneratorParameter<S extends AbstractBean> {
 
     private Locale currentLocale = Locale.of("es", "VE");
 
     private ResourceBundle resourceBundle = ResourceBundle.getBundle("BundleName", currentLocale);
 
-    private Function translateFunction = new Function() {
+    private final Function translateFunction = new Function() {
         @Override
         public Object[] run(Object[] params) throws Exception {
-            try{
+            try {
                 return new String[]{resourceBundle.getString(params[0].toString())};
-            }catch(Exception e)
-            {
+            } catch (Exception e) {
                 return new String[]{params[0].toString()};
             }
         }
@@ -67,15 +67,6 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
     private boolean hidePropertyEditor = false;
 
     private Class clazz; // TODO: Improve the logic of it.
-
-    public Integer getButtonWidth() {
-        return buttonWidth;
-    }
-
-    public void setButtonWidth(Integer buttonWidth) {
-        this.buttonWidth = buttonWidth;
-    }
-
     private NodeConstructor genericButtonConstructor = new NodeConstructor() {
         /**
          * 1st param is the name and the 2nd is the icon
@@ -91,21 +82,23 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
             return button;
         }
     };
-
     private NodeConstructor addNextButtonConstructor = genericButtonConstructor;
     private NodeConstructor editButtonConstructor = genericButtonConstructor;
     private NodeConstructor deleteButtonConstructor = genericButtonConstructor;
     private NodeConstructor refreshButtonConstructor = genericButtonConstructor;
-
     private ArrayList<Integer> buttonsOrder = new ArrayList<>();
-
-    private ArrayList<NodeConstructor> extraButtonsConstructor = new ArrayList<>();
-
+    private ArrayList<CustomButton> extraButtons = new ArrayList<>();
     private AbstractDataProvider<S> dataProvider;
-
     private Function beforeSave;
-
     private Function beforeDelete;
+
+    public Integer getButtonWidth() {
+        return buttonWidth;
+    }
+
+    public void setButtonWidth(Integer buttonWidth) {
+        this.buttonWidth = buttonWidth;
+    }
 
     public Function getBeforeSave() {
         return beforeSave;
@@ -203,13 +196,6 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
         this.refreshButtonConstructor = refreshButtonConstructor;
     }
 
-    public ArrayList<NodeConstructor> getExtraButtonsConstructor() {
-        return extraButtonsConstructor;
-    }
-
-    public void setExtraButtonsConstructor(ArrayList<NodeConstructor> extraButtonsConstructor) {
-        this.extraButtonsConstructor = extraButtonsConstructor;
-    }
 
     public ArrayList<Integer> getButtonsOrder() {
         return buttonsOrder;
@@ -235,17 +221,18 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
         this.dataProvider = dataProvider;
     }
 
-    public void setHidePropertyEditor(boolean hidePropertyEditor) {
-        this.hidePropertyEditor = hidePropertyEditor;
-    }
-
     public boolean isHidePropertyEditor() {
         return hidePropertyEditor;
+    }
+
+    public void setHidePropertyEditor(boolean hidePropertyEditor) {
+        this.hidePropertyEditor = hidePropertyEditor;
     }
 
     public ResourceBundle getResourceBundle() {
         return resourceBundle;
     }
+
     public void setCurrentLocale(Locale currentLocale) {
         this.currentLocale = currentLocale;
         resourceBundle = ResourceBundle.getBundle("BundleName", currentLocale);
@@ -262,5 +249,17 @@ public class CrudGeneratorParameter <S extends AbstractBean> {
 
     public Function getTranslateFunction() {
         return translateFunction;
+    }
+
+    public ArrayList<CustomButton> getExtraButtons() {
+        return extraButtons;
+    }
+
+    public void setExtraButtons(ArrayList<CustomButton> extraButtons) {
+        this.extraButtons = extraButtons;
+    }
+
+    public void addCustomButton(CustomButton customButton) {
+        getExtraButtons().add(customButton);
     }
 }

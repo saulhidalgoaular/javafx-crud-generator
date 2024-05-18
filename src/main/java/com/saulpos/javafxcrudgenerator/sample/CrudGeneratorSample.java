@@ -1,17 +1,31 @@
+/*
+ * Copyright (C) 2012-2023 Saúl Hidalgo <saulhidalgoaular at gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.saulpos.javafxcrudgenerator.sample;
 
+import com.saulpos.javafxcrudgenerator.CrudGenerator;
+import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
 import com.saulpos.javafxcrudgenerator.model.Function;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractDataProvider;
 import com.saulpos.javafxcrudgenerator.presenter.CrudPresenter;
-import com.saulpos.javafxcrudgenerator.CrudGenerator;
-import com.saulpos.javafxcrudgenerator.CrudGeneratorParameter;
+import com.saulpos.javafxcrudgenerator.view.CustomButton;
 import com.saulpos.javafxcrudgenerator.view.NodeConstructor;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -26,7 +40,7 @@ public class CrudGeneratorSample extends Application {
 
     public static final AbstractDataProvider CUSTOM_DATA_PROVIDER = new AbstractDataProvider() {
 
-        private List allItems = new ArrayList();
+        private final List allItems = new ArrayList();
 
         {
             Product p1 = new Product();
@@ -76,16 +90,14 @@ public class CrudGeneratorSample extends Application {
             // It is just to show how it works. It is not a real implementation of the filtering
             // If you are using Database, criteria should go down to database.
             List allItems = getAllItems(clazz);
-            if (!(filter instanceof Product)) {
+            if (!(filter instanceof Product objFilter)) {
                 return allItems;
             }
-            Product objFilter = (Product) filter;
             List filtered = new ArrayList();
             for (Object obj : allItems) {
-                if (!(obj instanceof Product)) {
+                if (!(obj instanceof Product objProduct)) {
                     continue;
                 }
-                Product objProduct = (Product) obj;
                 boolean isOK = true;
                 isOK &= (objFilter.getName() == null) || (objProduct.getName() != null && objProduct.getName().toLowerCase().contains(objFilter.getName().toLowerCase()));
                 isOK &= (objFilter.getInitializationDate() == null) || (objProduct.getInitializationDate() != null && objProduct.getInitializationDate().equals(objFilter.getInitializationDate()));
@@ -105,6 +117,11 @@ public class CrudGeneratorSample extends Application {
         public void registerClass(Class clazz) {
 
         }
+
+        @Override
+        public List<Object[]> getItems(String query) {
+            return null;
+        }
     };
 
     public static void main(String[] args) {
@@ -122,16 +139,20 @@ public class CrudGeneratorSample extends Application {
                 Label icon = GlyphsDude.createIconLabel(FontAwesomeIcon.STAR, crudGeneratorParameter.translate("custom.button"), "20px", "10px", ContentDisplay.LEFT);
                 customButton.setGraphic(icon);
                 customButton.setPrefWidth(crudGeneratorParameter.getButtonWidth());
-                customButton.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
-                        System.out.println(name);
-                        System.out.println(crudGeneratorParameter.translate("custom.button.clicked"));
-                    }
-                });
                 return customButton;
             }
         };
+
+        Function customButtonFunction = new Function() {
+            @Override
+            public Object[] run(Object[] params) throws Exception {
+                Product productBeingEdited = (Product) params[0];
+                System.out.println(productBeingEdited.getName());
+                return null;
+            }
+        };
+
+        crudGeneratorParameter.addCustomButton(new CustomButton(customButtonConstructor, customButtonFunction, true));
 
         crudGeneratorParameter.setClazz(Product.class);
         crudGeneratorParameter.setDataProvider(CUSTOM_DATA_PROVIDER);
@@ -143,7 +164,6 @@ public class CrudGeneratorSample extends Application {
             }
         });
 
-        crudGeneratorParameter.getExtraButtonsConstructor().add(customButtonConstructor);
         CrudGenerator<Product> crudGenerator = new CrudGenerator<>(crudGeneratorParameter);
 
         stage.setTitle(crudGeneratorParameter.translate("window.title"));

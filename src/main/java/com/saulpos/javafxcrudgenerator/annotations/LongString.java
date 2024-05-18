@@ -14,6 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.saulpos.javafxcrudgenerator.annotations;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 

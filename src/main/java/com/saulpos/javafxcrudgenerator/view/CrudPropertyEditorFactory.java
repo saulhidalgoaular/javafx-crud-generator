@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2012-2023 Saúl Hidalgo <saulhidalgoaular at gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.saulpos.javafxcrudgenerator.view;
 
 import com.saulpos.javafxcrudgenerator.annotations.LongString;
@@ -8,14 +23,13 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.Node;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
-import jfxtras.scene.control.CalendarTimePicker;
+import jfxtras.scene.control.LocalDateTimePicker;
+import jfxtras.scene.control.LocalTimePicker;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.AbstractPropertyEditor;
 import org.controlsfx.property.editor.DefaultPropertyEditorFactory;
@@ -23,11 +37,9 @@ import org.controlsfx.property.editor.Editors;
 import org.controlsfx.property.editor.PropertyEditor;
 
 import java.lang.reflect.Field;
-import java.time.*;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashMap;
-
-import jfxtras.scene.control.LocalDateTimePicker;
 
 public class CrudPropertyEditorFactory {
 
@@ -45,21 +57,20 @@ public class CrudPropertyEditorFactory {
                     }
                 }
 
-                if (item instanceof CrudPropertySheetItem) {
-                    CrudPropertySheetItem itemCrud = (CrudPropertySheetItem) item;
+                if (item instanceof CrudPropertySheetItem itemCrud) {
                     if (getFields(itemCrud).get(itemCrud.getOriginalName()).isAnnotationPresent(LongString.class)) {
                         return getTextAreaPropertyEditor(item);
-                    }else if (getFields(itemCrud).get(itemCrud.getOriginalName()).isAnnotationPresent(Password.class)){
+                    } else if (getFields(itemCrud).get(itemCrud.getOriginalName()).isAnnotationPresent(Password.class)) {
                         return getPasswordPropertyEditor(item);
-                    }
-                    else if (java.time.LocalDateTime.class.equals (itemCrud.getPropertyDescriptor().getPropertyType())){
+                    } else if (java.time.LocalDateTime.class.equals(itemCrud.getPropertyDescriptor().getPropertyType())) {
                         return getLocalDateTimePropertyEditor(item);
+                    } else if (java.time.LocalTime.class.equals(itemCrud.getPropertyDescriptor().getPropertyType())) {
+                        return getLocalTimePropertyEditor(item);
                     }
                 }
 
                 PropertyEditor<?> defaultEditor = new DefaultPropertyEditorFactory().call(item);
-                if (item instanceof CrudPropertySheetItem) {
-                    CrudPropertySheetItem itemCrud = (CrudPropertySheetItem) item;
+                if (item instanceof CrudPropertySheetItem itemCrud) {
 
                     if (getFields(itemCrud).get(itemCrud.getOriginalName()).isAnnotationPresent(Readonly.class)) {
                         defaultEditor.getEditor().setDisable(true);
@@ -73,7 +84,7 @@ public class CrudPropertyEditorFactory {
     private static HashMap<String, Field> getFields(CrudPropertySheetItem itemCrud) {
         HashMap<String, Field> fields = new HashMap<>();
         for (Class<?> c = itemCrud.getBean().getClass(); c != null; c = c.getSuperclass()) {
-            for (Field f : c.getDeclaredFields()){
+            for (Field f : c.getDeclaredFields()) {
                 fields.put(f.getName(), f);
             }
         }
@@ -101,6 +112,55 @@ public class CrudPropertyEditorFactory {
         };
     }
 
+    private static AbstractPropertyEditor<LocalTime, LocalTimePicker> getLocalTimePropertyEditor(PropertySheet.Item item) {
+        LocalTimePicker timePicker = new LocalTimePicker();
+        timePicker.setLocalTime(LocalTime.now());
+
+
+        return new AbstractPropertyEditor<>(item, timePicker) {
+            @Override
+            protected ObservableValue<LocalTime> getObservableValue() {
+                return new ObservableValue<LocalTime>() {
+                    @Override
+                    public void addListener(ChangeListener<? super LocalTime> changeListener) {
+                        timePicker.localTimeProperty().addListener((observableValue, oldValue, newValue) -> {
+                            changeListener.changed(this, oldValue, newValue);
+                        });
+                    }
+
+                    @Override
+                    public void removeListener(ChangeListener<? super LocalTime> changeListener) {
+                        timePicker.localTimeProperty().removeListener((InvalidationListener) changeListener);
+                    }
+
+                    @Override
+                    public LocalTime getValue() {
+                        return timePicker.getLocalTime();
+                    }
+
+                    @Override
+                    public void addListener(InvalidationListener invalidationListener) {
+                        timePicker.localTimeProperty().addListener((observableValue, oldValue, newValue) -> {
+                            invalidationListener.invalidated(this);
+                        });
+                    }
+
+                    @Override
+                    public void removeListener(InvalidationListener invalidationListener) {
+                        timePicker.localTimeProperty().removeListener(invalidationListener);
+                    }
+                };
+            }            @Override
+            public void setValue(LocalTime value) {
+                if (value != null) {
+                    timePicker.setLocalTime(value);
+                }
+            }
+
+
+        };
+    }
+
     private static AbstractPropertyEditor<LocalDateTime, HBox> getLocalDateTimePropertyEditor(PropertySheet.Item item) {
         HBox hbox = new HBox();
         LocalDateTimePicker dateTimePicker = new LocalDateTimePicker();
@@ -109,13 +169,6 @@ public class CrudPropertyEditorFactory {
         hbox.getChildren().add(dateTimePicker);
 
         return new AbstractPropertyEditor<>(item, hbox) {
-            @Override
-            public void setValue(LocalDateTime value) {
-                if (value != null) {
-                    dateTimePicker.setLocalDateTime(value);
-                }
-            }
-
             @Override
             protected ObservableValue<LocalDateTime> getObservableValue() {
                 return new ObservableValue<LocalDateTime>() {
@@ -145,10 +198,17 @@ public class CrudPropertyEditorFactory {
 
                     @Override
                     public void removeListener(InvalidationListener invalidationListener) {
-                        dateTimePicker.localDateTimeProperty().removeListener((InvalidationListener) invalidationListener);
+                        dateTimePicker.localDateTimeProperty().removeListener(invalidationListener);
                     }
                 };
+            }            @Override
+            public void setValue(LocalDateTime value) {
+                if (value != null) {
+                    dateTimePicker.setLocalDateTime(value);
+                }
             }
+
+
         };
     }
 
@@ -157,7 +217,7 @@ public class CrudPropertyEditorFactory {
         int rows = 5;
         try {
             rows = itemCrud.getBean().getClass().getDeclaredField(itemCrud.getOriginalName()).getAnnotation(LongString.class).rows();
-        }catch (Exception e) {
+        } catch (Exception e) {
 
         }
 

@@ -18,5 +18,5 @@ package com.saulpos.javafxcrudgenerator.view;
 import javafx.scene.Node;
 
 public interface NodeConstructor {
-    Node generateNode(final Object ... name);
+    Node generateNode(final Object... name);
 }

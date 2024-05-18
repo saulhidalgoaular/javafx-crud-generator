@@ -39,7 +39,6 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## Contact
 For questions or feedback, please reach out to [saulhidalgoaular@gmail.com](mailto:saulhidalgoaular@gmail.com).
 
-
-Screenshots (Code can be seen in the Sample Package):
+Screenshot (Code available in the Sample Package):
 
 ![Project image](https://user-images.githubusercontent.com/125213550/218573836-55fea625-5872-48a2-a398-427f8561dffc.png)
