@@ -29,7 +29,7 @@ public class CrudGenerator<S extends AbstractBean> {
         this.parameter = parameter;
     }
 
-    public CrudPresenter generate() throws Exception {
+    public CrudPresenter<S> generate() throws Exception {
         final CrudModel<S> model = new CrudModel<>(parameter);
         final CrudView view = new CrudViewGenerator(parameter).generate();
 
