@@ -22,7 +22,7 @@ Make sure you have the following installed:
 - Maven
 
 ## Documentation
-Detailed example can be found in the [src/main/java/com/saulpos/javafxcrudgenerator/sample/CrudGeneratorSample.java](Sample file), including:
+Detailed example can be found in the [Sample File](src/main/java/com/saulpos/javafxcrudgenerator/sample/CrudGeneratorSample.java), including:
 - How to configure different JPA implementations.
 - Customizing the CRUD panel.
 - Examples and use cases.
