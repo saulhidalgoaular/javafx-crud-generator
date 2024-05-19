@@ -1,4 +1,4 @@
-module com.saulpos.crud {
+module com.saulpos.javafxcrudgenerator {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
