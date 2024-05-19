@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.saulpos</groupId>
     <artifactId>javafx-crud-generator</artifactId>
-    <version>1.0-SNAPSHOT-20230222</version>
+    <version>1.0-SNAPSHOT-20240519</version>
     <name>javafx-crud-generator</name>
 
     <distributionManagement>
@@ -22,21 +22,22 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.9.1</junit.version>
-        <log4j.version>2.19.0</log4j.version>
-        <maven.compiler.source>19</maven.compiler.source>
-        <maven.compiler.target>19</maven.compiler.target>
+        <log4j.version>3.0.0-beta2</log4j.version>
+        <javafx.version>23-ea+3</javafx.version>
+        <maven.compiler.source>22</maven.compiler.source>
+        <maven.compiler.target>22</maven.compiler.target>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>19</version>
+            <version>${javafx.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
-            <version>19</version>
+            <version>${javafx.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.jfxtras/jfxtras-controls -->
         <dependency>
@@ -48,18 +49,18 @@
         <dependency>
             <groupId>jakarta.persistence</groupId>
             <artifactId>jakarta.persistence-api</artifactId>
-            <version>3.1.0</version>
+            <version>3.2.0-M2</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.19.0</version>
+            <version>${log4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
-            <version>2.19.0</version>
+            <version>${log4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

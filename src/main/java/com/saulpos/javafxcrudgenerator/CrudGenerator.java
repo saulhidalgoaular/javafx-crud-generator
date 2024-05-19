@@ -33,7 +33,6 @@ package com.saulpos.javafxcrudgenerator;
 import com.saulpos.javafxcrudgenerator.model.CrudModel;
 import com.saulpos.javafxcrudgenerator.model.dao.AbstractBean;
 import com.saulpos.javafxcrudgenerator.presenter.CrudPresenter;
-import com.saulpos.javafxcrudgenerator.sample.Product;
 import com.saulpos.javafxcrudgenerator.view.CrudView;
 import com.saulpos.javafxcrudgenerator.view.CrudViewGenerator;
 
@@ -45,10 +44,10 @@ public class CrudGenerator<S extends AbstractBean> {
         this.parameter = parameter;
     }
 
-    public CrudPresenter generate() throws Exception {
-        final CrudModel<Product> model = new CrudModel<>(parameter);
+    public CrudPresenter<S> generate() throws Exception {
+        final CrudModel<S> model = new CrudModel<>(parameter);
         final CrudView view = new CrudViewGenerator(parameter).generate();
 
-        return new CrudPresenter <Product>(model, view);
+        return new CrudPresenter<S>(model, view);
     }
 }
