@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.saulpos</groupId>
     <artifactId>javafx-crud-generator</artifactId>
-    <version>1.0-SNAPSHOT-20240519</version>
+    <version>1.0-SNAPSHOT-20250124</version>
     <name>javafx-crud-generator</name>
 
     <distributionManagement>
