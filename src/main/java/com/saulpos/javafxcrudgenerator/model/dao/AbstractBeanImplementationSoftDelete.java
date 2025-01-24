@@ -47,7 +47,7 @@ public abstract class AbstractBeanImplementationSoftDelete<T extends AbstractBea
     }
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id.get();
     }

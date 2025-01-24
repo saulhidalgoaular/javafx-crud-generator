@@ -131,7 +131,7 @@ public class CrudGeneratorSample extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         CrudGeneratorParameter crudGeneratorParameter = new CrudGeneratorParameter();
-        crudGeneratorParameter.setCurrentLocale(Locale.of("en", "US"));
+        crudGeneratorParameter.setCurrentLocale(new Locale("en", "US"));
         NodeConstructor customButtonConstructor = new NodeConstructor() {
             @Override
             public Node generateNode(Object... name) {
